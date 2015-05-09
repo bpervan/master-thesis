@@ -1,0 +1,125 @@
+\documentclass[times, utf8, diplomski]{fer}
+\usepackage{booktabs}
+
+\begin{document}
+
+% TODO: Navedite broj rada.
+\thesisnumber{1136}
+
+% TODO: Navedite naslov rada.
+\title{Preporučiteljski sustavi u sveprisutnom računarstvu}
+
+% TODO: Navedite vaše ime i prezime.
+\author{Branimir Pervan}
+
+\maketitle
+
+% Ispis stranice s napomenom o umetanju izvornika rada. Uklonite naredbu \izvornik ako želite izbaciti tu stranicu.
+\izvornik
+
+% Dodavanje zahvale ili prazne stranice. Ako ne želite dodati zahvalu, naredbu ostavite radi prazne stranice.
+\zahvala{Ovdje dolazi zahvala}
+
+\tableofcontents
+
+\chapter{Uvod}
+
+
+\chapter{Preporučiteljski sustavi}
+\section{Uvod u preporučiteljske sustave}
+Preporučiteljski sustavi su, ukratko rečeno, skup programskih alata i tehnika
+koji krajnjem korisniku pružaju preporuku za neki predmet koji mu je na neki
+način u interesu [2]. Za rad svakog preporučitelja bitna su dva skupa: skup
+predmeta preporuke i skup korisnika sustava.
+
+Predmet se shvaća generički i on može varirati ovisno o kontekstu primjene,
+primjerice, artikli u internet trgovini, knjige u digitalnim knjižnicama, pjesme
+i filmovi na multimedijalnim servisima, rezultati pretraživanja na tražilicama,
+osobe na društvenim mrežama i servisima za upoznavanje i sl. Nadalje, predmeti
+se mogu opisati pripadajućim atributima uključivo s kompleksnosti i vrijednosti,
+dok vrijednost može biti pozitivna ako postoji potencijal korisnosti za
+korisnika, ili negativna ako predmet ne odgovara korisniku. Ti atributi opet mogu 
+varirati u ovisnosti o samom predmetu preporuke, primjerice žanr ukoliko je predmet 
+glazba, ili boja ukoliko je predmet takav da ga mu se taj atribut može pridijeliti.
+
+S druge strane, korisnici sustava imaju različite scenarije korištenja
+preporučitelja od kojih su osnovni filtriranje neželjenog sadržaja iz velikih
+baza podataka i savjetovanje pri nedostatku vlastite kompetencije za izbor sadržaja. 
+Interakcija korisnika sa sustavom omogućuje praćenje njegovih odabira, te kroz analizu 
+profila korisnika i njegovih osobnih preferencija stvaranje modela za preporuku predmeta 
+na nekoliko načina. Podaci koje korisnik ostavlja u sustavu u osnovi se mogu podijeliti 
+u dva skupa: implicitni i eksplicitni [3]. Implicitni podaci su oni podaci za koje korisnik nije 
+izravno svjestan da ih ostavlja. 
+Neki od tih podataka su npr. demografski podaci, točnije, šire područje iz kojeg korisnik koristi sustav a 
+jednostavno se doznaje iz baze podataka dodijeljenih područja (eng. scope) IP adresa. 
+Pod implicitne podatke spadaju i akcije korisnika tokom rada sa sustavom koje nemaju 
+izravne veze sa ocjenjivanjem.
+Eksplicitni su pak oni podaci koje korisnik ostavlja s namjernom, primjerice koristeći ankete o svojim 
+preferencijama ili odgovarajući na upite o pojedinim predmetima. Na ovaj način provodi se svojevrsno 
+treniranje preporučitelja.
+
+Preporučiteljski sustavi razlikuju se prema načinu filtriranja i analiziranja informacija, 
+a razlikujemo četiri osnovna načina [3]:
+\begin{enumerate}
+  \item Preporučivanje neovisno o korisniku (eng. \textit{Non -- personalized
+  recommenders})
+  \item Preporučivanje zasnovano na sadržaju (eng. \textit{Content -- based
+  recommendation})
+  \item Preporučivanje zasnovano na suradnji (eng. \textit{Collaborative
+  recommendation})
+  \item Hibridne tehnike preporučivanja
+\end{enumerate}
+
+Razvoj preporučiteljskih sustava započeo je devedesetih godina prošlog stoljeća,
+a nemalo je populariziran 2006. g. svojevrsnim natjecanjem „The Netflix Prize” 
+kada je poznati pružatelj multimedije na zahtjev ponudio nagradu od
+\$$1,000,000$ američkih dolara za tim koji razvije preporučitelj bolji od tada
+postojećeg \glqq Cinematch \grqq za određeni postotak [5].
+Ovo je ostavilo velik utjecaj na razvoj preporučitelja prvenstveno zbog činjenice da je u uvjetima 
+natjecanja navedeno da rezultati i principi rada razvijenih preporučitelja 
+moraju biti javno objavljeni i dostupni.
+
+\section{Nepersonalizirani preporučitelji}
+\section{Personalizirani preporučitelji}
+\subsection{Preporučitelji zasnovani na sadržaju}
+\subsection{Preporučitelji zasnovani na suradnji}
+\subsubsection{Korisnik -- Korisnik}
+\subsubsection{Predmet -- Predmet}
+
+\subsection{Hibridni preporučitelji}
+\subsection{Moguća područja primjene}
+
+\chapter{Modeliranje podataka}
+\section{Modeliranje korisnika}
+\section{Modelrianje predmeta}
+
+\chapter{Problem vremena i prostora}
+
+\chapter{Razvoj algoritma i radnog okvira}
+
+\chapter{Testiranje i evaluacija}
+\section{Metodologija}
+\section{Testiranje}
+\section{Evaluacija preporučitelja}
+
+\chapter{Zaključak}
+Zaključak.
+
+\bibliography{literatura}
+\bibliographystyle{fer}
+
+\begin{sazetak}
+Sažetak na hrvatskom jeziku.
+
+\kljucnerijeci{Ključne riječi, odvojene zarezima.}
+\end{sazetak}
+
+% TODO: Navedite naslov na engleskom jeziku.
+\engtitle{Recommender systems in ubiquituous computing}
+\begin{abstract}
+Abstract.
+
+\keywords{Keywords.}
+\end{abstract}
+
+\end{document}
