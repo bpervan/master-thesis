@@ -1,5 +1,10 @@
-\documentclass[times, utf8, diplomski]{fer}
+\documentclass[times, utf8, diplomski, numeric]{fer}
 \usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 \begin{document}
 
@@ -22,78 +27,401 @@
 
 \tableofcontents
 
-\chapter{Uvod}
+%Spomenuti IoT, recommendere i njihovu primjenu, sveprisutno računarstvo je
+%prisutnije no ikad, 
+%kako povezati preporučitelje i sveprisutno računarstvo, 
+%što se tu ima preporučivati, koji je konkretan scenarij itd
 
+%jednostavno, preporučiteljski sustavi filtriraju informacije iz velikih i nepreglednih baza
+%podataka a gdje ćeš više informacija nego u sveprisutnom računarstvu
+%koji je motiv za ovaj diplomski -> do sada se nije razvio takav specifičan
+% preporučitelj
+\chapter{Uvod}
+U posljednjih dvadesetak godina razvoj Interneta stvari (\emph{eng. Internet
+of Things}) uhvatio je gotovo eksponencijalni zamah, a pojedini izvori navode da
+će broj uređaja priključenih na ovu sveprisutnu mrežu do $2020$. g. doseći $26$
+milijardi \cite{gartner2013Iot} odnosno $30$ milijardi \cite{ABI2013Iot}. Tomu
+značajno doprinosi i konstantno opadanje cijene proizvodnog procesa tehnologije
+koja naizgled obične stvari na neki način čini inteligentnima i sposobnima za
+komunikaciju. Sveprisutno računarstvo, kao koncept u računarskoj znanosti
+gdje je računarstvo prisutno svugdje \cite{theComputerWeiser}, opisuje upravo 
+takve vrste stvari i uređaja, ali i takve principe gdje računalo može biti
+ugrađeno u bilo kojem uređaju, na bilo kojoj lokaciji i u bilo kojem obliku.
+
+Tu još negjde mora doći dosta toga o preporučiteljima i njihovoj mega
+korisnosti 
+
+Potreba i smisao izučavanja ovog područja dolazi iz očitog primjera za
+ulaganjem u bolje i efikasnije algoritme jer je u nepreglednoj masi
+informacija, kakav je Internet stvari idealan izvor, procesna moć današnjih
+računala davno izgubila bitku.
+
+Motiv ovog diplomskog rada jest manjak dostupnih algoritama za ovakvu
+specifičnu vrstu preporučitelja. U ovom radu dat će se teorijska
+podlogua bazičnih algoritama za filtriranje sadržaja te analizirati prednosti i
+nedostatke takvih pristupa. Prikazat će se principi primjene preporučiteljskih
+sustava u sveprisutnim aplikacijama te će se prikazati i analizirati posebni
+zahtjevi na preporučiteljske sustave od strane takvih aplikacija na konkretnom
+scenariju. Na kraju će biti dan prikaz razvijenog preporučiteljskog sustava za
+takvu primjenu.
 
 \chapter{Preporučiteljski sustavi}
 \section{Uvod u preporučiteljske sustave}
 Preporučiteljski sustavi su, ukratko rečeno, skup programskih alata i tehnika
-koji krajnjem korisniku pružaju preporuku za neki predmet koji mu je na neki
-način u interesu [2]. Za rad svakog preporučitelja bitna su dva skupa: skup
-predmeta preporuke i skup korisnika sustava.
+koji iz relativno velikog i nepreglednog skupa karakteriziranih informacija
+krajnjem korisniku, koji je opet na neki način karakteriziran, filtriraju
+informacije o mogućim preferencijama tog korisnika. Općenito, možemo reći da je
+jednostavan model preporučiteljskog sustava dan formulom:
+\begin{equation}
+\label{eq:elementarniModel}
+	R \leftarrow U \times I
+\end{equation}
+gdje je $R$ rezultat, tj. predikcija (\emph{eng. prediction, recommendation}),
+preferencije korisnika $U$ (\emph{eng. user}) koji je zatražio preporuku, tj.
+filtriranje sadržaja , a $I$ predmet nad kojim se vrši predikcija preferencije
+(\emph{eng. item}). Traženje potencijalnih preporuka za korisnika $U$ tada se u
+najjednostavnijem slučaju svodi na kombiniranje profila njegovih preferencija s
+profilima predmeta u skupu svih predmeta dostupnih algoritmu za filtriranje.
+Krajnji rezultat na kraju jest najčešće lista od $n$ najboljih preporuka, tj.
+pretpostavki da bi korisnik te predmete ocjenio najbolje (\emph{eng. top -- $N$
+list})
+Gornji model ima dva osnovna i lako uočljiva ograničenja:
+\begin{enumerate}
+  \item Traženje preporuka za korisnika svodi se na iscrpno pretraživanje
+  prostora predmeta dostupnih algoritmu za filtriranje
+  \item Rezultat je preporuka kojoj fali bilo kakav kontekst.
+\end{enumerate}
+
+Da bismo doskočili ovim problemima, razmotrit ćemo razne modele preporuke od
+kojih su neke već dobro poznati i korišteni algoritmi. Za početak, uvedimo u
+formulu \ref{eq:elementarniModel} općeniti kontekst preporuke:
+\begin{equation}
+\label{eq:elementarniModelSKontekstom}
+	R \leftarrow U \times I \times C
+\end{equation}
+gjde je $C$ kontekst u kojem korisnik $U$ traži preporuku.
 
 Predmet se shvaća generički i on može varirati ovisno o kontekstu primjene,
 primjerice, artikli u internet trgovini, knjige u digitalnim knjižnicama, pjesme
-i filmovi na multimedijalnim servisima, rezultati pretraživanja na tražilicama,
-osobe na društvenim mrežama i servisima za upoznavanje i sl. Nadalje, predmeti
-se mogu opisati pripadajućim atributima uključivo s kompleksnosti i vrijednosti,
-dok vrijednost može biti pozitivna ako postoji potencijal korisnosti za
-korisnika, ili negativna ako predmet ne odgovara korisniku. Ti atributi opet mogu 
-varirati u ovisnosti o samom predmetu preporuke, primjerice žanr ukoliko je predmet 
-glazba, ili boja ukoliko je predmet takav da ga mu se taj atribut može pridijeliti.
+i filmovi namultimedijalnim servisima, rezultati pretraživanja na tražilicama,
+osobe na društvenim mrežama, smjerovi kretanja u prostoru i u ovisnosti s
+vremenom itd. Svaki predmet u korišten od strane algoritma za filtriranje obično
+je opisan nekim karakteristikama koji variraju u ovisnosti o kontekstu predmeta.
+Tako primjerice neka pjesma može biti opisana žanrom, trajanjem i izvođačem, a
+knjiga isto tako žanrom, autorom i brojem stranica. Unositi težine za pojedine
+ocjene karakteristika predmeta nije uobičajeno jer na taj način dolazi do
+subjektiviziranja rezultata filtriranja na manji skup osoba, ali s druge strane
+gledano, nije ni nemoguće.
 
 S druge strane, korisnici sustava imaju različite scenarije korištenja
 preporučitelja od kojih su osnovni filtriranje neželjenog sadržaja iz velikih
-baza podataka i savjetovanje pri nedostatku vlastite kompetencije za izbor sadržaja. 
-Interakcija korisnika sa sustavom omogućuje praćenje njegovih odabira, te kroz analizu 
-profila korisnika i njegovih osobnih preferencija stvaranje modela za preporuku predmeta 
-na nekoliko načina. Podaci koje korisnik ostavlja u sustavu u osnovi se mogu podijeliti 
-u dva skupa: implicitni i eksplicitni [3]. Implicitni podaci su oni podaci za koje korisnik nije 
-izravno svjestan da ih ostavlja. 
-Neki od tih podataka su npr. demografski podaci, točnije, šire područje iz kojeg korisnik koristi sustav a 
-jednostavno se doznaje iz baze podataka dodijeljenih područja (eng. scope) IP adresa. 
-Pod implicitne podatke spadaju i akcije korisnika tokom rada sa sustavom koje nemaju 
-izravne veze sa ocjenjivanjem.
-Eksplicitni su pak oni podaci koje korisnik ostavlja s namjernom, primjerice koristeći ankete o svojim 
-preferencijama ili odgovarajući na upite o pojedinim predmetima. Na ovaj način provodi se svojevrsno 
-treniranje preporučitelja.
+baza podatak i savjetovanje pri nedostatku vlastite kompetencije za izbor
+sadržaja (referenca: ono čudo koje te pita kaj te interesira). Korisnici imaju
+svoje preferencije koje su u ovom slučaju uglavnom opisane težinama jer prema
+različitim potrebama određene karakteristike predmeta nad kojima se vrši
+filtriranje mogu biti zanimljivije, odnosno manje zanimljive.
 
-Preporučiteljski sustavi razlikuju se prema načinu filtriranja i analiziranja informacija, 
-a razlikujemo četiri osnovna načina [3]:
+Interakcijom korisnika sa sustavom omogućuje se praćenje njegovih odabira,
+treniranje preporučitelja te kroz analizu profila korisnika i njegovih osobnih
+preferencija stvaranje modela za preporuku predmeta na nekoliko načina. Podaci
+koje korisnik ostavlja u sustavu u osnovi se mogu podijeliti u dva skupa:
 \begin{enumerate}
-  \item Preporučivanje neovisno o korisniku (eng. \textit{Non -- personalized
-  recommenders})
-  \item Preporučivanje zasnovano na sadržaju (eng. \textit{Content -- based
-  recommendation})
-  \item Preporučivanje zasnovano na suradnji (eng. \textit{Collaborative
-  recommendation})
-  \item Hibridne tehnike preporučivanja
+  \item Implicitni
+  \item Eksplicitni
+\end{enumerate}
+Implicitni podaci su oni podaci koje je sustav prikupio od korisnika bez da ga
+je to eksplicitno zatražio. Takvi podaci mogu biti primjerice, demogravski
+podaci, točnije, šire područje iz kojeg korisnik koristi sustav a jednostavno se
+doznaje iz baze podataka dodijeljenih područja (\emph{eng. scope}) IP adresa.
+Također, pod implicitne podatke spadaju i akcije korisnika u sustavu koje se
+mogu doznati iz sjedničkih zapisa, kao i tzv. klikovi na određene poveznice
+unutar sustava.
+
+S druge strane, eksplicitni podaci su oni koje korisnik ostavlja s namjerom,
+primjerice koristeći ankete o svojim preferencijama, ostavljajući povratnu
+informaciju na ponuđene predmete (\emph{eng. feedback}) ili odgovarajući na bilo
+koji način na upite o pojedinim predmetima.
+
+U općem slučaju, preporučiteljske sustave razlikujemo prema načinu filtriranja i
+analiziranja informacija, a razlikujemo četiri osnovna načina (tj. jedan način
+pseudofiltriranja i tri načina filtriranja):
+\begin{enumerate}
+  \item Filtriranje neovisno o korisniku (\emph{eng. Non -- personalized
+  filtering})
+  \item Filtriranje zasnovano na sadržaju (\emph{eng. Content -- based
+  filtering})
+  \item Filtriranje zasnovano na suradnji (\emph{eng. Collaborative
+  filtering})
+  \item Hibridne tehnike filtriranja odnosno preporučivanja
 \end{enumerate}
 
-Razvoj preporučiteljskih sustava započeo je devedesetih godina prošlog stoljeća,
-a nemalo je populariziran 2006. g. svojevrsnim natjecanjem „The Netflix Prize” 
-kada je poznati pružatelj multimedije na zahtjev ponudio nagradu od
-\$$1,000,000$ američkih dolara za tim koji razvije preporučitelj bolji od tada
-postojećeg \glqq Cinematch \grqq za određeni postotak [5].
-Ovo je ostavilo velik utjecaj na razvoj preporučitelja prvenstveno zbog činjenice da je u uvjetima 
-natjecanja navedeno da rezultati i principi rada razvijenih preporučitelja 
-moraju biti javno objavljeni i dostupni.
+Povijesno gledano, razvoj preporučiteljskih sustava započeo je devedesetih
+godina prošlog stoljeća, a nemalo je populariziran $2006$. g. svojevrsnim
+natjecanjem \glqq The Netflix Prize \grqq kada je poznati pružatelj multimedije
+na zahtjev ponudio nagradu od \$$1,000,000$ američkih dolara za tim koji razvije
+preporučitelj bolji od taga postojećeg sustava \glqq Cinematch \grqq za određeni
+postotak.
+Ovo je ostavilo velik utjecaj na razvoj preporučitelja prvenstveno zbog
+činjenice da je u uvjetima natjecanja navedeno da rezultati i principi rada
+razvijenih preporučitelja moraju biti javno objavljeni i dostupni
+%referenca
 
-\section{Nepersonalizirani preporučitelji}
-\section{Personalizirani preporučitelji}
-\subsection{Preporučitelji zasnovani na sadržaju}
-\subsection{Preporučitelji zasnovani na suradnji}
+\section{Filtriranje neovisno o korisniku}
+%TODO negdje ubaciti kako zapravo dobiti preporuku (top N)
+Osnovni model filtriranja jest filtriranje neovisno o korisniku. Model preporuke
+koji proizlazi iz ovakvog načina filtriranja, strogo gledano, ne može biti
+preporučitelj jer preporuka ne ovisi strogo o korisniku. Drugim riječima, svaki
+korisnik koji zatraži preporuku od ove vrste filtriranja dobit će istu
+preporuku. Ovu tvrdnju mogli bi jednostavnije prikazati relacijom:
+\begin{equation}
+\label{eq:filtriranjeNeovisnoOKorisniku}
+	R \leftarrow I
+\end{equation}
+gdje je $R$ predikcija, tj. preporuka, a $I$ predmet. Iz relacije
+\ref{eq:filtriranjeNeovisnoOKorisniku} očigledno je da je predikcija funkcija
+isključivo predmeta, pa kao takva ne može biti smatrana punokrvnim
+preporučiteljem.
+
+Razmjerno jednostavna predožba ovog modela jest rejting (\emph{eng. Rating}).
+Uzmimo za primjer neki servis za ocjenjivanje i korisničke recenzije
+ugostiteljskih objekata. Neka svaki korisnik koji je koristnio uslugu nekog od
+objekata ima pristup sustavu u kojem može u više kategorija ostaviti ocjenu iz
+nekog intervala s prisanom recenzijom. Također, neka svaki korisnik ima
+mogućnost ocijeniti uslugu brojčanom ocjenom iz intervala od jedan do pet. Model
+preporučitelja u tom slučaju bio bi opisan s:
+\begin{equation}
+\label{eq:skupOcjena}
+	S = \{1, 2, 3, 4, 5\}
+\end{equation}
+\begin{equation}
+\label{eq:prosjek}
+	R = \lfloor \frac{\sum_{i=1}^{N} s_i}{N} \ast 10 \rfloor
+\end{equation}
+gdje je $S$ skup mogućih ocjena, $R$ konačan rejting predmeta, $N$ ukupan broj
+korisnika koji su ocjenili taj predmet, a $s_i$ ocjena $i$-tog korisnika. Iako,
+izgrađeni model preporuke strogo gledano nije preporučitelj, on to ipak čini
+posredno nudeći korisniku ono što su drugi korisnici obilježili kao poželjnije.
+Ovakav model obično koriste usluge s povratnom informacijom korisnika
+(\emph{eng. Feedback}), npr. \emph{eBay}, \emph{Tripadvisor} i \emph{Zagat}.
+Elemente ovog preporučitelja prikazane relacijama \ref{eq:skupOcjena} i
+\ref{eq:prosjek} možemo varirati kako bi prilagodili izgrađeni model drugim
+sustavima, primjerice:
+\begin{itemize}
+  \item Skup ocjena $S$. Ovisno o potrebi, moguće je skup proširiti do potrebnog
+  broja ocjena, imajući na umu da veća granulacija nije nužno bolja, kao i da
+  može biti beskorisna u vidu onemogućenja korisnika da predmet ocjeni spontano,
+  a da neće biti vidljiva u krajnjem rezultatu. Također, granulaciju je moguće
+  povećati dozvoljavanjem ocjena van skupa cijelih brojeva.
+  \item Prikaz rezultata $R$. U formuli \ref{eq:prosjek} prije zaokruživanja
+  prosjek je pomnožen faktorom $10$ radi eliminacije decimala. Moguće je
+  odabrati neki drugi prikaz rezultata, primjerice u postotcima.
+\end{itemize}
+Sam način ocjenjivanja ne mora nužno biti eksplicitna dodjela ocjene. Moguće je
+primjerice koristiti sustav glasovanja (\emph{eng. Vote up/down}). Najpoznatiji
+primjeri koji koriste takve ocjene su \emph{Reddit} i \emph{StackOverflow}.
+
+U općem slučaju modeli preporučitelja zasnovani na ovakvoj vrsti filtriranja
+imaju dvije mane:
+\begin{itemize}
+  \item Zavaravanje korisnika od strane rejtinga koji je, neovisno o načinu
+  prikaza, i dalje samo prosjek pojedinačnih ocjena.
+  \item Nedostatak konteksta za preporuke.
+\end{itemize}
+
+Potonji problem posebno se manifestira prilikom asocijativnog preporučivanja.
+Uzmimo za primjer da tražimo preporuku za neki predmet koji je dodatak na neki
+već postojeći predmet, primjerice, tražimo preporuku za preljev za sladoled.
+%TODO a gdje ovo utrpati
+Izgradimo sada jednostavan model prema kojem bi mogli dobiti nepersonaliziranu
+preporuku za predmet koji ovisi o drugom predmetu. Neka su $X$ i $Y$ skupovi
+svih korisnika koji su kupili proizvode $X$ i $Y$ respektivno.
+
+Intuitivno se nameće da ukoliko je više korisnika kupilo proizvod $X$ i uz njega
+proizvod $Y$ da će i ostalim korisnicima (koji traže preporuku) proizvod $Y$
+odgovarati uz proizvod $X$. Elementarnom algebrom skupova možemo dakle
+zaključiti da se predikcija za nekog korisnika može izraziti relacijom:
+\begin{equation}
+\label{eq:naivnaNepersonaliziraniTemp}
+	R = \frac{\mid X \cap Y \mid}{\mid X \mid}
+\end{equation}
+Osnovni problem proizlazi iz činjenice da su određeni predmeti neovisno
+popularni. Primjerice, u nekom dućanu, moguće je da većina korisnika kupuje neki
+predmet pa može doći do lažne korelacije popularnog predmeta s nekim drugim
+predmetom. Drugi problem je nepostojanost veze između predmeta iz skupa $X$ i
+$Y$ u smislu asocijativnosti. Ukoliko je $X$ skup sladoleda, a $Y$ skup
+preljeva, korisniku bi kao preporuku trebalo izdvojiti preljeve za sladoled iz
+skupa $Y$. 
+
+\begin{equation}
+\label{eq:nepersonalizirani}
+	R = \frac
+		{\frac
+			{\mid X \cap Y \mid}
+			{\mid X \mid}}
+		{\frac
+			{\mid \overline{X} \cap Y\mid}
+			{\mid \overline{X} \mid}}
+\end{equation}
+
+Preporuka korisniku na kraju se jednostavno svodi na prikaz prvih $N$ najboljih
+prosječnih ocjena.
+
+Naivni preporučitelj preporuku može dati korištenjem intuitivno izvedive
+formule:
+\begin{equation}
+\label{eq:naivnaNepersonalizirani}
+	R = \frac{X \cap Y}{X}
+\end{equation}
+gdje su $X$ i $Y$ skupovi svih korisnika koji su kupili proizvode 
+
+\section{Filtriranje ovisno o korisniku}
+Za razliku od filtriranja neovisnog o korisniku, filtriranje ovisno o korisniku
+uzima u obzir korisnika i njegove preferencije.
+\subsection{Filtriranje zasnovano na sadržaju}
+Razmotrimo situaciju kada ne tretiramo korisnike ili predmete kao osnovne
+(atomarne) jedinice, nego ih možemo opisati nekim kategorijama, primjerice,
+demografskim podacima za korisnika, autorom i izdavačem ako je predmet neka
+knjiga i sl. Preporučivanje zasnovano na sadržaju u osnovi dovoi u vezu
+prikupljene preferencije korisnika, bilo eksplicitno, bilo implicitno. Neka je u
+sustavu koji koristi preporučitelj zasnovan na sadržaju svaki predmet opisan
+tekstualnim medapodacima i vektorom:
+\begin{equation}
+\label{eq:vektorKarakteristika}
+	\boldsymbol{X_i} = 
+		\big[ 
+			\boldsymbol{w_{1,i}}, 
+			\boldsymbol{w_{2,i}}, 
+			\boldsymbol{w_{3,i}}, 
+			\ldots, 
+			\boldsymbol{w_{N,i}} 
+		\big]^T
+\end{equation}
+gdje je $\boldsymbol{w_{j,i}}$ kvantitativni, tj. brojčani opis neke $j$-te
+karakteristike za $i$-ti predmet. Težina je neka proizvoljno odabrana metrika
+koja može varirati od jednostavnog broja pojavljivanja, uključujući $0$/$1$
+pristup (karakteristika je primjenjiva, odnosno karakteristika nije
+primjenjiva) do precijznijih metrika. Sličnost između dva predmeta moguće je
+tada izraziti kosinusom kuta između vektora njihovih karakteristika. 
+\begin{equation}
+\label{eq:kosinus}
+	\boldsymbol{cos}(\boldsymbol{V}_1, \boldsymbol{V}_2) = 
+		\frac
+			{\boldsymbol{V}_1 \ast \boldsymbol{V}_2}
+			{\|\boldsymbol{V}_1\| \times \|\boldsymbol{V}_2\|}
+\end{equation}
+Tu još negdje ubaci da svaka karakteristika može imati svoju težinu, u smislu da
+neka karakteristika može biti važnija.
+Također, neka za svakog korisnika postoji korisnički profil sa dostupnim
+preferencijama korisnika dostupnim u vektorskom zapisu gdje $i$-ta komponenta
+vektora predstavlja težinu te karakteristike za korisnika. Tada je na sličan
+način moguće izraziti kompatibilnost promatranog korisnika i predmeta. U
+ovisnosti o kontekstu primjene, vektore je poželjno i normalizirati.
+Jedna od većih prednosti ovog načina filtriranja je što može stvarati preporuke
+neovisno o tome je li za predmet davana povratna informacija ili ne. Drugim
+riječima, ovaj način filtriranja iznimno je prikladan na početku rada sustava
+jer nema problema s takozvanim hladnim početkom (\emph{eng. Cold start}). Isto
+tako, prikladan je za primjene gdje je moguće relativno dobro strukturiranim
+karakteristikama opisati predmete. S druge strane, nepogodan je ukoliko ga
+se implementira u sustave gdje korisnici dolaze rijetko ili relativno često
+mijenjaju preferencije. Zbog svega navedenog, ova vrsta filtriranja uglavnom se
+upotrebljava u sustavima za pregledavanje vijesti, personaliziranim servisima za
+multimediju, video na zahtjev i sl.
+
+Nešto tu ne štima vezano uz težine. Komponente vektora zapravo su kvantitativni
+opis, brojka, to nisu težine. Težine, koje predstavljaju koja je karakteristika
+korisniku koliko važna su u drugom vektoru?
+
+\subsection{Filtriranje zasnovano na suradnji}
+Suradnički pristup dijametralno je suprotan sadržajnom pristupu. Princip rada
+ove vrste filtriranja suradnja je između pojedinih korisnika odnosno predmeta.
+Definicija ove vrste suradnje zapravo leži u određivanju sličnosti između dvaju
+korisnika ili predmeta, a glavna premisa jest da preferencije predmeta uglavnom
+važe za sve korisnike koji imaju iste interese ili su slično ocijenili slične
+predmete. Primjerice, razmatranjem slučaja gdje dva različita korisnika dodijele
+dvije relativno slične ocjene nekom predmetu, zaključak jest da je vjerojatnost
+da su ta dva korisnika slično ocjenila i neke druge predmete razmjerno velika. S
+druge strane, veća je vjerojatnost da će neki korisnik ocjeniti slično neka dva
+predmeta ako su ih i ostali korisnici slično ocjenili.
+
+Zbog usporedbi i rada na dvije različite razine, korisničkoj i predmetnoj, ovaj
+preporučitelj se u osnovi dijeli na dvije moguće tehnike:
+\begin{itemize}
+  \item Korisnik-korisnik (\emph{eng. User-user, Neighbourhood-based,
+  Memory-based})
+  \item Predmet-predmet (\emph{eng. Item-item, Item-based, Model-based})
+\end{itemize}
+
 \subsubsection{Korisnik -- Korisnik}
+Suradničko filtriranje na relaciji korisnik - korisnik
+\begin{equation}
+\label{eq:pearsonKorisnik}
+	R = \frac
+			{{\sum_{i \epsilon I} 
+				\big[
+					(r_{k,i} - \overline{r_k})} \ast
+					(r_{u,i} - \overline{r_u})
+				\big]
+			}
+			{\sqrt{{\sum_{i \epsilon I} s_i}} \ast \sqrt{{\sum_{i \epsilon I}
+			s_i}}}
+\end{equation}
+
+Neka je $K$ skup svih korisnika nekog sustava. Također, neka je $k$ korisnik iz
+skupa $K$ koji traži preporuku za neki predmet. Tada je susjedstvo $N$
+korisnika $k$ definirano kao
+\begin{equation}
+\label{eq:susjedstvo}
+	N = K \backslash \{k\}
+\end{equation}
+
+Algoritam:
+\begin{algorithm}
+	\caption{Korisnik-korisnik filtriranje}
+	\label{algo:korisnik-korisnik}
+	\begin{algorithmic}
+		\STATE{\textbf{Ulaz:} $k$ - korisnik za kojeg se traži predikcija. $N$ -
+		susjedstvo korisnika}
+		\STATE{\textbf{Izlaz:} Predikcija $p$ ocjene korisnika $K$ za predmet $P$.}
+		\STATE{topN := $20$}
+		\STATE{n := length($N$)}
+		\STATE{w := initVector()}
+		\FOR{($i := 0; i < n; inc(i)$)}
+			\STATE{$w_i := calculatePearson(k, N_i)$}
+		\ENDFOR
+		\STATE{sort(w)}
+		\STATE{$suma := 0; tezine := 0$}
+		\FOR{($i := 0; i < topN; inc(i)$)}
+			\STATE{$suma := suma + w_i * N_i$}
+			\STATE{$tezine := tezine + w_i$}
+		\ENDFOR
+		\STATE{$p := suma / tezine$}
+		\RETURN{p}
+	\end{algorithmic}
+\end{algorithm}
+
 \subsubsection{Predmet -- Predmet}
 
-\subsection{Hibridni preporučitelji}
+\subsection{Hibridni tehnike}
 \subsection{Moguća područja primjene}
 
 \chapter{Modeliranje podataka}
+\section{Hijerarhijsko modeliranje}
+
+
 \section{Modeliranje korisnika}
 \section{Modelrianje predmeta}
 
 \chapter{Problem vremena i prostora}
+Osnovni problem s kojim se konvencionalni preporučiteljski sustavi susreću (a
+time i popularniji radni okviri i biblioteke koji ih implementiraju) jest
+izostanak bilo kakve potpore za prostorne i vremenske komponente koje
+su se pokazale neophodne za rad sa sveprisutnim sustavima.
+%Za sveprisutno prostor i vrijeme su jedne od bitnijih stavki (referenca?)
+
+\section{Vremenska komponenta}
+
+\section{Prostorna komponenta}
+
 
 \chapter{Razvoj algoritma i radnog okvira}
 
