@@ -356,14 +356,16 @@ Suradničko filtriranje na relaciji korisnik - korisnik
 \begin{equation}
 \label{eq:pearsonKorisnik}
 	R = \frac
-			{{\sum_{i \epsilon I} 
+			{\sum_{i \epsilon I} 
 				\big[
-					(r_{k,i} - \overline{r_k})} \ast
+					(r_{k,i} - \overline{r_k}) \ast
 					(r_{u,i} - \overline{r_u})
 				\big]
 			}
-			{\sqrt{{\sum_{i \epsilon I} s_i}} \ast \sqrt{{\sum_{i \epsilon I}
-			s_i}}}
+			{
+				\sqrt{{\sum_{i \epsilon I} (r_{k,i} - \overline{r_k})^2}} \ast 
+				\sqrt{{\sum_{i \epsilon I} (r_{u,i} - \overline{r_u})^2}}
+			}
 \end{equation}
 
 Neka je $K$ skup svih korisnika nekog sustava. Također, neka je $k$ korisnik iz
@@ -373,6 +375,19 @@ korisnika $k$ definirano kao
 \label{eq:susjedstvo}
 	N = K \backslash \{k\}
 \end{equation}
+
+\begin{equation}
+\label{eq:pearsonKosinus}
+	w_{k,u} = 
+		\cos{(\vec{r_k}, \vec{r_u})} = 
+		\frac
+			{\vec{r_k} \ast \vec{r_u}}
+			{\|\vec{r_k}\| \times \|\vec{r_u}\|} = 
+		\frac
+			{\sum_{i=1}^m r_{k,i} \ast r_{u,i}}
+			{\sqrt{\sum_{i=1}^m r_{k,i}^2} \ast \sqrt{\sum_{i=1}^m r_{u,i}^2}}
+\end{equation}
+
 
 Algoritam:
 \begin{algorithm}
