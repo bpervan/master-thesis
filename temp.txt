@@ -1,0 +1,34 @@
+- Uvod
+- Sveprisutno računarstvo
+- Preporučiteljski sustavi
+	- PS u sveprisutnom (specifičnosti, koji postoje, mobilni uređaji itd. 4sq)
+- Nekakav novi model preporučiteljskog sustava
+	- izražen prostorno vremenski kontekst (općenito)
+- Ispitivanje modela
+	- Scenarij i kako se uklapa u veliki model
+	- Simulacija primjene (scenarija) (opis testnog scenarija)
+	- Provođenje testiranja
+		- Scenariji 
+	- Rezultati testiranja
+- Zaključak
+dvije razine reinforcementa
+koje je pravo vrijeme za reinforcement
+dva profila -> privremeni i trajni profil pa zbroj nakon kupnje
+netko svaka dva tjedna kupuje jabuke pa mu se svaka dva tjedna kupuju jabuke (recurring)
+
+Visitor(pattern)
+I kolaboracija i sadržaj
+	- kod sadržaja, gdje je udaljenost manja od nekog broja (i fizička udaljenost)
+	- grid (model jednostavnog prostora)
+	- fizički nema beacona kod svake police ali zbog rasporeda znamo otprilike 
+	gdje je sve
+	- račun udaljenosti je apstrahiran (pola dana max :) )
+	
+timestamp -> popis beacona -> rss
+magnetometar i akcelerometar
+shadow preporuke (može u globalni model) -> implicitna preporuka u kojoj korisnika
+preko akcija vodimo do onoga što njemu treba
+beacon id -> proizvod i lokaciju
+
+out -> za trenutnu lokaciju -> u kojem smijeru dalje i koji proizvodi idući (topN)
+

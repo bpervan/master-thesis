@@ -5,6 +5,21 @@
 \usepackage{bm}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{verbatim}
+\usepackage{tikz,times}
+
+\usetikzlibrary{arrows}
+
+\tikzset{
+  treenode/.style = {align=center, inner sep=0pt, text centered,
+    font=\sffamily},
+  arn_n/.style = {treenode, circle, white, font=\sffamily\bfseries, draw=black,
+    fill=black, text width=1.5em},% arbre rouge noir, noeud noir
+  arn_r/.style = {treenode, circle, red, draw=red, 
+    text width=1.5em, very thick},% arbre rouge noir, noeud rouge
+  arn_x/.style = {treenode, rectangle, draw=black,
+    minimum width=0.5em, minimum height=0.5em}% arbre rouge noir, nil
+}
 
 \begin{document}
 
@@ -64,6 +79,8 @@ sustava u sveprisutnim aplikacijama te će se prikazati i analizirati posebni
 zahtjevi na preporučiteljske sustave od strane takvih aplikacija na konkretnom
 scenariju. Na kraju će biti dan prikaz razvijenog preporučiteljskog sustava za
 takvu primjenu.
+
+\chapter{Sveprisutno računarstvo}
 
 \chapter{Preporučiteljski sustavi}
 \section{Uvod u preporučiteljske sustave}
@@ -217,8 +234,9 @@ sustavima, primjerice:
   odabrati neki drugi prikaz rezultata, primjerice u postotcima.
 \end{itemize}
 Sam način ocjenjivanja ne mora nužno biti eksplicitna dodjela ocjene. Moguće je
-primjerice koristiti sustav glasovanja (\emph{eng. Vote up/down}). Najpoznatiji
-primjeri koji koriste takve ocjene su \emph{Reddit} i \emph{StackOverflow}.
+primjerice koristiti sustav glasovanja \engl{Vote up/down} (\emph{eng. Vote
+up/down}).
+Najpoznatiji primjeri koji koriste takve ocjene su \emph{Reddit} i \emph{StackOverflow}.
 
 U općem slučaju modeli preporučitelja zasnovani na ovakvoj vrsti filtriranja
 imaju dvije mane:
@@ -368,6 +386,8 @@ Suradničko filtriranje na relaciji korisnik - korisnik
 			}
 \end{equation}
 
+
+
 Neka je $K$ skup svih korisnika nekog sustava. Također, neka je $k$ korisnik iz
 skupa $K$ koji traži preporuku za neki predmet. Tada je susjedstvo $N$
 korisnika $k$ definirano kao
@@ -415,16 +435,105 @@ Algoritam:
 \end{algorithm}
 
 \subsubsection{Predmet -- Predmet}
+Suradničko filtriranje na razini predmet-predmet
+\begin{equation}
+\label{eq:pearsonPredmet}
+	R = \frac
+			{\sum_{u \epsilon U} 
+				\big[
+					(r_{u,i} - \overline{r_i}) \ast
+					(r_{u,j} - \overline{r_j})
+				\big]
+			}
+			{
+				\sqrt{{\sum_{u \epsilon U} (r_{u,i} - \overline{r_i})^2}} \ast 
+				\sqrt{{\sum_{u \epsilon U} (r_{u,j} - \overline{r_j})^2}}
+			}
+\end{equation}
 
+\begin{equation}
+\label{eq:tezinskiProsjek}
+	p_{k,i} = 
+		\frac
+			{\sum_{j \epsilon N} r_{k,j} \ast w_{i,j}}
+			{\sum_{j \epsilon N} \|w_{i,j}\|}
+\end{equation}
 \subsection{Hibridni tehnike}
+\begin{enumerate}
+  \item Težinski
+  \item Izmjenični
+  \item Miješani
+  \item Kombinacija obilježja
+  \item Kaskada
+  \item Pojačavanje obilježja
+  \item Meta razina
+\end{enumerate}
 \subsection{Moguća područja primjene}
+\subsection{Preporučiteljski sustavi u sveprisutnom računarstvu}
+specifičnosti, koji postoje, mobilni uređaji, foursquare itd.
+\chapter{Izgrađeni model preporučiteljskog sustava}
+Izražen prostorno vremenski kontekst (općenito)
+dvije razine reinforcementa
+koje je pravo vrijeme za reinforcement
+dva profila -> privremeni i trajni profil pa zbroj nakon kupnje
+netko svaka dva tjedna kupuje jabuke pa mu se svaka dva tjedna kupuju jabuke
+(recurring) 
+\section{Preporučiteljski sustavi s izraženom prostornom i vremenskom
+komponentom}
+\section{Prostorna komponenta}
+\section{Vremenska komponenta}
+\chapter{Ispitivanje modela}
+\section{Ispitni scenarij}
+\section{Simulacija primjene}
+\section{Provođenje testiranja}
+\section{Scenariji korištenja}
+\section{Rezultati testiranja}
 
 \chapter{Modeliranje podataka}
 \section{Hijerarhijsko modeliranje}
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=14.515cm]{images/storestruct.png}
+	\caption{Hijerarhijsko modeliranje dućana}
+	\label{fig:storestruct}
+\end{figure}
+Slika \ref{fig:storestruct} je dana kao ekstremno jednostavan primjer
+mogućnosti modeliranja hijerarhije. Na njoj se može vidjeti kako je korijen
+hijerarhijskog stabla model razmatranog dućana. U prvom nižem sloju dućan se u
+općem slučaju dijeli u čisto fizičkom smislu na redove, tj. lokacije. Dalje u
+nižim slojevima slijede skupine proizvoda. Ovdje valja napomenuti kako je moguće
+da se za neke predmete hijerarhija proteže kroz više razina zbog prirodnog
+hijerarhijskog modela specifičnog za te predmete. Na kraju, listovi stabla
+predstavljaju konkretne predmete.
 
+Kao što je već navedeno, svaki čvor stabla predstavlja jedan konkretan
+predmet.
+Zbog toga, čvor kao takav enkapsulira sve ono čime je taj konkretni predmet
+predstavljen u sustavu. U općem slučaju to su:
+\begin{itemize}
+  \item Metapodaci, kao npr.
+	\begin{itemize}
+	  \item Interni identifikacijski kod predmeta
+	  \item Barkod \engl{Bar code}
+	  \item Naziv
+	  \item Proizvođača
+	\end{itemize}
+  \item Vektor karakteristika
+\end{itemize}
 
 \section{Modeliranje korisnika}
-\section{Modelrianje predmeta}
+\begin{enumerate}
+  \item multiplus profil, znamo tko što voli, tj. imamo profil korisnika
+  \item dopuna profila? kroz šetnju, kroz zadržavanje, kada kupi?
+  \item cold start profil?
+\end{enumerate}
+
+Profil:
+\begin{enumerate}
+  \item Proizvodi, skupine proizvoda, redovi? -> stablo?
+  \item vektor preferencija
+\end{enumerate}
+\section{Modeliranje predmeta}
 
 \chapter{Problem vremena i prostora}
 Osnovni problem s kojim se konvencionalni preporučiteljski sustavi susreću (a
@@ -434,12 +543,28 @@ su se pokazale neophodne za rad sa sveprisutnim sustavima.
 %Za sveprisutno prostor i vrijeme su jedne od bitnijih stavki (referenca?)
 
 \section{Vremenska komponenta}
-
+\glqq subota \grqq vs. \glqq utorak \grqq
 \section{Prostorna komponenta}
-
+lokacija unutar dućana
 
 \chapter{Razvoj algoritma i radnog okvira}
+\section{Ulazi i izlazi}
+\begin{enumerate}
+  \item logovi (id + rss)
+  \item multiplus id
+  \item lokacija beacona s id-em
+  \item multiplus profil (kontekstualizirani), vremenski
+  \item tendencija kretanja
+\end{enumerate}
+\begin{enumerate}
+  \item lista s obzirom na lokaciju i vrijeme
+  \item s obzirom na očekivani profil kupnje
+\end{enumerate}
 
++Generalizacija -> kako bi se isti sustav koristio na FERu recimo
++blagajna -> reinfrcement
++fade out efekt
++akcije (u konzumu)
 \chapter{Testiranje i evaluacija}
 \section{Metodologija}
 \section{Testiranje}
