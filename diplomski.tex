@@ -370,7 +370,12 @@ preporučitelj se u osnovi dijeli na dvije moguće tehnike:
 \end{itemize}
 
 \subsubsection{Korisnik -- Korisnik}
-Suradničko filtriranje na relaciji korisnik - korisnik
+Suradničko filtriranje na relaciji između korisnika koji traži preporuku i
+ostalih korisnika sustava svodi se na predikciju ocjene korisnika koji traži
+preporuku za neki predmet na osnovu ocjena njemu bliskih ljudi gdje je bliskost
+dva korisnika dobro definirana nekom metrikom, npr. Pearsonovim koeficjentom
+korelacije (\ref{eq:pearsonKorisnik})
+
 \begin{equation}
 \label{eq:pearsonKorisnik}
 	R = \frac
@@ -386,15 +391,14 @@ Suradničko filtriranje na relaciji korisnik - korisnik
 			}
 \end{equation}
 
+gdje je $w_{q,u}$ težina između aktivnog korisnika $k$ i korisnika $u$, $i$ skup
+predmeta koje su ocijenila oba korisnika, $r_{u,i}$ ocjena koju je korisnik $u$
+dodijelio predmetu $i$, a $\overline{r_u}$ srednja vrijednost svih ocjena koje
+je dodijelio korisnik $u$.
 
-
-Neka je $K$ skup svih korisnika nekog sustava. Također, neka je $k$ korisnik iz
-skupa $K$ koji traži preporuku za neki predmet. Tada je susjedstvo $N$
-korisnika $k$ definirano kao
-\begin{equation}
-\label{eq:susjedstvo}
-	N = K \backslash \{k\}
-\end{equation}
+Alternativno, ocjene korisnika možemo predstaviti kao vektore u
+$m$ - dimenzionalnom prostoru pa se težina može izraziti preko skalarnog
+produkta kao kosinus kuta između ta dva vektora:
 
 \begin{equation}
 \label{eq:pearsonKosinus}
@@ -408,8 +412,20 @@ korisnika $k$ definirano kao
 			{\sqrt{\sum_{i=1}^m r_{k,i}^2} \ast \sqrt{\sum_{i=1}^m r_{u,i}^2}}
 \end{equation}
 
+Mana pristupa \ref{eq:pearsonKosinus} jest nedostatak negativnih ocjena.
 
-Algoritam:
+Neka je $K$ skup svih korisnika nekog sustava. Također, neka je $k$ korisnik iz
+skupa $K$ koji traži preporuku za neki predmet. Tada je susjedstvo $N$
+korisnika $k$ definirano kao
+\begin{equation}
+\label{eq:susjedstvo}
+	N = K \backslash \{k\}
+\end{equation}
+
+S obzirom na relaciju \ref{eq:susjedstvo} i metriku za ocjenu bliskosti
+(\ref{eq:pearsonKorisnik}) ili \ref{eq:pearsonKosinus} dan je algoritam za
+filtriranje na relaciji više korisnika:
+\ref{algo:korisnik-korisnik}
 \begin{algorithm}
 	\caption{Korisnik-korisnik filtriranje}
 	\label{algo:korisnik-korisnik}
@@ -434,8 +450,41 @@ Algoritam:
 	\end{algorithmic}
 \end{algorithm}
 
+Algoritam se ugrubo svodi na:
+\begin{enumerate}
+  \item Dodjelu težine svim susjedima korisnika $k$.
+  \item Odabir $n$ susjeda koji imaju najveće težine s obzirom na korisnika $k$
+  gdje je broj tih susjeda ($topN$) određen empirijski.
+  \item Izračun predviđanja ocjene korisnika $k$ iz težinskog prosjeka ocjena
+  odabranih korisnika
+\end{enumerate}
+
+Ovaj pristup je relativno efikasan i jednostavan za implementaciju, ali druge
+strane, računalno postaje vrlo zahtjevan ako se primjeni na velike baze podataka
+korisnika i predmeta. U algoritmu \ref{algo:korisnik-korisnik} se može vidjeti
+da $for$ petlja ima $N$ prolazaka, a za svaki taj prolazak računa se Pearsonov
+koeficjent korelacije dan formulom \ref{eq:pearsonKorisnik} ($I$ puta).
+Složenost tada iznosi:
+\begin{equation}
+\label{eq:slozenostKorisnik}
+	O(N \ast I)
+\end{equation}
+
+Iako ocjene \ref{eq:slozenostKorisnik} pokazuje je ovisnost linearna,
+ipak se vidi da povećanjem broja korisnika ili predmeta dolazi do
+značajnog povećanja potrebnog broja operacija za izračun preporuke. 
+Valja dodati i da je algoritam \ref{algo:korisnik-korisnik} pojednostavljena
+verzija algoitma, pa ni ocjena \ref{eq:slozenostKorisnik} ne može biti uzeta
+kao konačna.
+
 \subsubsection{Predmet -- Predmet}
-Suradničko filtriranje na razini predmet-predmet
+S obzirom na nedostatke prethodne tehnike u performansama, inženjeri poznate
+internetske trgovine \emph{Amazon.com} predložili su sličan pristup ali iz druge
+perspektive gdje se ne traže sličnosti između korisnika, nego između predmeta
+\cite{amazon}. Kao i kod prethodno opisanog pristupa i algoritma
+\ref{algo:korisnik-korisnik}, metrika za ocjenu sličnosti između predmeta je
+Pearsonov koeficjent korelacije, u ovom slučaju definiran kao:
+
 \begin{equation}
 \label{eq:pearsonPredmet}
 	R = \frac
@@ -451,6 +500,10 @@ Suradničko filtriranje na razini predmet-predmet
 			}
 \end{equation}
 
+gdje je $U$ skup svih korisnika koji su ocjenili predmete $i$ i $j$, $r_{u,i}$
+ocjena korisnika $u$ za predmet $i$, a $\overline{r_i}$ srednja ocjena $i$-tog
+predmeta za sve korisnike. Predviđanje ocjene korisnika $k$ za predmet $i$
+računa se korištenjem težinskog prosjeka:
 \begin{equation}
 \label{eq:tezinskiProsjek}
 	p_{k,i} = 
@@ -458,16 +511,42 @@ Suradničko filtriranje na razini predmet-predmet
 			{\sum_{j \epsilon N} r_{k,j} \ast w_{i,j}}
 			{\sum_{j \epsilon N} \|w_{i,j}\|}
 \end{equation}
+gdje je $N$ susjedstvo predmeta ocjenjenih od strane korisnika $k$ najsličnijih
+predmetu $i$. Jedan od najpoznatijih preporučitelja na svijetu, internetska
+trgovina \emph{Amazon.com} koristi patentirani hibridni algoritam baziran na
+ovoj tehnici.
 \subsection{Hibridni tehnike}
 \begin{enumerate}
-  \item Težinski
-  \item Izmjenični
-  \item Miješani
-  \item Kombinacija obilježja
-  \item Kaskada
-  \item Pojačavanje obilježja
-  \item Meta razina
+  \item Težinski - ocjena predmeta preporuke računa se iz svih dostupnih
+  preporučiteljskih tehnika u sustavu. Najjednostavniji primjer jest linearna
+  kombinacija preporuka. Neki sustavi koji koriste ovu tehniku kombiniraju
+  preporuke zasnovane na suradnji i preporuke zasnovane na sadržaju uz
+  kalibraciju težina u ovisnosti o povratnoj informaciji korisnika.
+  \item Izmjenični - kod ove tehnike sustav koristi neki predefinirani kriterij
+  za izmjenu tehnike preporuke, primjerice, neka je dan sustav koji inicijalno
+  za svakog korisnika koristi preporuku zasnovanu na suradnji. Ako sustav tom
+  tehnikom ne može stvoriti preporuku određenog nivoa pouzdanosti, rpebacuje se
+  na preporuku zasnovanu na sadržaju.
+  \item Miješani - ova tehnika računa preporuke iz više elementarnih
+  preporučitelja i prikazuje ih simultano.
+  \item Kombinacija obilježja - jedan od načina za spajanje suradnjičkog i
+  sadržajnog preporučitelja jest interpretirati informacije suradničkog
+  preporučitelja kao dodatne podatke koji čine ulaz sadržajnog preporučitelja.
+  \item Kaskada - ova tehnika predstavlja svojevrsnu dvorazinsku preporuku. Prvo
+  jedan preporučitelj relativno grubo rangira potencijalne kandidate, a nakon
+  toga drugi preporučitelj radi precizniju razdiobu. Tehnika je posebno pogodna
+  za one slučajeve kada jedan preporučitelj ne može dovoljno precizno generirati
+  predviđanja za preporuke predmeta.
+  \item Pojačavanje obilježja - tehnika kod koje je generirano predviđanje ili
+  klasifikacija predmeta jednog preporučitelja pripojena slijedećoj
+  preporučiteljskoj tehnici u nizu.
+  \item Meta razina - izlaz jednog preporučitelja je ulaz drugog preporučitelja.
 \end{enumerate}
+
+Konkretne primjene preporučiteljskih sustava u heterogenim okolinama, danas se
+svode u velikoj mjeri na različite hibride osnovnih tehnika. Velike industrije
+trgovine i zabavnih sadržaja u praksi imaju autorska algoritamska rješenja
+hibridnih preporučitelja.
 \subsection{Moguća područja primjene}
 \subsection{Preporučiteljski sustavi u sveprisutnom računarstvu}
 specifičnosti, koji postoje, mobilni uređaji, foursquare itd.
