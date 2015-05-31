@@ -52,8 +52,8 @@
 %koji je motiv za ovaj diplomski -> do sada se nije razvio takav specifičan
 % preporučitelj
 \chapter{Uvod}
-U posljednjih dvadesetak godina razvoj Interneta stvari (\emph{eng. Internet
-of Things}) uhvatio je gotovo eksponencijalni zamah, a pojedini izvori navode da
+U posljednjih dvadesetak godina razvoj Interneta stvari \engl{Internet
+of Things} uhvatio je gotovo eksponencijalni zamah, a pojedini izvori navode da
 će broj uređaja priključenih na ovu sveprisutnu mrežu do $2020$. g. doseći $26$
 milijardi \cite{gartner2013Iot} odnosno $30$ milijardi \cite{ABI2013Iot}. Tomu
 značajno doprinosi i konstantno opadanje cijene proizvodnog procesa tehnologije
@@ -100,19 +100,19 @@ poslovima \cite{VukoticTankovic}.
 
 
 \section{Razvoj}
-U općem slučaju možemo razlikovati tri velika vala u računalnoj eri. To su:
+U općem slučaju mogu se razlikovati tri velika vala u računalnoj eri. To su:
 \begin{enumerate}
-  \item Radne stanice (\engl{Mainframe}) - jedno računalo, više osoba
-  \item Osobna računala (\engl{PC, Personal Computer}) - jedno računalo, jedna
+  \item Radne stanice \engl{Mainframe} - jedno računalo, više osoba
+  \item Osobna računala \engl{PC, Personal Computer} - jedno računalo, jedna
   osoba
-  \item Sveprisutno računarstvo (\engl{Ubiquitous Computing}) - više računala,
+  \item Sveprisutno računarstvo \engl{Ubiquitous Computing} - više računala,
   jedna osoba
 \end{enumerate}
 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=10cm]{images/majortrends.png}
-	\caption{Tri vala u računarstvu(slika ne valja)}
+	\caption{Tri vala u računarstvu (preuzeto u edukacijske svrhe, ne valja slika)}
 	\label{fig:majortrends}
 \end{figure}
 
@@ -137,15 +137,15 @@ jednostavan model preporučiteljskog sustava dan formulom:
 \label{eq:elementarniModel}
 	R \leftarrow U \times I
 \end{equation}
-gdje je $R$ rezultat, tj. predikcija (\emph{eng. prediction, recommendation}),
-preferencije korisnika $U$ (\emph{eng. user}) koji je zatražio preporuku, tj.
+gdje je $R$ rezultat, tj. predikcija \engl{ prediction, recommendation},
+preferencije korisnika $U$ \engl{ user} koji je zatražio preporuku, tj.
 filtriranje sadržaja , a $I$ predmet nad kojim se vrši predikcija preferencije
-(\emph{eng. item}). Traženje potencijalnih preporuka za korisnika $U$ tada se u
+\engl{ item}. Traženje potencijalnih preporuka za korisnika $U$ tada se u
 najjednostavnijem slučaju svodi na kombiniranje profila njegovih preferencija s
 profilima predmeta u skupu svih predmeta dostupnih algoritmu za filtriranje.
 Krajnji rezultat na kraju jest najčešće lista od $n$ najboljih preporuka, tj.
-pretpostavki da bi korisnik te predmete ocjenio najbolje (\emph{eng. top -- $N$
-list})
+pretpostavki da bi korisnik te predmete ocjenio najbolje \engl{ top -- $N$
+list}
 Gornji model ima dva osnovna i lako uočljiva ograničenja:
 \begin{enumerate}
   \item Traženje preporuka za korisnika svodi se na iscrpno pretraživanje
@@ -193,26 +193,26 @@ koje korisnik ostavlja u sustavu u osnovi se mogu podijeliti u dva skupa:
 Implicitni podaci su oni podaci koje je sustav prikupio od korisnika bez da ga
 je to eksplicitno zatražio. Takvi podaci mogu biti primjerice, demogravski
 podaci, točnije, šire područje iz kojeg korisnik koristi sustav a jednostavno se
-doznaje iz baze podataka dodijeljenih područja (\emph{eng. scope}) IP adresa.
+doznaje iz baze podataka dodijeljenih područja \engl{ scope} IP adresa.
 Također, pod implicitne podatke spadaju i akcije korisnika u sustavu koje se
 mogu doznati iz sjedničkih zapisa, kao i tzv. klikovi na određene poveznice
 unutar sustava.
 
 S druge strane, eksplicitni podaci su oni koje korisnik ostavlja s namjerom,
 primjerice koristeći ankete o svojim preferencijama, ostavljajući povratnu
-informaciju na ponuđene predmete (\emph{eng. feedback}) ili odgovarajući na bilo
+informaciju na ponuđene predmete \engl{ feedback} ili odgovarajući na bilo
 koji način na upite o pojedinim predmetima.
 
 U općem slučaju, preporučiteljske sustave razlikujemo prema načinu filtriranja i
 analiziranja informacija, a razlikujemo četiri osnovna načina (tj. jedan način
 pseudofiltriranja i tri načina filtriranja):
 \begin{enumerate}
-  \item Filtriranje neovisno o korisniku (\emph{eng. Non -- personalized
-  filtering})
-  \item Filtriranje zasnovano na sadržaju (\emph{eng. Content -- based
-  filtering})
-  \item Filtriranje zasnovano na suradnji (\emph{eng. Collaborative
-  filtering})
+  \item Filtriranje neovisno o korisniku \engl{ Non -- personalized
+  filtering}
+  \item Filtriranje zasnovano na sadržaju \engl{ Content -- based
+  filtering}
+  \item Filtriranje zasnovano na suradnji \engl{ Collaborative
+  filtering}
   \item Hibridne tehnike filtriranja odnosno preporučivanja
 \end{enumerate}
 
@@ -243,7 +243,7 @@ gdje je $R$ predikcija, tj. preporuka, a $I$ predmet. Iz relacije
 isključivo predmeta, pa kao takva ne može biti smatrana punokrvnim
 preporučiteljem.
 
-Razmjerno jednostavna predožba ovog modela jest rejting (\emph{eng. Rating}).
+Razmjerno jednostavna predožba ovog modela jest rejting \engl{ Rating}.
 Uzmimo za primjer neki servis za ocjenjivanje i korisničke recenzije
 ugostiteljskih objekata. Neka svaki korisnik koji je koristnio uslugu nekog od
 objekata ima pristup sustavu u kojem može u više kategorija ostaviti ocjenu iz
@@ -263,7 +263,7 @@ korisnika koji su ocjenili taj predmet, a $s_i$ ocjena $i$-tog korisnika. Iako,
 izgrađeni model preporuke strogo gledano nije preporučitelj, on to ipak čini
 posredno nudeći korisniku ono što su drugi korisnici obilježili kao poželjnije.
 Ovakav model obično koriste usluge s povratnom informacijom korisnika
-(\emph{eng. Feedback}), npr. \emph{eBay}, \emph{Tripadvisor} i \emph{Zagat}.
+\engl{ Feedback}, npr. \emph{eBay}, \emph{Tripadvisor} i \emph{Zagat}.
 Elemente ovog preporučitelja prikazane relacijama \ref{eq:skupOcjena} i
 \ref{eq:prosjek} možemo varirati kako bi prilagodili izgrađeni model drugim
 sustavima, primjerice:
@@ -278,8 +278,8 @@ sustavima, primjerice:
   odabrati neki drugi prikaz rezultata, primjerice u postotcima.
 \end{itemize}
 Sam način ocjenjivanja ne mora nužno biti eksplicitna dodjela ocjene. Moguće je
-primjerice koristiti sustav glasovanja \engl{Vote up/down} (\emph{eng. Vote
-up/down}).
+primjerice koristiti sustav glasovanja \engl{Vote up/down} \engl{ Vote
+up/down}.
 Najpoznatiji primjeri koji koriste takve ocjene su \emph{Reddit} i \emph{StackOverflow}.
 
 U općem slučaju modeli preporučitelja zasnovani na ovakvoj vrsti filtriranja
@@ -290,9 +290,10 @@ imaju dvije mane:
   \item Nedostatak konteksta za preporuke.
 \end{itemize}
 
-Potonji problem posebno se manifestira prilikom asocijativnog preporučivanja.
-Uzmimo za primjer da tražimo preporuku za neki predmet koji je dodatak na neki
-već postojeći predmet, primjerice, tražimo preporuku za preljev za sladoled.
+Nedostatak konteksta za preporuke posebno se manifestira prilikom asocijativnog
+preporučivanja. Uzmimo za primjer da tražimo preporuku za neki predmet koji je
+dodatak na neki već postojeći predmet, primjerice, tražimo preporuku za preljev
+za sladoled.
 %TODO a gdje ovo utrpati
 Izgradimo sada jednostavan model prema kojem bi mogli dobiti nepersonaliziranu
 preporuku za predmet koji ovisi o drugom predmetu. Neka su $X$ i $Y$ skupovi
@@ -381,7 +382,7 @@ ovisnosti o kontekstu primjene, vektore je poželjno i normalizirati.
 Jedna od većih prednosti ovog načina filtriranja je što može stvarati preporuke
 neovisno o tome je li za predmet davana povratna informacija ili ne. Drugim
 riječima, ovaj način filtriranja iznimno je prikladan na početku rada sustava
-jer nema problema s takozvanim hladnim početkom (\emph{eng. Cold start}). Isto
+jer nema problema s takozvanim hladnim početkom \engl{ Cold start}. Isto
 tako, prikladan je za primjene gdje je moguće relativno dobro strukturiranim
 karakteristikama opisati predmete. S druge strane, nepogodan je ukoliko ga
 se implementira u sustave gdje korisnici dolaze rijetko ili relativno često
@@ -408,9 +409,9 @@ predmeta ako su ih i ostali korisnici slično ocjenili.
 Zbog usporedbi i rada na dvije različite razine, korisničkoj i predmetnoj, ovaj
 preporučitelj se u osnovi dijeli na dvije moguće tehnike:
 \begin{itemize}
-  \item Korisnik-korisnik (\emph{eng. User-user, Neighbourhood-based,
-  Memory-based})
-  \item Predmet-predmet (\emph{eng. Item-item, Item-based, Model-based})
+  \item Korisnik-korisnik \engl{User-user, Neighbourhood-based,
+  Memory-based}
+  \item Predmet-predmet \engl{Item-item, Item-based, Model-based}
 \end{itemize}
 
 \subsubsection{Korisnik -- Korisnik}
