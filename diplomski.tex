@@ -117,7 +117,28 @@ U općem slučaju mogu se razlikovati tri velika vala u računalnoj eri. To su:
 \end{figure}
 
 \section{Zahtjevi}
+Analiziranjem zahtjeva na sveprisutno i prožimajuće računarstvo, može se
+zaključiti nešto:
+\begin{itemize}
+  \item Mali uređaji
+  \item Umrežavanje
+  \item Sakupljanje podataka i razmjena u okruženju bez prisustva korisnika
+  \item Otvoreno računarstvo radi podložnosti promjene softwarea i uređaja
+  (Java ili CLR ili nekaj takvo -> bytecode)
+\end{itemize}
 
+Još jedna lista zahtjeva na sveprisutno
+\begin{itemize}
+  \item Uređaj za prikaz, terminal, korisnički interface
+  \item Ekonomična cijena
+  \item Širok mrežni opseg
+  \item Sistem nevidljivih datoteka (bez znanja o direktorijima, nazivu
+  datoteka, lokaciji td.)
+  \item Automatska instalacija - migracija s jednog računala na drugi
+  \item Personaliziranost informacija
+  \item Privatnost (ima puno personaliziranih informacija, što ako se netko
+  dokopa?)
+\end{itemize}
 
 koje su glavne potrebe za rad sa sveprisutnim sustavima (mala energija,
 procesna moć, interakcija s okolinom)
@@ -125,6 +146,34 @@ procesna moć, interakcija s okolinom)
 \section{Primjena}
 
 Udri brigu na veselje u ovom poglavlju natuć za sva vremena xD
+
+Pametni gradovi, pametni prostori, internet stvari.
+
+Aspekt integracije: postojeće stvari -> nova tehnologija (orjentacija u muzeju
+s mobitelom)
+
+Primjene u urbanom računarstvo:
+\begin{itemize}
+  \item Javne i komercijalne infrastrukture
+  \item Mobilne i druge bežične mreže
+  \item Kolektivni transport
+  \item Plaćanje
+  \item Sigurnost i nadgledanje
+  \item Rasprostranjeno reklamiranje
+  \item Pametna arhitektura
+  \item Spektakularni urbani događaji
+  \item Mobilni tehnološki uređaji
+  \item Osobna komunikacija
+  \item Servisi socijalnih mreža
+  \item Urbana umjetnost?
+\end{itemize}
+
+Urbani krajolik -> skriveni slojevi mogu postati vidljivi, svojevrsni izum
+mikroskopa.
+
+Urbano računarstvo -> ljudi koji žive u urbanoj stredini mogu imati mnogo
+različitih interesa ali imaju jednu stvar koja im je zajednička: mjesto gdje
+žive (ovo bi se moglo primjeniti na činjenicu da svi imaju isti cilj u šopingu)
 
 \chapter{Preporučiteljski sustavi}
 \section{Uvod u preporučiteljske sustave}
@@ -137,15 +186,17 @@ jednostavan model preporučiteljskog sustava dan formulom:
 \label{eq:elementarniModel}
 	R \leftarrow U \times I
 \end{equation}
-gdje je $R$ rezultat, tj. predikcija \engl{ prediction, recommendation},
+gdje je $R$ rezultat, tj. predikcija \engl{prediction, recommendation},
 preferencije korisnika $U$ \engl{ user} koji je zatražio preporuku, tj.
 filtriranje sadržaja , a $I$ predmet nad kojim se vrši predikcija preferencije
-\engl{ item}. Traženje potencijalnih preporuka za korisnika $U$ tada se u
+\engl{item}. Traženje potencijalnih preporuka za korisnika $U$ tada se u
 najjednostavnijem slučaju svodi na kombiniranje profila njegovih preferencija s
 profilima predmeta u skupu svih predmeta dostupnih algoritmu za filtriranje.
-Krajnji rezultat na kraju jest najčešće lista od $n$ najboljih preporuka, tj.
-pretpostavki da bi korisnik te predmete ocjenio najbolje \engl{ top -- $N$
-list}
+Dakle, preporuka $R$ zapravo je predviđanje ocjene korisnika $U$ za
+traženi predmet $I$. Krajnji rezultat na kraju jest najčešće lista od $n$
+najboljih preporuka, tj. pretpostavki da bi korisnik te predmete ocjenio
+najbolje \engl{top -- $N$ list}. 
+
 Gornji model ima dva osnovna i lako uočljiva ograničenja:
 \begin{enumerate}
   \item Traženje preporuka za korisnika svodi se na iscrpno pretraživanje
@@ -193,25 +244,25 @@ koje korisnik ostavlja u sustavu u osnovi se mogu podijeliti u dva skupa:
 Implicitni podaci su oni podaci koje je sustav prikupio od korisnika bez da ga
 je to eksplicitno zatražio. Takvi podaci mogu biti primjerice, demogravski
 podaci, točnije, šire područje iz kojeg korisnik koristi sustav a jednostavno se
-doznaje iz baze podataka dodijeljenih područja \engl{ scope} IP adresa.
+doznaje iz baze podataka dodijeljenih područja \engl{scope} IP adresa.
 Također, pod implicitne podatke spadaju i akcije korisnika u sustavu koje se
 mogu doznati iz sjedničkih zapisa, kao i tzv. klikovi na određene poveznice
 unutar sustava.
 
 S druge strane, eksplicitni podaci su oni koje korisnik ostavlja s namjerom,
 primjerice koristeći ankete o svojim preferencijama, ostavljajući povratnu
-informaciju na ponuđene predmete \engl{ feedback} ili odgovarajući na bilo
+informaciju na ponuđene predmete \engl{feedback} ili odgovarajući na bilo
 koji način na upite o pojedinim predmetima.
 
 U općem slučaju, preporučiteljske sustave razlikujemo prema načinu filtriranja i
 analiziranja informacija, a razlikujemo četiri osnovna načina (tj. jedan način
 pseudofiltriranja i tri načina filtriranja):
 \begin{enumerate}
-  \item Filtriranje neovisno o korisniku \engl{ Non -- personalized
+  \item Filtriranje neovisno o korisniku \engl{Non -- personalized
   filtering}
-  \item Filtriranje zasnovano na sadržaju \engl{ Content -- based
+  \item Filtriranje zasnovano na sadržaju \engl{Content -- based
   filtering}
-  \item Filtriranje zasnovano na suradnji \engl{ Collaborative
+  \item Filtriranje zasnovano na suradnji \engl{Collaborative
   filtering}
   \item Hibridne tehnike filtriranja odnosno preporučivanja
 \end{enumerate}
@@ -243,7 +294,7 @@ gdje je $R$ predikcija, tj. preporuka, a $I$ predmet. Iz relacije
 isključivo predmeta, pa kao takva ne može biti smatrana punokrvnim
 preporučiteljem.
 
-Razmjerno jednostavna predožba ovog modela jest rejting \engl{ Rating}.
+Razmjerno jednostavna predožba ovog modela jest rejting \engl{Rating}.
 Uzmimo za primjer neki servis za ocjenjivanje i korisničke recenzije
 ugostiteljskih objekata. Neka svaki korisnik koji je koristnio uslugu nekog od
 objekata ima pristup sustavu u kojem može u više kategorija ostaviti ocjenu iz
@@ -278,7 +329,7 @@ sustavima, primjerice:
   odabrati neki drugi prikaz rezultata, primjerice u postotcima.
 \end{itemize}
 Sam način ocjenjivanja ne mora nužno biti eksplicitna dodjela ocjene. Moguće je
-primjerice koristiti sustav glasovanja \engl{Vote up/down} \engl{ Vote
+primjerice koristiti sustav glasovanja \engl{Vote up/down} \engl{Vote
 up/down}.
 Najpoznatiji primjeri koji koriste takve ocjene su \emph{Reddit} i \emph{StackOverflow}.
 
@@ -594,7 +645,38 @@ trgovine i zabavnih sadržaja u praksi imaju autorska algoritamska rješenja
 hibridnih preporučitelja.
 \section{Moguća područja primjene}
 \section{Preporučiteljski sustavi u sveprisutnom računarstvu}
+Primjena preporučiteljskih sustava u sveprisutnom računarstvu logična je
+posljedica ne samo činjenice da je sveprisutno računarstvo računarstvo kao takvo
+pa u njemu postoji interes za preporukom, nego i činjenice da se u njemu
+generiraju velike količine podataka pa se preporučiteljski algoritmi mogu
+primjeniti kao filtri podataka. O podacima sveprisutnom računarstvu praktički
+je nemoguće govoriti bez konteksta u kojem se nalaze. Taj kontekst može se
+definirati kao bilo koja informacija o okolnostima, predmetima ili uvjetima
+koje okružuju korisnika, a smatra se relevantnom za interakciju između
+korisnika i sveprisutnog računalnog okruženja \cite{RanganathanCampbell}.
+
+Tri najvažnija aspekta kontekseta su \cite{schilit1994context}:
+\begin{enumerate}
+  \item Gdje se korisnik sustava nalazi
+  \item U društvu kojih je drugih korisnika sustava
+  \item Koji resursi se nalaze u blizini
+\end{enumerate}
+
+Koje su specifičnosti? Nisam ni sam ziher, algoritam vjerojatno mora biti
+prilagođen filtiranju ogromne količine nestrukturiranih podataka, kontekst
+vremena i prostora je najbitniji, predmeti preporuke su iz puno više različitih
+domena nego npr na amazonu, pa ih je teže opisati.
+
+Primjer preporučiteljskog sustava koji se djelomično nalazi u sveprisutnom
+računarstvu jest algoritam koji koristi \emph{Foursquare}. \emph{Foursquare} je
+servis koji preporučuje lokale na temelju preferencija korisnika, njegovih
+ocjena sličnih lokacija te ocjena njegovih najbližih prijatelja i stručnjaka
+koje prati \cite{FoursquareAbout}. Kod ovog preporučitelja vidljiv je prostorni
+kontekst u smislu preporučivanja
+
 specifičnosti, koji postoje, mobilni uređaji, foursquare itd.
+
+%Novi chapter%
 \chapter{Izgrađeni model preporučiteljskog sustava}
 Izražen prostorno vremenski kontekst (općenito)
 dvije razine reinforcementa
@@ -605,13 +687,28 @@ netko svaka dva tjedna kupuje jabuke pa mu se svaka dva tjedna kupuju jabuke
 \section{Preporučiteljski sustavi s izraženom prostornom i vremenskom
 komponentom}
 \section{Prostorna komponenta}
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=7cm]{images/grid.png}
+	\caption{Tlocrt dućana modeliran kvadratnom mrežom}
+	\label{fig:StoreGrid}
+\end{figure}
+
 \section{Vremenska komponenta}
+
+%Novi chapter%
 \chapter{Ispitivanje modela}
 \section{Ispitni scenarij}
+
+
+
 \section{Simulacija primjene}
 \section{Provođenje testiranja}
 \section{Scenariji korištenja}
 \section{Rezultati testiranja}
+
+
 
 \chapter{Modeliranje podataka}
 \section{Hijerarhijsko modeliranje}
