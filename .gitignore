@@ -5,3 +5,7 @@ tmp
 .project
 .texlipse
 README.txt
+
+#Images
+images/*.gif
+images/*.psd
