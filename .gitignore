@@ -9,3 +9,8 @@ README.txt
 #Images
 images/*.gif
 images/*.psd
+images/*.ai
+images/*.svg
+
+#Produced
+*.pdf

@@ -22,22 +22,17 @@
 }
 
 \begin{document}
-
-% TODO: Navedite broj rada.
 \thesisnumber{1136}
-
-% TODO: Navedite naslov rada.
 \title{Preporučiteljski sustavi u sveprisutnom računarstvu}
-
-% TODO: Navedite vaše ime i prezime.
 \author{Branimir Pervan}
-
 \maketitle
 
-% Ispis stranice s napomenom o umetanju izvornika rada. Uklonite naredbu \izvornik ako želite izbaciti tu stranicu.
+% Ispis stranice s napomenom o umetanju izvornika rada. Uklonite naredbu
+% \izvornik ako želite izbaciti tu stranicu.
 \izvornik
 
-% Dodavanje zahvale ili prazne stranice. Ako ne želite dodati zahvalu, naredbu ostavite radi prazne stranice.
+% Dodavanje zahvale ili prazne stranice. Ako ne želite dodati zahvalu, naredbu
+% ostavite radi prazne stranice.
 \zahvala{Ovdje dolazi zahvala}
 
 \tableofcontents
@@ -47,10 +42,10 @@
 %kako povezati preporučitelje i sveprisutno računarstvo, 
 %što se tu ima preporučivati, koji je konkretan scenarij itd
 
-%jednostavno, preporučiteljski sustavi filtriraju informacije iz velikih i nepreglednih baza
-%podataka a gdje ćeš više informacija nego u sveprisutnom računarstvu
-%koji je motiv za ovaj diplomski -> do sada se nije razvio takav specifičan
-% preporučitelj
+%jednostavno, preporučiteljski sustavi filtriraju informacije iz velikih i
+% nepreglednih baza podataka a gdje ćeš više informacija nego u sveprisutnom
+% računarstvu koji je motiv za ovaj diplomski -> do sada se nije razvio takav
+% specifičan preporučitelj
 \chapter{Uvod}
 U posljednjih dvadesetak godina razvoj Interneta stvari \engl{Internet
 of Things} uhvatio je gotovo eksponencijalni zamah, a pojedini izvori navode da
@@ -675,8 +670,9 @@ koje prati \cite{FoursquareAbout}. Kod ovog preporučitelja vidljiv je prostorni
 kontekst u smislu preporučivanja
 
 specifičnosti, koji postoje, mobilni uređaji, foursquare itd.
-
-%Novi chapter%
+%-------------------------------------------------------------------------------
+%  CHAPTER: Izgrađeni model preporučiteljskog sustava
+%-------------------------------------------------------------------------------
 \chapter{Izgrađeni model preporučiteljskog sustava}
 Izražen prostorno vremenski kontekst (općenito)
 dvije razine reinforcementa
@@ -686,7 +682,12 @@ netko svaka dva tjedna kupuje jabuke pa mu se svaka dva tjedna kupuju jabuke
 (recurring) 
 \section{Preporučiteljski sustavi s izraženom prostornom i vremenskom
 komponentom}
+I kolaboracija i sadržaj
+- kod sadržaja, gdje je udaljenost manja od nekog broja (i fizička udaljenost)
+- račun udaljenosti je apstrahiran
 \section{Prostorna komponenta}
+
+Opisati modeliranje prostora, kretanje po gridu itd.
 
 \begin{figure}[htb]
 	\centering
@@ -696,100 +697,116 @@ komponentom}
 \end{figure}
 
 \section{Vremenska komponenta}
+vrijeme, recurring, dio tjedna u kojem se kupuje, doba dana u kojem se kupuje
+
+\section{Modeliranje korisnika}
+multiplus profil
 
 %Novi chapter%
 \chapter{Ispitivanje modela}
 \section{Ispitni scenarij}
+Osmišljavanje ispitnog scenarija pokazalo se natprosječno zahtjevnim radi
+pokušaja da takav scenarij obuhvati i ispita sve segmente kontekstualno svjesnog
+preporučitelja. S druge strane, takav scenarij je morao biti realno
+ostvariv, u smislu da ne bude sintetički osmišljen nego da u realnom
+svijetu postoji takva situacija u kojoj će se osmišljeni preporučiteljski
+model moći implementirati i koristiti. Na kraju je odabrana prosječna
+svakodnevna aktivnost većine potencijalnih korisnika ovakvog sustava, a to je
+odlazak u kupovinu.
 
+%TODO: gdje se nalaze podaci o policama?
+Ispitni scenarij podrazumjeva generički srednje velik dućan u kojem se
+može naći mješovita roba, dakle, i prehrana i neprehrana. Radi jednostavnosti, a
+bez značajnijeg utjecaja na krajnji ishod, tlocrt dućana modeliran je mrežastom
+strukturom prikazanom na slici \ref{fig:StoreGrid}. U dućanu se na svakom mjestu
+mogu nalaziti radio oznake \engl{beacon} kojima mogu biti obilježeni:
+\begin{itemize}
+  \item Neka lokacija u dućanu, npr. red polica
+  \item Skupina proizvoda
+  \item Konkretan proizvod
+\end{itemize}
+Ovdje se nameće pitanje je li potrebno radio oznakama obilježiti sve
+potencijalne predmete preporuke. Sa strane sustava, podrazumjeva se
+posjedovanje točnih lokacija svake radio oznake, a poznavanjem točnih lokacija
+te poznavanjem rasporeda u dućanu, interpolacijom možemo aproksimirati lokaciju
+korisnika u trenutcima kada je on između radio oznaka. Svakoj radio oznaci
+pridodani su i neki metapodaci od kojih je najvažniji jedinstveni identifikator
+u sustavu.
 
+%TODO: beacon opis
+Svaka radio oznaka ima određeni domet signala kojim razašilje \engl{broadcast}
+svoj jedinstveni identifikator. Kada se mobilni uređaj nađe u dometu signala, on
+prima taj jedinstveni identifikator te može utvrditi \emph{RSS} \engl{Received
+signal strength}. 
 
-\section{Simulacija primjene}
-\section{Provođenje testiranja}
-\section{Scenariji korištenja}
-\section{Rezultati testiranja}
-
-
-
-\chapter{Modeliranje podataka}
-\section{Hijerarhijsko modeliranje}
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=14.515cm]{images/storestruct.png}
-	\caption{Hijerarhijsko modeliranje dućana}
-	\label{fig:storestruct}
+	\includegraphics[width=9cm]{images/gridbeacons1cell.png}
+	\caption{Grafički prikaz radio oznake i mobilnog telefona}
+	\label{fig:RssOneCell}
 \end{figure}
-Slika \ref{fig:storestruct} je dana kao ekstremno jednostavan primjer
-mogućnosti modeliranja hijerarhije. Na njoj se može vidjeti kako je korijen
-hijerarhijskog stabla model razmatranog dućana. U prvom nižem sloju dućan se u
-općem slučaju dijeli u čisto fizičkom smislu na redove, tj. lokacije. Dalje u
-nižim slojevima slijede skupine proizvoda. Ovdje valja napomenuti kako je moguće
-da se za neke predmete hijerarhija proteže kroz više razina zbog prirodnog
-hijerarhijskog modela specifičnog za te predmete. Na kraju, listovi stabla
-predstavljaju konkretne predmete.
 
-Kao što je već navedeno, svaki čvor stabla predstavlja jedan konkretan
-predmet.
-Zbog toga, čvor kao takav enkapsulira sve ono čime je taj konkretni predmet
-predstavljen u sustavu. U općem slučaju to su:
+Slika \ref{fig:RssOneCell} prikazuje slučaj kada je mobilni
+uređaj u dometu jedne radio oznake. U tom slučaju može se smatrati da je
+korisnik zainteresiran za ono što radio oznaka obilježava. S druge strane,
+ako se korisnik nađe u dometu dva ili više radio oznaka (slika
+\ref{fig:RssTwoCells}), onda se jednostavno uzima signal one radio oznake čiji
+je \emph{RSS} u tom trenutku jači. Naime, \emph{RSS} opada s udaljenošću pa se s
+pravom može smatrati da jači \emph{RSS} nužno povlači veću fizičku blizinu
+korisnika u odnosu na pripadajuću radio oznaku, tj. ono što ta radio oznaka
+obilježava.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=9cm]{images/gridbeacons2cells.png}
+	\caption{Grafički prikaz višestrukog prijama signala s radio oznaka}
+	\label{fig:RssTwoCells}
+\end{figure}
+
+Također, uzima se u obzir i vrijeme zadržavanja korisnika u blizini radio
+oznake. Ukoliko je korisnik proveo manje vremena od neke empirijski određene
+vremenske granice $t_min$, onda se može smatrati da korisnik nije iskazao
+interes za predmet koji radio oznaka obilježava.
+U obzir valja uzeti i orjentaciju korisnika. Nerijetko je moguće da korisnik
+bude u dometu signala radio oznake, a fizički nije usmjeren prema predmetu koji
+ona označava. Korištenjem magnetometra na pametnom uređaju i poznavanjem
+razmještaja radio oznaka u prostoru, može se jednostavno utvrditi je li korisnik
+iskazao interes za obilježeni predmet ili je okrenut od njega.
+%zadržavanje -> reinforcement
+
+Izvor podataka je dobro enkapsuliran pa se može reći da mora implementirati
+sučelje s određenom opremom, a ta oprema je:
 \begin{itemize}
-  \item Metapodaci, kao npr.
-	\begin{itemize}
-	  \item Interni identifikacijski kod predmeta
-	  \item Barkod \engl{Bar code}
-	  \item Naziv
-	  \item Proizvođača
-	\end{itemize}
-  \item Vektor karakteristika
+  \item Komunikacijski radio, npr. \emph{WLAN} \engl{Wireless LAN} -- koristi
+  se za svu komunikaciju sa poslužiteljima po pitanju dohvaćanja metapodataka o
+  radio oznakama, traženje preporuke itd.
+  \item Magnetometar -- koristi se utvrđivanje je li korisnik okrenut prema
+  radio oznaci ili od nje. %TODO: neka slika ovdje, malo je nejasno
+  \item Akcelerometar -- koristi se za utvrđivanje gibanja korisnika. Ako je
+  korisnik u pokretu, zanemaruju se podaci sa ulaza za očitavanje radio oznaka
+  \item Bluetooth -- koristi se za komunikaciju s radio oznakama
 \end{itemize}
 
-\section{Modeliranje korisnika}
-\begin{enumerate}
-  \item multiplus profil, znamo tko što voli, tj. imamo profil korisnika
-  \item dopuna profila? kroz šetnju, kroz zadržavanje, kada kupi?
-  \item cold start profil?
-\end{enumerate}
+Takav izvor u praksi može biti bilo koji moderniji mobilni telefon ili tablet.
 
-Profil:
-\begin{enumerate}
-  \item Proizvodi, skupine proizvoda, redovi? -> stablo?
-  \item vektor preferencija
-\end{enumerate}
-\section{Modeliranje predmeta}
+\section{Simulacija primjene}
+%TODO: treba negdje ubaciti kako se stvar može generalizirati
+Opis načina testiranja
+Opisati inpute i outpute, konfiguraciju itd.
 
-\chapter{Problem vremena i prostora}
-Osnovni problem s kojim se konvencionalni preporučiteljski sustavi susreću (a
-time i popularniji radni okviri i biblioteke koji ih implementiraju) jest
-izostanak bilo kakve potpore za prostorne i vremenske komponente koje
-su se pokazale neophodne za rad sa sveprisutnim sustavima.
-%Za sveprisutno prostor i vrijeme su jedne od bitnijih stavki (referenca?)
+timestamp -> popis beacona + rss
+magnetometar i akcelerometar
+shadow preporuke (može u globalni model) -> implicitna preporuka u kojoj korisnika
+preko akcija vodimo do onoga što njemu treba
+beacon id -> proizvod i lokaciju
 
-\section{Vremenska komponenta}
-\glqq subota \grqq vs. \glqq utorak \grqq
-\section{Prostorna komponenta}
-lokacija unutar dućana
+out -> za trenutnu lokaciju -> u kojem smijeru dalje i koji proizvodi idući (topN)
 
-\chapter{Razvoj algoritma i radnog okvira}
-\section{Ulazi i izlazi}
-\begin{enumerate}
-  \item logovi (id + rss)
-  \item multiplus id
-  \item lokacija beacona s id-em
-  \item multiplus profil (kontekstualizirani), vremenski
-  \item tendencija kretanja
-\end{enumerate}
-\begin{enumerate}
-  \item lista s obzirom na lokaciju i vrijeme
-  \item s obzirom na očekivani profil kupnje
-\end{enumerate}
-
-+Generalizacija -> kako bi se isti sustav koristio na FERu recimo
-+blagajna -> reinfrcement
-+fade out efekt
-+akcije (u konzumu)
-\chapter{Testiranje i evaluacija}
-\section{Metodologija}
-\section{Testiranje}
-\section{Evaluacija preporučitelja}
+\section{Provođenje testiranja}
+Opis testnog scenarija u smislu kako smo polijepili beacone po feru, hodali,
+zaustavljali se itd.
+\section{Rezultati testiranja}
+Prikazati rezultate, jelte
 
 \chapter{Zaključak}
 Zaključak.
@@ -803,7 +820,6 @@ Sažetak na hrvatskom jeziku.
 \kljucnerijeci{Ključne riječi, odvojene zarezima.}
 \end{sazetak}
 
-% TODO: Navedite naslov na engleskom jeziku.
 \engtitle{Recommender systems in ubiquituous computing}
 \begin{abstract}
 Abstract.
