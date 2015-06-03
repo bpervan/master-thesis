@@ -691,6 +691,16 @@ su se pokazale neophodne za rad sa sveprisutnim sustavima.
 \section{Naš model}
 Znači cijeli model treba opisati, od ocjenjivanja do apsolutno svega
 
+\begin{equation}
+\label{eq:DefModel}
+	R \leftarrow U \times I \times C
+\end{equation}
+
+\begin{equation}
+\label{eq:Context}
+	C \leftarrow T \times S
+\end{equation}
+
 Izražen prostorno vremenski kontekst (općenito)
 dvije razine reinforcementa
 koje je pravo vrijeme za reinforcement
@@ -708,17 +718,113 @@ I kolaboracija i sadržaj
 
 \section{Prostorna komponenta}
 
-Opisati modeliranje prostora, kretanje po gridu itd.
+S obzirom na kompleksnost postupka modeliranja prostora, prostorna komponenta
+konteksta modelirat će se poednostavljeno, i to kvadratnom mrežom
+(slika \ref{fig:StoreGrid}). Iako se na prvi pogled tako čini, to nije
+ograničenje jer modeliranje prostora u kojem će korisnici tražiti preporuku
+najčešće nije slobodno, tj. korisnik se u takvim prostorima kreće putem koji mu
+je dostupan. Primjer je dućan u kojem se korisnik može kretati između polica, a
+očito je i razumno da se ne može kretati \emph{preko} polica.
+%TODO: ružno napisano, refactor
+Dostupne puteve za korisnika može se čuvati u npr. riječnicima
+\engl{Dictionary}, tj. parovima $kljuc \rightarrow vrijednost$ gdje je $kljuc$
+neko polje kvadratne mreže a $vrijednost$ lista svih \emph{susjednih} polja do
+kojih je moguće doći iz polja $kljuc$. Minorna mana ovog pristupa jest
+dvostruko spremanje putova jer ako se iz polja $p_1$ može doći u polje $p_2$,
+onda se iz polja $p_2$ može doći u polje $p_1$. Dvostruko spremanje može se
+izbjeći nauštrb vremenu pretraživanja dvostrukih putanja, a za relativno malu
+memorijsku uštedu, čak i kod modeliranja vrlo velikih prostora.
+%TODO: refactor text
+Ako se kvadratnu mrežu i dostupne putove kretanja prikaže kao neusmjereni
+težinski graf, onda se taj prostor može predstaviti \emph{matricom
+susjedstva}, a kako je takva matrica simetrična, spremati se može samo npr.
+gornja trokutasta matrica, čime se postiže svojevrsna rijetka popunjenost
+matrice \engl{Sparse Matrix}.
+%TODO: i ovo refactor
+%treba napisati kako su različite namjene dijkstre i A* itd.
+Prednost predstavljanja mreže i prostora grafom jest i postojanje nebrojeno
+mnogo pouzdanih i efikasnih algoritama za traženje najkraćeg puta između dva
+vrha, odnosno dva polja. Neki od njih su npr. \emph{Dijkstrin algoritam},
+\emph{Bellman-Ford algoriam} ili \emph{A$\ast$ algoritam}.
 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=7cm]{images/grid.png}
-	\caption{Tlocrt dućana modeliran kvadratnom mrežom}
+	\caption{Tlocrt prostora modeliran kvadratnom mrežom}
 	\label{fig:StoreGrid}
 \end{figure}
 
 \section{Vremenska komponenta}
-vrijeme, recurring, dio tjedna u kojem se kupuje, doba dana u kojem se kupuje
+
+*vrijeme, recurring,
+*dio tjedna u kojem se kupuje, doba dana u kojem se kupuje, fade out efekt,
+akcije
+
+Vremenska komponenta koja se uzima u obzir u modelu preporučitelja također je
+zapravo komponenta konteksta u kojem se nalazi korisnik. 
+
+uuuu, korisnik može za određeni proizvod imati funkciju koja opisuje kakve on
+ima vremenske preferencije s obzirom na taj proizvod. ili funkcija može
+opisivati samo one trenutke kada se stavlja korisnik u situaciju da traži
+preporuk
+
+Jedna takva funkcija može biti primjerice tzv. \emph{Gaussova krivulja}
+(slika \ref{fig:Gauss1}). Ona je pogodna zbog činjenice da prosječan korisnik
+prosječnu akciju u kojoj će tražiti preporuku u principu traži u jednom kraćem
+vremenskom intervalu. Drugim riječima, pojedini predmeti preporuke za nekog
+korisnika u vremenski svjesnom preporučiteljskom sustavu bit će zanimljivi samo
+jedan kraći interval.
+\begin{equation}
+	\label{eq:BellFunc}
+	f(x;a,b,c) = \frac
+	{
+		1
+	}
+	{
+		1 + \mid\frac{x - c}{a}\mid^{2b}
+	}
+\end{equation}
+gdje je $x$ varijabla, a $a$, $b$ i $c$ parametri kojima se regulira oblik
+krivulje:
+\begin{itemize}
+  \item $a$ - širina vrha
+  \item $b$ - nagib porasta i pada, oblik vrha
+  \item $c$ - pomak na $x$ osi
+\end{itemize}
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=12cm]{images/zvonolika1.png}
+	\caption{Preferencija korisnika za predmet na dnevnoj skali}
+	\label{fig:Gauss1}
+\end{figure}
+
+S druge strane, skala ne mora biti dnevna, može biti i tjedna te se funkciju
+može zadati po dijelovima (puno kompleksnije situacije). % Tu mi fali neka slika 
+% funkcije pod više dijelova i na tjednoj skali
+Znači, funkcija može biti na više različitih skala i može odražavati
+preferenciju za predmet ili preferenciju za traženje preporuke općenito
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=12cm]{images/zvonolika1.png}
+	\caption{Preferencija korisnika za predmet na dnevnoj skali}
+	\label{fig:Gauss2}
+\end{figure}
+
+S obzirom na matematičku analizu koja stoji iza računa za pronalazak funkcije,
+one se mogu zadati i diskretno, npr. kroz vektor uzoraka funkcije. Ta diskretnu
+funkciju može se koristiti kao takva ili se može procesom interpolacije naći
+njezin eksplicitni zapis. Pogodne metode interpolacije mogu npr. biti
+interpolacija polinomom višeg stupnja ili interpolacija splajnovima
+\engl{Spline}.
+
+
+u funkcija može biti kontinuirana, a može biti i uzorkovana i
+pohranjena u nekom polju. y os funkcije tada je vrijednost koju korisnik
+pridaje nekom proizvodu u neko doba dana. ne mora biti ni doba dana, može biti
+doba tjedna. diskretizirane funkcije mogu se interpolirati polinomima višeg
+stupnja ili splajnovima
 
 \section{Modeliranje korisnika}
 multiplus profil
@@ -814,7 +920,7 @@ sučelje s određenom opremom, a ta oprema je:
   se za svu komunikaciju sa poslužiteljima po pitanju dohvaćanja metapodataka o
   radio oznakama, traženje preporuke itd.
   \item Magnetometar -- koristi se utvrđivanje je li korisnik okrenut prema
-  radio oznaci ili od nje. %TODO: neka slika ovdje, malo je nejasno
+  radio oznaci ili od nje. % 
   \item Akcelerometar -- koristi se za utvrđivanje gibanja korisnika. Ako je
   korisnik u pokretu, zanemaruju se podaci sa ulaza za očitavanje radio oznaka
   \item Bluetooth -- koristi se za komunikaciju s radio oznakama
