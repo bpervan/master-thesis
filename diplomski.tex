@@ -679,12 +679,27 @@ dvije razine reinforcementa
 koje je pravo vrijeme za reinforcement
 dva profila -> privremeni i trajni profil pa zbroj nakon kupnje
 netko svaka dva tjedna kupuje jabuke pa mu se svaka dva tjedna kupuju jabuke
-(recurring) 
+(recurring)
+
+Priča o postojećim preporučiteljima i kako nemaju prostorno vremenskih
+komponenti 
 \section{Preporučiteljski sustavi s izraženom prostornom i vremenskom
 komponentom}
+
+Znači cijeli model treba opisati, od ocjenjivanja do apsolutno svega
+
+Tu bi u principu trebalo ubaciti the algoritam
+* fade out efekt
+akcije(u konzumu)
 I kolaboracija i sadržaj
 - kod sadržaja, gdje je udaljenost manja od nekog broja (i fizička udaljenost)
 - račun udaljenosti je apstrahiran
+
+Osnovni problem s kojim se konvencionalni preporučiteljski sustavi susreću (a
+time i popularniji radni okviri i biblioteke koji ih implementiraju) jest
+izostanak bilo kakve potpore za prostorne i vremenske komponente koje
+su se pokazale neophodne za rad sa sveprisutnim sustavima.
+%Za sveprisutno prostor i vrijeme su jedne od bitnijih stavki (referenca?)
 \section{Prostorna komponenta}
 
 Opisati modeliranje prostora, kretanje po gridu itd.
@@ -701,6 +716,18 @@ vrijeme, recurring, dio tjedna u kojem se kupuje, doba dana u kojem se kupuje
 
 \section{Modeliranje korisnika}
 multiplus profil
+
+\begin{enumerate}
+  \item multiplus profil, znamo tko što voli, tj. imamo profil korisnika
+  \item dopuna profila? kroz šetnju, kroz zadržavanje, kada kupi?
+  \item cold start profil?
+\end{enumerate}
+
+Profil:
+\begin{enumerate}
+  \item Proizvodi, skupine proizvoda, redovi? -> stablo?
+  \item vektor preferencija
+\end{enumerate}
 
 %Novi chapter%
 \chapter{Ispitivanje modela}
@@ -793,6 +820,19 @@ Takav izvor u praksi može biti bilo koji moderniji mobilni telefon ili tablet.
 %TODO: treba negdje ubaciti kako se stvar može generalizirati
 Opis načina testiranja
 Opisati inpute i outpute, konfiguraciju itd.
+
+Ulazi i izlazi
+\begin{enumerate}
+  \item logovi (id + rss)
+  \item multiplus id
+  \item lokacija beacona s id-em
+  \item multiplus profil (kontekstualizirani), vremenski
+  \item tendencija kretanja
+\end{enumerate}
+\begin{enumerate}
+  \item lista s obzirom na lokaciju i vrijeme
+  \item s obzirom na očekivani profil kupnje
+\end{enumerate}
 
 timestamp -> popis beacona + rss
 magnetometar i akcelerometar
