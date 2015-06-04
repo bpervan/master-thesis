@@ -741,6 +741,7 @@ dvostruko spremanje putova jer ako se iz polja $p_1$ može doći u polje $p_2$,
 onda se iz polja $p_2$ može doći u polje $p_1$. Dvostruko spremanje može se
 izbjeći nauštrb vremenu pretraživanja dvostrukih putanja, a za relativno malu
 memorijsku uštedu, čak i kod modeliranja vrlo velikih prostora.
+%TODO: Manhattan distance
 %TODO: refactor text
 Ako se kvadratnu mrežu i dostupne putove kretanja prikaže kao neusmjereni
 težinski graf, onda se taj prostor može predstaviti \emph{matricom
@@ -762,10 +763,6 @@ vrha, odnosno dva polja. Neki od njih su npr. \emph{Dijkstrin algoritam},
 \end{figure}
 
 \section{Vremenska komponenta}
-
-*vrijeme, recurring,
-*dio tjedna u kojem se kupuje, doba dana u kojem se kupuje, fade out efekt,
-akcije
 
 Vremenska komponenta koja se uzima u obzir u modelu preporučitelja također je
 zapravo komponenta konteksta u kojem se nalazi korisnik. 
@@ -826,12 +823,41 @@ njezin eksplicitni zapis. Pogodne metode interpolacije mogu npr. biti
 interpolacija polinomom višeg stupnja ili interpolacija splajnovima
 \engl{Spline}.
 
-
 u funkcija može biti kontinuirana, a može biti i uzorkovana i
 pohranjena u nekom polju. y os funkcije tada je vrijednost koju korisnik
 pridaje nekom proizvodu u neko doba dana. ne mora biti ni doba dana, može biti
 doba tjedna. diskretizirane funkcije mogu se interpolirati polinomima višeg
 stupnja ili splajnovima
+
+%TODO: refactor
+Vremenska komponenta omogućava i praćenje obrazaca ponašanja korisnika, pa time
+i predviđanje ponavljanja ponašanja \engl{Recurring}.
+
+Vremenska komponenta podrazumjeva i tzv. \emph{efekt blijeđenja} \engl{Fade-out
+effect}. Ako korisnik kod kojeg je uočen neki obrazac akcija prestane provoditi
+tu akciju, preporučitelj će prestati primati pobudu za održavanje te akcije.
+Međutim, neće je odmah zanemariti nego će se vremenska komponenta, tj. funkcija
+koja opisuje tu komponentu, lagano gušiti nekom drugom funkcijom, primjerice
+recipročnom eksponencijalnom funkcijom:
+
+\begin{equation}
+	\label{eq:RecipExp}
+	g(x) = e^{-x}
+\end{equation}
+
+Tada će ukupan rezultat vremenske komponente konteksta biti:
+
+\begin{equation}
+	\label{eq:Gusenje}
+	T \leftarrow f(x) \ast g(x)
+\end{equation}
+
+gdje je $f(x)$ funkcija koja opisuje vremensku komponentu konteksta nekog
+korisnika za neki predmet, a $g(x)$ funkcija koja guši tu komponentu.
+primjer. Ovdje također postoji mogućnost da se funkcija $g(x)$ zada diskretno,
+tj. po uzorcima.
+
+akcije
 
 \section{Modeliranje korisnika}
 multiplus profil
