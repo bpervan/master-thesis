@@ -702,11 +702,12 @@ Znači cijeli model treba opisati, od ocjenjivanja do apsolutno svega
 \end{equation}
 
 Izražen prostorno vremenski kontekst (općenito)
-dvije razine reinforcementa
-koje je pravo vrijeme za reinforcement
-dva profila -> privremeni i trajni profil pa zbroj nakon kupnje
-netko svaka dva tjedna kupuje jabuke pa mu se svaka dva tjedna kupuju jabuke
-(recurring)
+dvije razine reinforcementa. preporučitelj neće raditi online, tj. akcije iz
+trenutnog sessiona ne utječu na preporuke u tom istom sessionu. tek kad se
+session commita (po izlasku iz sustava) profili se zbrajaju i preporuke postaju
+aktualne koje je pravo vrijeme za reinforcement dva profila -> privremeni i
+trajni profil pa zbroj nakon kupnje netko svaka dva tjedna kupuje jabuke pa mu
+se svaka dva tjedna kupuju jabuke (recurring)
 
 
 Tu bi u principu trebalo ubaciti the algoritam
@@ -944,7 +945,7 @@ bude u dometu signala radio oznake, a fizički nije usmjeren prema predmetu koji
 ona označava. Korištenjem magnetometra na pametnom uređaju i poznavanjem
 razmještaja radio oznaka u prostoru, može se jednostavno utvrditi je li korisnik
 iskazao interes za obilježeni predmet ili je okrenut od njega.
-%zadržavanje -> reinforcement
+%zadržavanje -> reinforcement prvog stupnja
 
 Izvor podataka je dobro enkapsuliran pa se može reći da mora implementirati
 sučelje s određenom opremom, a ta oprema je:
