@@ -724,6 +724,32 @@ sastoje itd.
 
 Kakve su ocjene, koje su skale
 
+\ref{algo:korisnik-korisnik}
+\begin{algorithm}
+	\caption{Algoritam kontekstualizirane preporuke u vremenu i prostoru}
+	\label{algo:TheAlgo}
+	\begin{algorithmic}
+		\STATE{\textbf{Ulaz:} }
+		\STATE{\textbf{Izlaz:} }
+		
+		\FOR{($i := 0; i < n; inc(i)$)}
+			\STATE{$w_i := calculatePearson(k, N_i)$}
+		\ENDFOR
+		
+		\STATE{sort(w)}
+		\STATE{$suma := 0; tezine := 0$}
+		
+		\FOR{($i := 0; i < topN; inc(i)$)}
+			\STATE{$suma := suma + w_i * N_i$}
+			\STATE{$tezine := tezine + w_i$}
+		\ENDFOR
+		
+		\STATE{$p := suma / tezine$}
+		
+		\RETURN{p}
+	\end{algorithmic}
+\end{algorithm}
+
 \section{Prostorna komponenta}
 
 S obzirom na kompleksnost postupka modeliranja prostora, prostorna komponenta
@@ -980,7 +1006,12 @@ Ulazi i izlazi
   \item s obzirom na očekivani profil kupnje
 \end{enumerate}
 
-
+Dnevnički zapisi \engl{Log} s pametnog uređaja pišu se i čitaju u predefiniranom
+formatu
+\begin{equation}
+	\centering
+	timestamp;beaconId1:rss1,beaconId2:rss2,beaconId3:rss3
+\end{equation}
 
 timestamp -> popis beacona + rss
 magnetometar i akcelerometar
