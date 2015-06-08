@@ -7,6 +7,7 @@
 \usepackage{algorithmic}
 \usepackage{verbatim}
 \usepackage{tikz,times}
+\usepackage{graphicx}
 
 \usetikzlibrary{arrows}
 
@@ -305,7 +306,7 @@ Osnovni model filtriranja jest filtriranje neovisno o korisniku. Model preporuke
 koji proizlazi iz ovakvog načina filtriranja, strogo gledano, ne može biti
 preporučitelj jer preporuka ne ovisi strogo o korisniku. Drugim riječima, svaki
 korisnik koji zatraži preporuku od ove vrste filtriranja dobit će istu
-preporuku. Ovu tvrdnju mogli bi jednostavnije prikazati relacijom:
+preporuku. Ova tvrdnja može se jednostavnije prikazati relacijom:
 \begin{equation}
 \label{eq:filtriranjeNeovisnoOKorisniku}
 	R \leftarrow I
@@ -315,13 +316,13 @@ gdje je $R$ predikcija, tj. preporuka, a $I$ predmet. Iz relacije
 isključivo predmeta, pa kao takva ne može biti smatrana punokrvnim
 preporučiteljem.
 
-Razmjerno jednostavna predožba ovog modela jest rejting \engl{Rating}.
-Uzmimo za primjer neki servis za ocjenjivanje i korisničke recenzije
-ugostiteljskih objekata. Neka svaki korisnik koji je koristnio uslugu nekog od
-objekata ima pristup sustavu u kojem može u više kategorija ostaviti ocjenu iz
-nekog intervala s prisanom recenzijom. Također, neka svaki korisnik ima
-mogućnost ocijeniti uslugu brojčanom ocjenom iz intervala od jedan do pet. Model
-preporučitelja u tom slučaju bio bi opisan s:
+Razmjerno jednostavna predožba ovog modela jest rejting \engl{Rating}. Neka je
+dan neki servis za ocjenjivanje i korisničke recenzije ugostiteljskih objekata.
+Neka svaki korisnik koji je koristnio uslugu nekog od objekata ima pristup
+sustavu u kojem može u više kategorija ostaviti ocjenu iz nekog intervala s
+ risanom recenzijom. Također, neka svaki korisnik ima mogućnost ocijeniti uslugu
+brojčanom ocjenom iz intervala od jedan do pet. Model preporučitelja u tom
+slučaju je opisan s:
 \begin{equation}
 \label{eq:skupOcjena}
 	S = \{1, 2, 3, 4, 5\}
@@ -331,13 +332,14 @@ preporučitelja u tom slučaju bio bi opisan s:
 	R = \lfloor \frac{\sum_{i=1}^{N} s_i}{N} \ast 10 \rfloor
 \end{equation}
 gdje je $S$ skup mogućih ocjena, $R$ konačan rejting predmeta, $N$ ukupan broj
-korisnika koji su ocjenili taj predmet, a $s_i$ ocjena $i$-tog korisnika. Iako,
+korisnika koji su ocjenili taj predmet, a $s_i$ ocjena $i$-tog korisnika. Iako
 izgrađeni model preporuke strogo gledano nije preporučitelj, on to ipak čini
 posredno nudeći korisniku ono što su drugi korisnici obilježili kao poželjnije.
 Ovakav model obično koriste usluge s povratnom informacijom korisnika
-\engl{ Feedback}, npr. \emph{eBay}, \emph{Tripadvisor} i \emph{Zagat}.
-Elemente ovog preporučitelja prikazane relacijama \ref{eq:skupOcjena} i
-\ref{eq:prosjek} možemo varirati kako bi prilagodili izgrađeni model drugim
+
+\engl{Feedback}, npr. \emph{eBay}, \emph{Tripadvisor} i \emph{Zagat}.
+Elementi ovog preporučitelja prikazani relacijama \ref{eq:skupOcjena} i
+\ref{eq:prosjek} mogu se varirati kako bi se prilagodio izgrađeni model drugim
 sustavima, primjerice:
 \begin{itemize}
   \item Skup ocjena $S$. Ovisno o potrebi, moguće je skup proširiti do potrebnog
@@ -362,19 +364,30 @@ imaju dvije mane:
   \item Nedostatak konteksta za preporuke.
 \end{itemize}
 
+%TODO: refactor
 Nedostatak konteksta za preporuke posebno se manifestira prilikom asocijativnog
-preporučivanja. Uzmimo za primjer da tražimo preporuku za neki predmet koji je
-dodatak na neki već postojeći predmet, primjerice, tražimo preporuku za preljev
-za sladoled.
+preporučivanja. Ako u sustavu postoje predmeti koji su na neki način logički
+povezani, te ako korisnik traži preporuku za neki od tih predmeta, tj. traži
+preporuku za dodatak na neki predmet, onda može doći do lažne korelacije i
+neispravne preporuke. Ovaj efekt jako dobro ilustrira primjer preuzet iz
+\cite{courseraRC}. U tom primjeru, dan je preporučiteljski sustav koji
+preporučuje korisnicima predmete koji su namirnice u supermarketu. U tom sustavu
+posebno popularan predmet su banane. Kada se korisniku daje preporuka nakon
+određene kupnje, često mu se, zbog popularnosti banana, one i preporučuju. Ako
+je korisnik primjerice kupio televizor, kao preporuku može dobiti banane samo
+zato što su one popularne.
+
+
 %TODO a gdje ovo utrpati
-Izgradimo sada jednostavan model prema kojem bi mogli dobiti nepersonaliziranu
-preporuku za predmet koji ovisi o drugom predmetu. Neka su $X$ i $Y$ skupovi
-svih korisnika koji su kupili proizvode $X$ i $Y$ respektivno.
+Jednostavan model pomoću kojega bi se mogla dobiti nepersonalizirana preporuka
+za predmet koji ovisi o drugom predmetu može biti relativno jednostavno
+izgrađen. Neka su $X$ i $Y$ skupovi svih korisnika koji su kupili proizvode $X$
+i $Y$ respektivno.
 
 Intuitivno se nameće da ukoliko je više korisnika kupilo proizvod $X$ i uz njega
 proizvod $Y$ da će i ostalim korisnicima (koji traže preporuku) proizvod $Y$
-odgovarati uz proizvod $X$. Elementarnom algebrom skupova možemo dakle
-zaključiti da se predikcija za nekog korisnika može izraziti relacijom:
+odgovarati uz proizvod $X$. Elementarnom algebrom skupova može se dakle
+zaključiti da predikcija za nekog korisnika može biti izražena relacijom:
 \begin{equation}
 \label{eq:naivnaNepersonaliziraniTemp}
 	R = \frac{\mid X \cap Y \mid}{\mid X \mid}
@@ -386,7 +399,6 @@ predmetom. Drugi problem je nepostojanost veze između predmeta iz skupa $X$ i
 $Y$ u smislu asocijativnosti. Ukoliko je $X$ skup sladoleda, a $Y$ skup
 preljeva, korisniku bi kao preporuku trebalo izdvojiti preljeve za sladoled iz
 skupa $Y$. 
-
 \begin{equation}
 \label{eq:nepersonalizirani}
 	R = \frac
@@ -413,13 +425,13 @@ gdje su $X$ i $Y$ skupovi svih korisnika koji su kupili proizvode
 Za razliku od filtriranja neovisnog o korisniku, filtriranje ovisno o korisniku
 uzima u obzir korisnika i njegove preferencije.
 \subsection{Filtriranje zasnovano na sadržaju}
-Razmotrimo situaciju kada ne tretiramo korisnike ili predmete kao osnovne
-(atomarne) jedinice, nego ih možemo opisati nekim kategorijama, primjerice,
-demografskim podacima za korisnika, autorom i izdavačem ako je predmet neka
-knjiga i sl. Preporučivanje zasnovano na sadržaju u osnovi dovoi u vezu
-prikupljene preferencije korisnika, bilo eksplicitno, bilo implicitno. Neka je u
-sustavu koji koristi preporučitelj zasnovan na sadržaju svaki predmet opisan
-tekstualnim medapodacima i vektorom:
+U gotovo svim primjenama preporučitelja, tj. u sustavima u kojima se oni
+koriste, predmeti ili korisnici nisu osnovne (atomarne) jedinice, nego ih se
+može opisati nekim kategorijama, primjerice, demografskim podacima za korisnika,
+autorom i izdavačem ako je predmet neka knjiga i sl. Preporučivanje zasnovano
+na sadržaju u osnovi dovodi u vezu prikupljene preferencije korisnika, bilo
+eksplicitno, bilo implicitno. Neka je u sustavu koji koristi preporučitelj
+zasnovan na sadržaju svaki predmet opisan tekstualnim medapodacima i vektorom:
 \begin{equation}
 \label{eq:vektorKarakteristika}
 	\boldsymbol{X_i} = 
@@ -444,8 +456,10 @@ tada izraziti kosinusom kuta između vektora njihovih karakteristika.
 			{\boldsymbol{V}_1 \ast \boldsymbol{V}_2}
 			{\|\boldsymbol{V}_1\| \times \|\boldsymbol{V}_2\|}
 \end{equation}
+
 Tu još negdje ubaci da svaka karakteristika može imati svoju težinu, u smislu da
 neka karakteristika može biti važnija.
+
 Također, neka za svakog korisnika postoji korisnički profil sa dostupnim
 preferencijama korisnika dostupnim u vektorskom zapisu gdje $i$-ta komponenta
 vektora predstavlja težinu te karakteristike za korisnika. Tada je na sličan
@@ -454,7 +468,7 @@ ovisnosti o kontekstu primjene, vektore je poželjno i normalizirati.
 Jedna od većih prednosti ovog načina filtriranja je što može stvarati preporuke
 neovisno o tome je li za predmet davana povratna informacija ili ne. Drugim
 riječima, ovaj način filtriranja iznimno je prikladan na početku rada sustava
-jer nema problema s takozvanim hladnim početkom \engl{ Cold start}. Isto
+jer nema problema s takozvanim hladnim početkom \engl{Cold start}. Isto
 tako, prikladan je za primjene gdje je moguće relativno dobro strukturiranim
 karakteristikama opisati predmete. S druge strane, nepogodan je ukoliko ga
 se implementira u sustave gdje korisnici dolaze rijetko ili relativno često
@@ -465,6 +479,8 @@ multimediju, video na zahtjev i sl.
 Nešto tu ne štima vezano uz težine. Komponente vektora zapravo su kvantitativni
 opis, brojka, to nisu težine. Težine, koje predstavljaju koja je karakteristika
 korisniku koliko važna su u drugom vektoru?
+
+Cijelu ovu priču treba proširiti i još utrpati algoritam.
 
 \subsection{Filtriranje zasnovano na suradnji}
 Suradnički pristup dijametralno je suprotan sadržajnom pristupu. Princip rada
@@ -587,7 +603,7 @@ Složenost tada iznosi:
 	O(N \ast I)
 \end{equation}
 
-Iako ocjene \ref{eq:slozenostKorisnik} pokazuje je ovisnost linearna,
+Iako ocjena \ref{eq:slozenostKorisnik} pokazuje je ovisnost linearna,
 ipak se vidi da povećanjem broja korisnika ili predmeta dolazi do
 značajnog povećanja potrebnog broja operacija za izračun preporuke. 
 Valja dodati i da je algoritam \ref{algo:korisnik-korisnik} pojednostavljena
