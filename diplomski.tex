@@ -53,13 +53,20 @@ of Things} uhvatio je gotovo eksponencijalni zamah, a pojedini izvori navode da
 milijardi \cite{gartner2013Iot} odnosno $30$ milijardi \cite{ABI2013Iot}. Tomu
 značajno doprinosi i konstantno opadanje cijene proizvodnog procesa tehnologije
 koja naizgled obične stvari na neki način čini inteligentnima i sposobnima za
-komunikaciju. Sveprisutno računarstvo, kao koncept u računarskoj znanosti
+komunikaciju. 
+Sveprisutno računarstvo, kao koncept u računarskoj znanosti
 gdje je računarstvo prisutno svugdje \cite{theComputerWeiser}, opisuje upravo 
 takve vrste stvari i uređaja, ali i takve principe gdje računalo može biti
 ugrađeno u bilo kojem uređaju, na bilo kojoj lokaciji i u bilo kojem obliku.
 
-Tu još negjde mora doći dosta toga o preporučiteljima i njihovoj mega
-korisnosti 
+Internet stvari samo je jedna od mogućih manifestacija sveprisutnog računarstva.
+
+S druge strane, preporučiteljski sustavi
+filtriranje sadržaja
+multimedija, internetske trgovine
+i ono manje primjetno, pametni prostori, arhitektura 
+preporučitelji svjesni konteksta
+vrijeme i prostor važni dionici konteksta
 
 Potreba i smisao izučavanja ovog područja dolazi iz očitog primjera za
 ulaganjem u bolje i efikasnije algoritme jer je u nepreglednoj masi
@@ -70,7 +77,7 @@ Dodano u uvod
 
 Motiv ovog diplomskog rada jest manjak dostupnih algoritama za ovakvu
 specifičnu vrstu preporučitelja. U ovom radu dat će se teorijska
-podlogua bazičnih algoritama za filtriranje sadržaja te analizirati prednosti i
+podloga bazičnih algoritama za filtriranje sadržaja te analizirati prednosti i
 nedostatke takvih pristupa. Prikazat će se principi primjene preporučiteljskih
 sustava u sveprisutnim aplikacijama te će se prikazati i analizirati posebni
 zahtjevi na preporučiteljske sustave od strane takvih aplikacija na konkretnom
@@ -82,7 +89,7 @@ takvu primjenu.
 A šta koji drek ovdje da pričam. Što je sveprisutno računarstvo, tko ga je
 definirao, što u njemu dolazi do izražaja, koje su koristi?
 
-Termin \glqq Sveprisutno računarstvo \grqq prvi je upotrijebio Mark Weiser u
+Termin \glqq Sveprisutno računarstvo\grqq prvi je upotrijebio Mark Weiser u
 svom vizionarskom članku u kojem je rekao kako su najkorisnije
 one one tehnologije koje nestaju, u smislu da korisnici izgube pojam o
 korištenju te tehnologije \cite{computer21}. 
@@ -186,9 +193,11 @@ jednostavan model preporučiteljskog sustava dan formulom:
 gdje je $R$ rezultat, tj. predikcija \engl{prediction, recommendation},
 preferencije korisnika $U$ \engl{ user} koji je zatražio preporuku, tj.
 filtriranje sadržaja , a $I$ predmet nad kojim se vrši predikcija preferencije
-\engl{item}. Traženje potencijalnih preporuka za korisnika $U$ tada se u
-najjednostavnijem slučaju svodi na kombiniranje profila njegovih preferencija s
-profilima predmeta u skupu svih predmeta dostupnih algoritmu za filtriranje.
+\engl{item}. Drugim riječima, predikcija je posljedica karakteristike,
+tj. preferencije korisnika, te karakteristike predmeta. Traženje potencijalnih
+preporuka za korisnika $U$ tada se u najjednostavnijem slučaju svodi na
+kombiniranje profila njegovih preferencija s profilima predmeta u skupu svih
+predmeta dostupnih algoritmu za filtriranje.
 Dakle, preporuka $R$ zapravo je predviđanje ocjene korisnika $U$ za
 traženi predmet $I$. Krajnji rezultat na kraju jest najčešće lista od $n$
 najboljih preporuka, tj. pretpostavki da bi korisnik te predmete ocjenio
@@ -201,14 +210,24 @@ Gornji model ima dva osnovna i lako uočljiva ograničenja:
   \item Rezultat je preporuka kojoj fali bilo kakav kontekst.
 \end{enumerate}
 
-Da bismo doskočili ovim problemima, razmotrit ćemo razne modele preporuke od
-kojih su neke već dobro poznati i korišteni algoritmi. Za početak, uvedimo u
-formulu \ref{eq:elementarniModel} općeniti kontekst preporuke:
+U svrhu riješavanja gore navedenih problema, razmotrit će se razni modeli
+preporuke od kojih su neki već dobro poznati i korišteni algoritmi. Neka je $C$
+kontekst u kojem korisnik $U$ traži preporuku. Formula \ref{eq:elementarniModel}
+tada postaje:
 \begin{equation}
 \label{eq:elementarniModelSKontekstom}
 	R \leftarrow U \times I \times C
 \end{equation}
-gjde je $C$ kontekst u kojem korisnik $U$ traži preporuku.
+dok predikcija $R$ postaje posljedica karakteristike, tj. preferencije
+korisnika, karakteristike predmeta i konteksta u kojem se vrši predikcija.
+Kontekst $C$ se ne shvaća atomarno i u sebi može sadržavati raznorazne
+komponente koje mogu utjecati na preporuku, npr:
+\begin{itemize}
+  \item Vrijeme predikcije
+  \item Mjesto na kojem se traži predikcija
+  \item Društvo drugih korisnika u datom trenutku
+  \item Možda još nešto tu navesti?
+\end{itemize}
 
 Predmet se shvaća generički i on može varirati ovisno o kontekstu primjene,
 primjerice, artikli u internet trgovini, knjige u digitalnim knjižnicama, pjesme
@@ -229,6 +248,7 @@ sadržaja (referenca: ono čudo koje te pita kaj te interesira). Korisnici imaju
 svoje preferencije koje su u ovom slučaju uglavnom opisane težinama jer prema
 različitim potrebama određene karakteristike predmeta nad kojima se vrši
 filtriranje mogu biti zanimljivije, odnosno manje zanimljive.
+%TODO: SVD tu negdje?
 
 Interakcijom korisnika sa sustavom omogućuje se praćenje njegovih odabira,
 treniranje preporučitelja te kroz analizu profila korisnika i njegovih osobnih
@@ -239,7 +259,7 @@ koje korisnik ostavlja u sustavu u osnovi se mogu podijeliti u dva skupa:
   \item Eksplicitni
 \end{enumerate}
 Implicitni podaci su oni podaci koje je sustav prikupio od korisnika bez da ga
-je to eksplicitno zatražio. Takvi podaci mogu biti primjerice, demogravski
+je to eksplicitno zatražio. Takvi podaci mogu biti primjerice, demografski
 podaci, točnije, šire područje iz kojeg korisnik koristi sustav a jednostavno se
 doznaje iz baze podataka dodijeljenih područja \engl{scope} IP adresa.
 Također, pod implicitne podatke spadaju i akcije korisnika u sustavu koje se
@@ -252,8 +272,7 @@ informaciju na ponuđene predmete \engl{feedback} ili odgovarajući na bilo
 koji način na upite o pojedinim predmetima.
 
 U općem slučaju, preporučiteljske sustave razlikujemo prema načinu filtriranja i
-analiziranja informacija, a razlikujemo četiri osnovna načina (tj. jedan način
-pseudofiltriranja i tri načina filtriranja):
+analiziranja informacija, a razlikujemo četiri osnovna načina:
 \begin{enumerate}
   \item Filtriranje neovisno o korisniku \engl{Non -- personalized
   filtering}
@@ -263,6 +282,11 @@ pseudofiltriranja i tri načina filtriranja):
   filtering}
   \item Hibridne tehnike filtriranja odnosno preporučivanja
 \end{enumerate}
+Iako se tehnički iz filtiranja neovisnog o korisniku može izgraditi
+preporučiteljski sustav, on to nije u punom smislu riječi jer praktički
+izostavlja ulogu korisnika u sustavu. Drugim riječima, svaki korisnik će dobiti
+istu preporuku. Zbog toga ga se može nazvati svojevrsnim
+\emph{pseudopreporučiteljem}.
 
 Povijesno gledano, razvoj preporučiteljskih sustava započeo je devedesetih
 godina prošlog stoljeća, a nemalo je populariziran $2006$. g. svojevrsnim
