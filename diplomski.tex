@@ -766,7 +766,6 @@ sastoje itd.
 
 Kakve su ocjene, koje su skale
 
-\ref{algo:korisnik-korisnik}
 \begin{algorithm}
 	\caption{Algoritam kontekstualizirane preporuke u vremenu i prostoru}
 	\label{algo:TheAlgo}
@@ -791,6 +790,29 @@ Kakve su ocjene, koje su skale
 		\RETURN{p}
 	\end{algorithmic}
 \end{algorithm}
+
+\begin{enumerate}
+  \item Prostorni filter: sve što je trenutno u okolini korisnika manje od
+  nekog graničnog „radiusa“, uzmi u obzir, ostalo odbaci. Potrebno između
+  ostalog da smanjimo broj računanja. Što je veća blizina, to veća težina u
+  rezultatu. Tu ide definicija udaljenosti, ili graf pa
+  Dijkstra/Bellman-Ford/A*, ili kvadradna mreža pa Manhattan distance
+  
+  \item Vremenski filter: Uzeti u obzir dio dana i dio tjedna, što smo
+  vremenski bliže vremenu u kojem korisnik kupuje te predmete, to je veća
+  težina/utjecaj. Svaki korisnik ima funkcije (kontinuirane ili diskretne)
+  kojima se opisuje vremenska preferencija za neke predmete
+  
+  \item U ovoj fazi postoji lista s poredanim prostorno vremenskim
+  „udaljenostima“. Ako sadrži manje od nekog broja predmeta, ponovi od 1. ali
+  olabavi kriterije
+  
+  \item U ovoj fazi primjenjujemo prilagođeni kolaborativni i content filter.
+  Može i SVD dekompozicija(skupo) pa matrična algebra
+  
+  \item Imamo listu, sortira se prema lokaciji i vodimo korisnika.
+  
+\end{enumerate}
 
 \section{Prostorna komponenta}
 
@@ -867,20 +889,19 @@ krivulje:
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=12cm]{images/zvonolika1.png}
+	\includegraphics[width=12cm]{images/zvonolika1matlab.png}
 	\caption{Preferencija korisnika za predmet na dnevnoj skali}
 	\label{fig:Gauss1}
 \end{figure}
 
 S druge strane, skala ne mora biti dnevna, može biti i tjedna te se funkciju
-može zadati po dijelovima (puno kompleksnije situacije). % Tu mi fali neka slika 
-% funkcije pod više dijelova i na tjednoj skali
+može zadati po dijelovima (puno kompleksnije situacije). 
 Znači, funkcija može biti na više različitih skala i može odražavati
 preferenciju za predmet ili preferenciju za traženje preporuke općenito
-
+%TODO Tu mi fali neka slika funkcije pod više dijelova i na tjednoj skali
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=12cm]{images/zvonolika1.png}
+	\includegraphics[width=14.21cm]{images/neprigusenocropped.png}
 	\caption{Preferencija korisnika za predmet na dnevnoj skali}
 	\label{fig:Gauss2}
 \end{figure}
@@ -923,8 +944,40 @@ Tada će ukupan rezultat vremenske komponente konteksta biti:
 
 gdje je $f(x)$ funkcija koja opisuje vremensku komponentu konteksta nekog
 korisnika za neki predmet, a $g(x)$ funkcija koja guši tu komponentu.
-primjer. Ovdje također postoji mogućnost da se funkcija $g(x)$ zada diskretno,
-tj. po uzorcima.
+primjer. 
+
+Na slici \ref{fig:GaussPriguseno} vidljiv je primjer \emph{efekta
+blijeđenja} na tipično periodičko ponašanje korisnika. Prema formuli
+\ref{eq:Gusenje} vrijedi:
+
+\begin{equation}
+	\label{eq:BellFunc}
+	f(x) = \frac
+	{
+		1
+	}
+	{
+		1 + \mid\frac{x - 2*k}{0.23}\mid^{5}
+	}
+	+ 2 \ast k + 1
+\end{equation}
+gdje je $k \in \{ 0, 1, 2, 3, 4, 5, 6, 7 \}$
+
+\begin{equation}
+	\label{eq:Prigusnica}
+	g(x)=e^{-0.18 * x}
+\end{equation}
+
+Ovdje također postoji mogućnost da se funkcija $g(x)$ zada diskretno, tj. po
+uzorcima.
+
+%TODO: slika s gušenjem
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=14.21cm]{images/prigusenocropped.png}
+	\caption{Preferencija korisnika za predmet na dnevnoj skali}
+	\label{fig:GaussPriguseno}
+\end{figure}
 
 akcije
 
