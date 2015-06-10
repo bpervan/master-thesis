@@ -363,6 +363,8 @@ sustavima, primjerice:
   odabrati neki drugi prikaz rezultata, primjerice u postotcima (slika
   	\ref{fig:Ebay2}).
 \end{itemize}
+Preporuka korisniku na kraju se jednostavno svodi na prikaz prvih $N$ najboljih
+prosječnih ocjena.
 
 \begin{figure}[htb]
 	\centering
@@ -408,7 +410,6 @@ imaju dvije mane:
   \item Nedostatak konteksta za preporuke.
 \end{itemize}
 
-%TODO: je li ovo dobar uvod
 Nepersonalizirana preporuka može se izvesti i asocijativno, traženjem implicitne
 korelacije između dvaju ili više predmeta. Naivno gledano, može se zaključiti
 ako je relativna većina korisnika uz kupnju nekog proizvoda $i_1$ kupila i
@@ -420,7 +421,22 @@ preporučiti proizvod $i_2$, i obrnuto. Ova tvrdnja može se opisati formulom
 \label{eq:NaivnaNep}
 	R = \frac{\mid X \cap Y \mid}{\mid X \mid}
 \end{equation}
+gdje je $X$ skup svih korisnika koji su kupili predmet $i_1$, $Y$ skup svih
+korisnika koji su kupili predmet $i_2$ a $R$ ocjena ovisnosti između predmeta
+$i_1$ i $i_2$. Zbog činjenice da je kardinalni broj presjeka dvaju skupova
+uvijek manji ili jednak kardinalnom broju bilo kojeg od ta dva skupa, ocjena $R$
+nalazi se u intervalu $0 \leq R \leq 1$.
 
+Problem ove metode preporučivanja jest navedeni nedostatak konteksta za
+preporuke. Taj nedostatak može se manifestirati u činjenici da su neki predmeti
+neovisno popularni. Primjerice, ako je neki predmet popularan, naivni
+preporučitelj može koristeći \ref {eq:NaivnaNep} (opravdano) stvoriti vezu
+između tog predmeta i bilo kojeg drugog predmeta. Primjer dan u
+\cite{courseraRC} pokazuje kako su u nekom sustavu posebno popularan predmet
+banane i kako naivni preporučitelj stvara veze između banana i nekih drugih
+generičkih predmeta, pa onda pri kupnji banana preporučuje te generičke predmete
+i obratno. Ovaj efekt može se eliminirati normalizacijom relacije
+\ref{eq:NaivnaNep}:
 
 \begin{equation}
 \label{eq:nepersonalizirani}
@@ -432,9 +448,8 @@ preporučiti proizvod $i_2$, i obrnuto. Ova tvrdnja može se opisati formulom
 			{\mid \overline{X} \cap Y\mid}
 			{\mid \overline{X} \mid}}
 \end{equation}
-
-Neka je dana situacija u kojoj je
-neki predmet u sustavu iznimno popularan od strane većine korisnika. 
+gdje su $X$ i $Y$ skupovi svih korisnika koji su kupili predmete $i_1$ i $i_2$
+respektivno.
 
 \section{Filtriranje ovisno o korisniku}
 Za razliku od filtriranja neovisnog o korisniku, filtriranje ovisno o korisniku
