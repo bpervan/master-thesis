@@ -316,13 +316,15 @@ preporuku. Ova tvrdnja može se jednostavnije prikazati relacijom:
 gdje je $R$ predikcija, tj. preporuka, a $I$ predmet. Iz relacije
 \ref{eq:filtriranjeNeovisnoOKorisniku} očigledno je da je predikcija funkcija
 isključivo predmeta, pa kao takva ne može biti smatrana punokrvnim
-preporučiteljem.
+preporučiteljem. S druge strane, isplati se proučiti ovu vrstu filtriranja jer
+neki njezini koncepti vrijede u općem slučaju, npr. sustav ocjenjivanja i sustav
+prikazivanja rezultata.
 
 Razmjerno jednostavna predožba ovog modela jest rejting \engl{Rating}. Neka je
 dan neki servis za ocjenjivanje i korisničke recenzije ugostiteljskih objekata.
 Neka svaki korisnik koji je koristnio uslugu nekog od objekata ima pristup
 sustavu u kojem može u više kategorija ostaviti ocjenu iz nekog intervala s
- risanom recenzijom. Također, neka svaki korisnik ima mogućnost ocijeniti uslugu
+pisanom recenzijom. Također, neka svaki korisnik ima mogućnost ocijeniti uslugu
 brojčanom ocjenom iz intervala od jedan do pet. Model preporučitelja u tom
 slučaju je opisan s:
 \begin{equation}
@@ -338,8 +340,15 @@ korisnika koji su ocjenili taj predmet, a $s_i$ ocjena $i$-tog korisnika. Iako
 izgrađeni model preporuke strogo gledano nije preporučitelj, on to ipak čini
 posredno nudeći korisniku ono što su drugi korisnici obilježili kao poželjnije.
 Ovakav model obično koriste usluge s povratnom informacijom korisnika
-
 \engl{Feedback}, npr. \emph{eBay}, \emph{Tripadvisor} i \emph{Zagat}.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=14.21cm]{images/neosobni/ebay1.png}
+	\caption{Primjer rejtinga na internetskoj aukcijskoj kući \emph{eBay}}
+	\label{fig:Ebay1}
+\end{figure}
+
 Elementi ovog preporučitelja prikazani relacijama \ref{eq:skupOcjena} i
 \ref{eq:prosjek} mogu se varirati kako bi se prilagodio izgrađeni model drugim
 sustavima, primjerice:
@@ -351,13 +360,46 @@ sustavima, primjerice:
   povećati dozvoljavanjem ocjena van skupa cijelih brojeva.
   \item Prikaz rezultata $R$. U formuli \ref{eq:prosjek} prije zaokruživanja
   prosjek je pomnožen faktorom $10$ radi eliminacije decimala. Moguće je
-  odabrati neki drugi prikaz rezultata, primjerice u postotcima.
+  odabrati neki drugi prikaz rezultata, primjerice u postotcima (slika
+  	\ref{fig:Ebay2}).
 \end{itemize}
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=5cm]{images/neosobni/ebay2.png}
+	\caption{Implicitna preporuka trgovca izražena postotcima}
+	\label{fig:Ebay2}
+\end{figure}
+
 Sam način ocjenjivanja ne mora nužno biti eksplicitna dodjela ocjene. Moguće je
 primjerice koristiti sustav glasovanja \engl{Vote up/down} \engl{Vote
-up/down}.
-Najpoznatiji primjeri koji koriste takve ocjene su \emph{Reddit} i \emph{StackOverflow}.
+up/down}. Pomoću takvog sustava, korisnici masovno određuju koji je sadržaj
+kvalitetniji, odnosno, koji je manje kvalitetan te na taj način vrše implicitnu
+preporuku. Primjer je internetska stranica za programerska pitanja i odgovore
+\emph{StackOverflow} (slika \ref{fig:stackoverflow1}). Na ovoj stranici, nakon
+postavljenog pitanja, korisnici daju odgovore, a sustav na više pozicije
+postavlja one odgovore kojima su korisnici dali više glasova, a na niže pozicije
+lošije i negativno rangirane odgovore. Također, korisnici mogu glasovati na
+kvalitetu postavljenog pitanja pa time nekvalitetna i loše postavljena pitanja
+eliminirati (tj. ne preporučiti) za odgovaranje. 
 
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=14.21cm]{images/neosobni/stackoverflow1.png}
+	\caption{Primjer rejtinga na internetskom portalu \emph{StackOverflow}}
+	\label{fig:stackoverflow1}
+\end{figure}
+
+Drugi najpoznatiji primjer koji koristi takav sustav dodjele ocjena jest
+internetski portal \emph{Reddit} (slika \ref{fig:reddit1}).
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=14.21cm]{images/neosobni/reddit1.png}
+	\caption{Primjer rejtinga na internetskom portalu \emph{Reddit}}
+	\label{fig:reddit1}
+\end{figure}
+
+%TODO: Ovo kao da je nabacano, i ovo iznad i ovo ispod ove linije?
 U općem slučaju modeli preporučitelja zasnovani na ovakvoj vrsti filtriranja
 imaju dvije mane:
 \begin{itemize}
@@ -366,41 +408,20 @@ imaju dvije mane:
   \item Nedostatak konteksta za preporuke.
 \end{itemize}
 
-%TODO: refactor
-Nedostatak konteksta za preporuke posebno se manifestira prilikom asocijativnog
-preporučivanja. Ako u sustavu postoje predmeti koji su na neki način logički
-povezani, te ako korisnik traži preporuku za neki od tih predmeta, tj. traži
-preporuku za dodatak na neki predmet, onda može doći do lažne korelacije i
-neispravne preporuke. Ovaj efekt jako dobro ilustrira primjer preuzet iz
-\cite{courseraRC}. U tom primjeru, dan je preporučiteljski sustav koji
-preporučuje korisnicima predmete koji su namirnice u supermarketu. U tom sustavu
-posebno popularan predmet su banane. Kada se korisniku daje preporuka nakon
-određene kupnje, često mu se, zbog popularnosti banana, one i preporučuju. Ako
-je korisnik primjerice kupio televizor, kao preporuku može dobiti banane samo
-zato što su one popularne.
+%TODO: je li ovo dobar uvod
+Nepersonalizirana preporuka može se izvesti i asocijativno, traženjem implicitne
+korelacije između dvaju ili više predmeta. Naivno gledano, može se zaključiti
+ako je relativna većina korisnika uz kupnju nekog proizvoda $i_1$ kupila i
+proizvod $i_2$, da bi i budućim korisnicima trebalo uz proizvod $i_1$
+preporučiti proizvod $i_2$, i obrnuto. Ova tvrdnja može se opisati formulom
+\ref{eq:NaivnaNep}:
 
-
-%TODO a gdje ovo utrpati
-Jednostavan model pomoću kojega bi se mogla dobiti nepersonalizirana preporuka
-za predmet koji ovisi o drugom predmetu može biti relativno jednostavno
-izgrađen. Neka su $X$ i $Y$ skupovi svih korisnika koji su kupili proizvode $X$
-i $Y$ respektivno.
-
-Intuitivno se nameće da ukoliko je više korisnika kupilo proizvod $X$ i uz njega
-proizvod $Y$ da će i ostalim korisnicima (koji traže preporuku) proizvod $Y$
-odgovarati uz proizvod $X$. Elementarnom algebrom skupova može se dakle
-zaključiti da predikcija za nekog korisnika može biti izražena relacijom:
 \begin{equation}
-\label{eq:naivnaNepersonaliziraniTemp}
+\label{eq:NaivnaNep}
 	R = \frac{\mid X \cap Y \mid}{\mid X \mid}
 \end{equation}
-Osnovni problem proizlazi iz činjenice da su određeni predmeti neovisno
-popularni. Primjerice, u nekom dućanu, moguće je da većina korisnika kupuje neki
-predmet pa može doći do lažne korelacije popularnog predmeta s nekim drugim
-predmetom. Drugi problem je nepostojanost veze između predmeta iz skupa $X$ i
-$Y$ u smislu asocijativnosti. Ukoliko je $X$ skup sladoleda, a $Y$ skup
-preljeva, korisniku bi kao preporuku trebalo izdvojiti preljeve za sladoled iz
-skupa $Y$. 
+
+
 \begin{equation}
 \label{eq:nepersonalizirani}
 	R = \frac
@@ -412,16 +433,8 @@ skupa $Y$.
 			{\mid \overline{X} \mid}}
 \end{equation}
 
-Preporuka korisniku na kraju se jednostavno svodi na prikaz prvih $N$ najboljih
-prosječnih ocjena.
-
-Naivni preporučitelj preporuku može dati korištenjem intuitivno izvedive
-formule:
-\begin{equation}
-\label{eq:naivnaNepersonalizirani}
-	R = \frac{X \cap Y}{X}
-\end{equation}
-gdje su $X$ i $Y$ skupovi svih korisnika koji su kupili proizvode 
+Neka je dana situacija u kojoj je
+neki predmet u sustavu iznimno popularan od strane većine korisnika. 
 
 \section{Filtriranje ovisno o korisniku}
 Za razliku od filtriranja neovisnog o korisniku, filtriranje ovisno o korisniku
