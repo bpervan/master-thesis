@@ -182,23 +182,24 @@ različitih interesa ali imaju jednu stvar koja im je zajednička: mjesto gdje
 
 \chapter{Preporučiteljski sustavi}
 \section{Uvod u preporučiteljske sustave}
-Preporučiteljski sustavi su, ukratko rečeno, skup programskih alata i tehnika
-koji iz relativno velikog i nepreglednog skupa karakteriziranih informacija
-krajnjem korisniku, koji je opet na neki način karakteriziran, filtriraju
-informacije o mogućim preferencijama tog korisnika. Općenito, možemo reći da je
-jednostavan model preporučiteljskog sustava dan formulom:
+Preporučiteljski sustavi su, ukratko rečeno, podrazred sustava za filtriranje
+podataka kojima je svrha predviđanje ocjene (ili preferencije) kojom bi neki
+korisnik ocijenio neki predmet u sustavu \cite{RSHandbook} Predmeti nad kojima
+takvi sustavi rade, kao i korisnici tog sustava opisani su određenim
+karakteristikama, odnosno važnostima tih karakteristika za korisnike. Općenito,
+može se reći da je jednostavan model preporučiteljskog sustava dan formulom:
 \begin{equation}
 \label{eq:elementarniModel}
 	R \leftarrow U \times I
 \end{equation}
 gdje je $R$ rezultat, tj. predikcija \engl{prediction, recommendation},
-preferencije korisnika $U$ \engl{ user} koji je zatražio preporuku, tj.
-filtriranje sadržaja , a $I$ predmet nad kojim se vrši predikcija preferencije
-\engl{item}. Drugim riječima, predikcija je posljedica karakteristike,
-tj. preferencije korisnika, te karakteristike predmeta. Traženje potencijalnih
-preporuka za korisnika $U$ tada se u najjednostavnijem slučaju svodi na
-kombiniranje profila njegovih preferencija s profilima predmeta u skupu svih
-predmeta dostupnih algoritmu za filtriranje.
+ocjene korisnika $U$ \engl{ user} koji je zatražio preporuku, tj. filtriranje
+sadržaja , a $I$ predmet nad kojim se vrši predikcija ocjene \engl{item}.
+Drugim riječima, predikcija je posljedica karakteristike, tj. preferencije
+korisnika, te karakteristike predmeta. Traženje potencijalnih preporuka za
+korisnika $U$ tada se u najjednostavnijem slučaju svodi na kombiniranje profila
+njegovih preferencija s profilima predmeta u skupu svih predmeta dostupnih
+algoritmu za filtriranje.
 Dakle, preporuka $R$ zapravo je predviđanje ocjene korisnika $U$ za
 traženi predmet $I$. Krajnji rezultat na kraju jest najčešće lista od $n$
 najboljih preporuka, tj. pretpostavki da bi korisnik te predmete ocjenio
@@ -214,20 +215,20 @@ Gornji model ima dva osnovna i lako uočljiva ograničenja:
 U svrhu riješavanja gore navedenih problema, razmotrit će se razni modeli
 preporuke od kojih su neki već dobro poznati i korišteni algoritmi. Neka je $C$
 kontekst u kojem korisnik $U$ traži preporuku. Formula \ref{eq:elementarniModel}
-tada postaje:
+tada prelazi u:
 \begin{equation}
 \label{eq:elementarniModelSKontekstom}
 	R \leftarrow U \times I \times C
 \end{equation}
 dok predikcija $R$ postaje posljedica karakteristike, tj. preferencije
 korisnika, karakteristike predmeta i konteksta u kojem se vrši predikcija.
-Kontekst $C$ se ne shvaća atomarno i u sebi može sadržavati raznorazne
-komponente koje mogu utjecati na preporuku, npr:
+Kontekst $C$ se ne shvaća atomarno i u sebi može sadržavati više različitih
+komponenata koje mogu utjecati na preporuku, npr:
 \begin{itemize}
   \item Vrijeme predikcije
   \item Mjesto na kojem se traži predikcija
-  \item Društvo drugih korisnika u datom trenutku
-  \item Možda još nešto tu navesti?
+  \item Prisutnost drugih korisnika u trenutku predikcije
+  \item Skupine predmeta, odnosno resursa, koje se nalaze u blizini
 \end{itemize}
 
 Predmet se shvaća generički i on može varirati ovisno o kontekstu primjene,
@@ -245,10 +246,10 @@ gledano, nije ni nemoguće.
 S druge strane, korisnici sustava imaju različite scenarije korištenja
 preporučitelja od kojih su osnovni filtriranje neželjenog sadržaja iz velikih
 baza podatak i savjetovanje pri nedostatku vlastite kompetencije za izbor
-sadržaja (referenca: ono čudo koje te pita kaj te interesira). Korisnici imaju
-svoje preferencije koje su u ovom slučaju uglavnom opisane težinama jer prema
-različitim potrebama određene karakteristike predmeta nad kojima se vrši
-filtriranje mogu biti zanimljivije, odnosno manje zanimljive.
+sadržaja \cite{AskIda}. Korisnici imaju svoje preferencije koje su u ovom
+slučaju uglavnom opisane težinama jer prema različitim potrebama određene
+karakteristike predmeta nad kojima se vrši filtriranje mogu biti zanimljivije,
+odnosno manje zanimljive.
 %TODO: SVD tu negdje?
 
 Interakcijom korisnika sa sustavom omogućuje se praćenje njegovih odabira,
@@ -289,12 +290,13 @@ izostavlja ulogu korisnika u sustavu. Drugim riječima, svaki korisnik će dobit
 istu preporuku. Zbog toga ga se može nazvati svojevrsnim
 \emph{pseudopreporučiteljem}.
 
+\section{Razvoj preporučiteljskih sustava}
 Povijesno gledano, razvoj preporučiteljskih sustava započeo je devedesetih
 godina prošlog stoljeća, a nemalo je populariziran $2006$. g. svojevrsnim
 natjecanjem \glqq The Netflix Prize \grqq kada je poznati pružatelj multimedije
 na zahtjev ponudio nagradu od \$$1,000,000$ američkih dolara za tim koji razvije
 preporučitelj bolji od taga postojećeg sustava \glqq Cinematch \grqq za određeni
-postotak.
+postotak \cite{Bennett2007}.
 Ovo je ostavilo velik utjecaj na razvoj preporučitelja prvenstveno zbog
 činjenice da je u uvjetima natjecanja navedeno da rezultati i principi rada
 razvijenih preporučitelja moraju biti javno objavljeni i dostupni
@@ -770,8 +772,8 @@ Kakve su ocjene, koje su skale
 	\caption{Algoritam kontekstualizirane preporuke u vremenu i prostoru}
 	\label{algo:TheAlgo}
 	\begin{algorithmic}
-		\STATE{\textbf{Ulaz:} }
-		\STATE{\textbf{Izlaz:} }
+		\STATE{\textbf{Ulaz: Korisnik $u$, Prostor $l$, Vrijeme $t$} }
+		\STATE{\textbf{Izlaz: Vektor kretanja $v$} }
 		
 		\FOR{($i := 0; i < n; inc(i)$)}
 			\STATE{$w_i := calculatePearson(k, N_i)$}
@@ -852,6 +854,15 @@ vrha, odnosno dva polja. Neki od njih su npr. \emph{Dijkstrin algoritam},
 	\caption{Tlocrt prostora modeliran kvadratnom mrežom}
 	\label{fig:StoreGrid}
 \end{figure}
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=7cm]{images/Manhattan_distance.png}
+	\caption{Ilustracija Manhattanske udaljenosti}
+	\label{fig:ManhattanDistance}
+\end{figure}
+
+
 
 \section{Vremenska komponenta}
 
