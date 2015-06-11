@@ -8,19 +8,10 @@
 \usepackage{verbatim}
 \usepackage{tikz,times}
 \usepackage{graphicx}
+\usepackage{listings}
+\usepackage{color}
 
-\usetikzlibrary{arrows}
-
-\tikzset{
-  treenode/.style = {align=center, inner sep=0pt, text centered,
-    font=\sffamily},
-  arn_n/.style = {treenode, circle, white, font=\sffamily\bfseries, draw=black,
-    fill=black, text width=1.5em},% arbre rouge noir, noeud noir
-  arn_r/.style = {treenode, circle, red, draw=red, 
-    text width=1.5em, very thick},% arbre rouge noir, noeud rouge
-  arn_x/.style = {treenode, rectangle, draw=black,
-    minimum width=0.5em, minimum height=0.5em}% arbre rouge noir, nil
-}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
 
 \begin{document}
 \thesisnumber{1136}
@@ -1168,7 +1159,6 @@ $accelerometer$ i $magnetometer$ složeni.
   fizičke osi uređaja u $\mu T$
 \end{itemize}
 
-
 timestamp -> popis beacona + rss
 magnetometar i akcelerometar
 shadow preporuke (može u globalni model) -> implicitna preporuka u kojoj korisnika
@@ -1202,4 +1192,15 @@ Abstract.
 \keywords{Keywords.}
 \end{abstract}
 
+\appendix
+\chapter{Primjer dnevničke datoteke}
+\lstinputlisting[
+		language=C, 
+		firstline=37,
+		lastline=46, 
+		numbers=left, 
+		breaklines=true, 
+		numbersep=5pt,
+		numberstyle=\color{mygray}
+	]{logs/LogFile_06-06-15_18_27a.txt}
 \end{document}
