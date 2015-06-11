@@ -533,44 +533,49 @@ za preporučivanje zasnovano na sadržaju:
 	\caption{Filtriranje zasnovano na sadržaju}
 	\label{algo:content}
 	\begin{algorithmic}
-		\STATE{\textbf{Ulaz:} $k$ - vektor preferencija korisnika. $I$ - vektor
-		predmeta u sustavu}
+		\STATE{\textbf{Ulaz:} $k$ - vektor ocjena korisnika. $I$ - matrica u kojoj su
+		retci predmeti, a stupci karakteristike}
 		\STATE{\textbf{Izlaz:} Lista $L$ najboljih $N$ predmeta za korisnika $k$}
 		\STATE{$L := initList(N)$}
-		\STATE{$idfPolje := initPolje(length(I_1))$}
-		\STATE{$userPolje := initPolje(length(I_1))$}
+		\STATE{$idfPolje := initPolje(width(I))$}
+		\STATE{$userPolje := initPolje(width(I))$}
+		
 		%PRVA FAZA ALGORITMA, NORMALIZIRATI VEKTOR ZA SVE ITEME
 		%Vanjska for petlja koja ide po svim itemima
-		\FOR{($i := 0; i < length(I); inc(i)$)}
+		\FOR{($i := 0; i < height(I); inc(i)$)}
 			%Unutarnja for petlja ide po svim karakteristikama
 			\STATE{$suma := 0$}
-			\FOR{($j := 0; j < length(i); inc(j)$)}
+			\FOR{($j := 0; j < width(I); inc(j)$)}
 				\IF{($i_j \neq 0$)}
 					\STATE{$inc(suma);$}
 				\ENDIF
 			\ENDFOR
-			\FOR{($j := 0; j < length(i); inc(j)$)}
-				\STATE{$i_j := 1/\sqrt{suma}$}
+			\FOR{($j := 0; j < width(I); inc(j)$)}
+				\STATE{$i_j := 1/\sqrt{suma};$}
 			\ENDFOR
 		\ENDFOR
 		
 		%DRUGA FAZA ALGORITMA, KREIRATI USER PROFILE vektorskim produktom korisnika i
 		% karakteristike
-		\FOR{$predmet \in PoljeKarakteristike$}
-			\STATE{$userPolje := $}
-		\ENDFOR
-		
 		%TREĆA FAZA ALGORITMA, izračunati IDF
-		\FORALL{$w \in PojedinaKarakteristika$}
-			\STATE{$test$}
+		\STATE{$count := 0;$}
+		\FOR{$(i := 0; i < width(I); inc(i))$}
+			\FOR{$(j := 0; j < height(I); inc(j))$}
+				\STATE{$userPolje_i := userPolje_i + I_{i,j} * k_j;$}
+				\IF{($I_{i,j} \neq 0$)}
+					\STATE{$inc(count);$}
+				\ENDIF
+			\ENDFOR
+			\STATE{$idfPolje_i := 1/count;$}
+			\STATE{$count := 0;$}
 		\ENDFOR
 		
+		\STATE{$L_i := L_i + i_j \ast idf_j \ast userProfile_j$}
+
 		%ČETVRTA FAZA ALGORITMA, predikcija= idf*profil*predmet
-		\FOR{($i := 0; i < length(I); inc(i)$)}
-			%Unutarnja for petlja ide po svim karakteristikama
-			\STATE{$suma := 0$}
-			\FOR{($j := 0; j < length(i); inc(j)$)}
-				\STATE{$L_i := L_i + i_j \ast idf_j \ast userProfile_j$}
+		\FOR{$(i := 0; i < height(I); inc(i))$}
+			\FOR{$(j := 0; j < width(I); inc(j))$}
+				\STATE{$L_i := L_i + I_j \ast userProfile_j \ast idfPolje_j;$}
 			\ENDFOR
 		\ENDFOR
 		
