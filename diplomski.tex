@@ -1140,12 +1140,34 @@ Ulazi i izlazi
   \item s obzirom na očekivani profil kupnje
 \end{enumerate}
 
-Dnevnički zapisi \engl{Log} s pametnog uređaja pišu se i čitaju u predefiniranom
-formatu
+%17:37:47.392#74278bda-b644-4520-8f0c-720eaf059935-baba-bebe$-86#9.8;-1.8;1.6#-42.2;4.7;13.9
+Krajnji ulaz u sustav, bez ikakve apstrakcije, su dnevnički zapisi \engl{Log} s
+pametnog uređaja. U njih uređaj zapisuje:
+\begin{itemize}
+  \item Vremensku oznaku
+  \item Jedinstveni identifikator radio oznake
+  \item \emph{RSS} \engl{Received signal strength}
+  \item Podatke s mjerača ubrzanja \engl{Accelerometer}
+  \item Podatke s magnetometra \engl{Magnetometer}
+\end{itemize}
+Dnevnički zapisi se pišu i čitaju u, odnosno iz obične tekstualne datoteke u
+predefiniranom formatu:
 \begin{equation}
 	\centering
-	timestamp;beaconId1:rss1,beaconId2:rss2,beaconId3:rss3
+	timestamp;beaconId\$rss\#accelerometer\#magnetometer\char`\\n
 \end{equation}
+gdje je $\char`\\n$ oznaka za novu liniju \engl{Line feed}
+Podaci $beaconId$ i $rss$ su, tipski gledano, jednostavni, a $timestamp$,
+$accelerometer$ i $magnetometer$ složeni.
+
+\begin{itemize}
+  \item Vremenska oznaka -- $sat:minuta:sekunda.stotinka$
+  \item Mjerač ubrzanja -- $x;y;z$ - mjeri ubrzanje sile na tri fizičke osi
+  uređaja u $m/s^2$, uključujući ubrzanje sile teže.
+  \item Magnetometar -- $x;y;z$ - mjeri ambijentalno geomagnetsko polje na tri
+  fizičke osi uređaja u $\mu T$
+\end{itemize}
+
 
 timestamp -> popis beacona + rss
 magnetometar i akcelerometar
