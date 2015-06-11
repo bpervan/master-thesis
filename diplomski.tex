@@ -443,16 +443,43 @@ gdje su $X$ i $Y$ skupovi svih korisnika koji su kupili predmete $i_1$ i $i_2$
 respektivno.
 
 \section{Filtriranje ovisno o korisniku}
-Za razliku od filtriranja neovisnog o korisniku, filtriranje ovisno o korisniku
-uzima u obzir korisnika i njegove preferencije.
+Grubi model filtriranja ovisnog o korisniku, prema relaciji
+\ref{eq:elementarniModel} računa predikciju kao produkt karakteristike predmeta
+i preferencije korisnika, no zanemaruje kontekst, osim ako on nije implicitno
+uključen u komponentu korisnika ili predmeta. U općem slučaju razlikuju se dvije
+vrste filtriranja ovisnog o korisniku: filtriranje zasnovano na sadržaju te
+suradničko filtriranje.
+
 \subsection{Filtriranje zasnovano na sadržaju}
 U gotovo svim primjenama preporučitelja, tj. u sustavima u kojima se oni
 koriste, predmeti ili korisnici nisu osnovne (atomarne) jedinice, nego ih se
 može opisati nekim kategorijama, primjerice, demografskim podacima za korisnika,
 autorom i izdavačem ako je predmet neka knjiga i sl. Preporučivanje zasnovano
 na sadržaju u osnovi dovodi u vezu prikupljene preferencije korisnika, bilo
-eksplicitno, bilo implicitno. Neka je u sustavu koji koristi preporučitelj
-zasnovan na sadržaju svaki predmet opisan tekstualnim medapodacima i vektorom:
+eksplicitno, bilo promatrajući povijest ponašanja, i karakteristike kojima je
+opisan neki predmet \cite{RSHandbook}. Na slici \ref{fig:contentnonpers} vidljiv
+je primjer preporučiteljskog rezultata bez ikakvih informacija o korisniku.
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=14.21cm]{images/content/nepersonalizirani.png}
+	\caption{Preporuka zasnovana na sadržaju i implicitno prikupljenim podacima}
+	\label{fig:contentnonpers}
+\end{figure}
+Podaci na temelju kojih je generirana preporuka prikupljeni su implicitno, u
+vidu grube lokacije korisnika (na slici je lokacija Ujedinjeno Kraljevstvo). S
+druge strane, slika \ref{fig:contentpers} prikazuje uključene podatke o
+korisniku, pa je lako vidljiva značajna razlika u generiranoj preporuci između
+dvije verzije preporučitelja u kojoj isti algoritam ima pristup različitim
+širinama skupova informacija. 
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=14.21cm]{images/content/personalizirani.png}
+	\caption{Preporuka zasnovana na sadržaju i eksplicitno personalizirana}
+	\label{fig:contentpers}
+\end{figure}
+
+Neka je u sustavu koji koristi preporučitelj zasnovan na sadržaju svaki predmet
+opisan tekstualnim medapodacima i vektorom:
 \begin{equation}
 \label{eq:vektorKarakteristika}
 	\boldsymbol{X_i} = 
@@ -466,31 +493,96 @@ zasnovan na sadržaju svaki predmet opisan tekstualnim medapodacima i vektorom:
 \end{equation}
 gdje je $\boldsymbol{w_{j,i}}$ kvantitativni, tj. brojčani opis neke $j$-te
 karakteristike za $i$-ti predmet. Težina je neka proizvoljno odabrana metrika
-koja može varirati od jednostavnog broja pojavljivanja, uključujući $0$/$1$
+koja može varirati od jednostavnog broja pojavljivanja, uključujući $0/1$
 pristup (karakteristika je primjenjiva, odnosno karakteristika nije
-primjenjiva) do precijznijih metrika. Sličnost između dva predmeta moguće je
-tada izraziti kosinusom kuta između vektora njihovih karakteristika. 
+primjenjiva) do precijznijih metrika. Sličnost između dvaju predmeta, $i_1$ i
+$i_2$ moguće je tada izraziti kosinusom kuta između vektora njihovih
+karakteristika:
 \begin{equation}
 \label{eq:kosinus}
-	\boldsymbol{cos}(\boldsymbol{V}_1, \boldsymbol{V}_2) = 
+	\boldsymbol{cos}(\boldsymbol{I}_1, \boldsymbol{I}_2) = 
 		\frac
-			{\boldsymbol{V}_1 \ast \boldsymbol{V}_2}
-			{\|\boldsymbol{V}_1\| \times \|\boldsymbol{V}_2\|}
+			{\boldsymbol{I}_1 \ast \boldsymbol{I}_2}
+			{\|\boldsymbol{I}_1\| \times \|\boldsymbol{I}_2\|}
 \end{equation}
+Teoretski, svaka karakteristika može imati svoju težinu, u smislu da može biti
+važnija, odnosno manje važna za opis nekog predmeta. Taj pristup svodi se na
+algoritam \emph{Redukcije dimenzija} i dekompoziciju matrice na singularne
+faktore, a bit će opisan naknadno.
 
-Tu još negdje ubaci da svaka karakteristika može imati svoju težinu, u smislu da
-neka karakteristika može biti važnija.
-
-Također, neka za svakog korisnika postoji korisnički profil sa dostupnim
+Neka također za svakog korisnika postoji korisnički profil sa dostupnim
 preferencijama korisnika dostupnim u vektorskom zapisu gdje $i$-ta komponenta
 vektora predstavlja težinu te karakteristike za korisnika. Tada je na sličan
-način moguće izraziti kompatibilnost promatranog korisnika i predmeta. U
-ovisnosti o kontekstu primjene, vektore je poželjno i normalizirati.
-Jedna od većih prednosti ovog načina filtriranja je što može stvarati preporuke
-neovisno o tome je li za predmet davana povratna informacija ili ne. Drugim
-riječima, ovaj način filtriranja iznimno je prikladan na početku rada sustava
-jer nema problema s takozvanim hladnim početkom \engl{Cold start}. Isto
-tako, prikladan je za primjene gdje je moguće relativno dobro strukturiranim
+način moguće izraziti kompatibilnost promatranog korisnika i predmeta:
+\begin{equation}
+\label{eq:cosUserItem}
+	\boldsymbol{cos}(\boldsymbol{U}, \boldsymbol{I}) = 
+		\frac
+			{\boldsymbol{U} \ast \boldsymbol{I}}
+			{\|\boldsymbol{U}\| \times \|\boldsymbol{I}\|}
+\end{equation}
+
+%TODO: ubaciti TFIDF
+
+Vektore je poželjno normalizirati, TFIDF
+
+S obzirom na relacije \ref{eq:kosinus} i \ref{eq:cosUserItem} slijedi algoritam
+za preporučivanje zasnovano na sadržaju:
+
+\begin{algorithm}
+	\caption{Filtriranje zasnovano na sadržaju}
+	\label{algo:content}
+	\begin{algorithmic}
+		\STATE{\textbf{Ulaz:} $k$ - vektor preferencija korisnika. $I$ - vektor
+		predmeta u sustavu}
+		\STATE{\textbf{Izlaz:} Lista $L$ najboljih $N$ predmeta za korisnika $k$}
+		\STATE{$L := initList(N)$}
+		\STATE{$idfPolje := initPolje(length(I_1))$}
+		\STATE{$userPolje := initPolje(length(I_1))$}
+		%PRVA FAZA ALGORITMA, NORMALIZIRATI VEKTOR ZA SVE ITEME
+		%Vanjska for petlja koja ide po svim itemima
+		\FOR{($i := 0; i < length(I); inc(i)$)}
+			%Unutarnja for petlja ide po svim karakteristikama
+			\STATE{$suma := 0$}
+			\FOR{($j := 0; j < length(i); inc(j)$)}
+				\IF{($i_j \neq 0$)}
+					\STATE{$inc(suma);$}
+				\ENDIF
+			\ENDFOR
+			\FOR{($j := 0; j < length(i); inc(j)$)}
+				\STATE{$i_j := 1/\sqrt{suma}$}
+			\ENDFOR
+		\ENDFOR
+		
+		%DRUGA FAZA ALGORITMA, KREIRATI USER PROFILE vektorskim produktom korisnika i
+		% karakteristike
+		\FOR{$predmet \in PoljeKarakteristike$}
+			\STATE{$userPolje := $}
+		\ENDFOR
+		
+		%TREĆA FAZA ALGORITMA, izračunati IDF
+		\FORALL{$w \in PojedinaKarakteristika$}
+			\STATE{$test$}
+		\ENDFOR
+		
+		%ČETVRTA FAZA ALGORITMA, predikcija= idf*profil*predmet
+		\FOR{($i := 0; i < length(I); inc(i)$)}
+			%Unutarnja for petlja ide po svim karakteristikama
+			\STATE{$suma := 0$}
+			\FOR{($j := 0; j < length(i); inc(j)$)}
+				\STATE{$L_i := L_i + i_j \ast idf_j \ast userProfile_j$}
+			\ENDFOR
+		\ENDFOR
+		
+		\RETURN{$L$}
+	\end{algorithmic}
+\end{algorithm}
+
+Jedna od većih prednosti ovog načina filtriranja jest što može stvarati
+preporuke neovisno o tome je li za predmet davana povratna informacija ili ne.
+Drugim riječima, ovaj način filtriranja iznimno je prikladan na početku rada
+sustava jer nema problema s takozvanim hladnim početkom \engl{Cold start}.
+Isto tako, prikladan je za primjene gdje je moguće relativno dobro strukturiranim
 karakteristikama opisati predmete. S druge strane, nepogodan je ukoliko ga
 se implementira u sustave gdje korisnici dolaze rijetko ili relativno često
 mijenjaju preferencije. Zbog svega navedenog, ova vrsta filtriranja uglavnom se
@@ -500,8 +592,6 @@ multimediju, video na zahtjev i sl.
 Nešto tu ne štima vezano uz težine. Komponente vektora zapravo su kvantitativni
 opis, brojka, to nisu težine. Težine, koje predstavljaju koja je karakteristika
 korisniku koliko važna su u drugom vektoru?
-
-Cijelu ovu priču treba proširiti i još utrpati algoritam.
 
 \subsection{Filtriranje zasnovano na suradnji}
 Suradnički pristup dijametralno je suprotan sadržajnom pristupu. Princip rada
@@ -669,6 +759,9 @@ gdje je $N$ susjedstvo predmeta ocjenjenih od strane korisnika $k$ najsličnijih
 predmetu $i$. Jedan od najpoznatijih preporučitelja na svijetu, internetska
 trgovina \emph{Amazon.com} koristi patentirani hibridni algoritam baziran na
 ovoj tehnici.
+
+\section{Redukcija dimenzija}
+SVD itd
 \section{Hibridni tehnike}
 \begin{enumerate}
   \item Težinski - ocjena predmeta preporuke računa se iz svih dostupnih
