@@ -105,7 +105,7 @@ U općem slučaju mogu se razlikovati tri velika vala u računalnoj eri. To su:
   jedna osoba
 \end{enumerate}
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=10cm]{images/majortrends.png}
 	\caption{Tri vala u računarstvu (preuzeto u edukacijske svrhe, ne valja slika)}
@@ -333,7 +333,7 @@ posredno nudeći korisniku ono što su drugi korisnici obilježili kao poželjni
 Ovakav model obično koriste usluge s povratnom informacijom korisnika
 \engl{Feedback}, npr. \emph{eBay}, \emph{Tripadvisor} i \emph{Zagat}.
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=14.21cm]{images/neosobni/ebay1.png}
 	\caption{Primjer rejtinga na internetskoj aukcijskoj kući \emph{eBay}}
@@ -357,7 +357,7 @@ sustavima, primjerice:
 Preporuka korisniku na kraju se jednostavno svodi na prikaz prvih $N$ najboljih
 prosječnih ocjena.
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=5cm]{images/neosobni/ebay2.png}
 	\caption{Implicitna preporuka trgovca izražena postotcima}
@@ -376,7 +376,7 @@ lošije i negativno rangirane odgovore. Također, korisnici mogu glasovati na
 kvalitetu postavljenog pitanja pa time nekvalitetna i loše postavljena pitanja
 eliminirati (tj. ne preporučiti) za odgovaranje. 
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=14.21cm]{images/neosobni/stackoverflow1.png}
 	\caption{Primjer rejtinga na internetskom portalu \emph{StackOverflow}}
@@ -385,7 +385,7 @@ eliminirati (tj. ne preporučiti) za odgovaranje.
 
 Drugi najpoznatiji primjer koji koristi takav sustav dodjele ocjena jest
 internetski portal \emph{Reddit} (slika \ref{fig:reddit1}).
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=14.21cm]{images/neosobni/reddit1.png}
 	\caption{Primjer rejtinga na internetskom portalu \emph{Reddit}}
@@ -459,19 +459,22 @@ na sadržaju u osnovi dovodi u vezu prikupljene preferencije korisnika, bilo
 eksplicitno, bilo promatrajući povijest ponašanja, i karakteristike kojima je
 opisan neki predmet \cite{RSHandbook}. Na slici \ref{fig:contentnonpers} vidljiv
 je primjer preporučiteljskog rezultata bez ikakvih informacija o korisniku.
-\begin{figure}[htb]
+
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=14.21cm]{images/content/nepersonalizirani.png}
 	\caption{Preporuka zasnovana na sadržaju i implicitno prikupljenim podacima}
 	\label{fig:contentnonpers}
 \end{figure}
+
 Podaci na temelju kojih je generirana preporuka prikupljeni su implicitno, u
 vidu grube lokacije korisnika (na slici je lokacija Ujedinjeno Kraljevstvo). S
 druge strane, slika \ref{fig:contentpers} prikazuje uključene podatke o
 korisniku, pa je lako vidljiva značajna razlika u generiranoj preporuci između
 dvije verzije preporučitelja u kojoj isti algoritam ima pristup različitim
 širinama skupova informacija. 
-\begin{figure}[htb]
+
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=14.21cm]{images/content/personalizirani.png}
 	\caption{Preporuka zasnovana na sadržaju i eksplicitno personalizirana}
@@ -529,7 +532,7 @@ Vektore je poželjno normalizirati, TFIDF
 S obzirom na relacije \ref{eq:kosinus} i \ref{eq:cosUserItem} slijedi algoritam
 za preporučivanje zasnovano na sadržaju:
 
-\begin{algorithm}
+\begin{algorithm}[!htbp]
 	\caption{Filtriranje zasnovano na sadržaju}
 	\label{algo:content}
 	\begin{algorithmic}[1]
@@ -682,7 +685,7 @@ $\overline{r_u}$ i $\overline{r_j}$ su zapravo normalizacijski članovi jer
 različiti korisnici mogu imati individualne kriterije i skale. 
 
 Algoritam za filtriranje na relaciji korisnik-korisnik slijedi:
-\begin{algorithm}
+\begin{algorithm}[!htbp]
 	\caption{Korisnik-korisnik filtriranje}
 	\label{algo:korisnik-korisnik}
 	\begin{algorithmic}[1]
@@ -736,9 +739,9 @@ sustava te krajnjem korisniku daje listu filmova koji su dovoljno dobro
 ocjenjeni od strane tih sličnih korisnika. Primjer je vidljiv na slici
 \ref{fig:movielens}.
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
-	\includegraphics[width=7cm]{images/collaborative/movielens.png}
+	\includegraphics[width=14.21cm]{images/collaborative/movielens.png}
 	\caption{Primjer preporuke sustava \glqq MovieLens\grqq}
 	\label{fig:movielens}
 \end{figure}
@@ -792,8 +795,12 @@ Pearsonov koeficjent korelacije, u ovom slučaju definiran kao:
 
 gdje je $U$ skup svih korisnika koji su ocjenili predmete $i$ i $j$, $r_{u,i}$
 ocjena korisnika $u$ za predmet $i$, a $\overline{r_i}$ srednja ocjena $i$-tog
-predmeta za sve korisnike. Predviđanje ocjene korisnika $k$ za predmet $i$
-računa se korištenjem težinskog prosjeka:
+predmeta za sve korisnike. Radi jednostavnosti, kod ovog algoritma matrica
+ocjena korisnika za predmete normalizira se oduzimanje prosječne ocjene
+kojom je svaki korisnik ocjenio predmete. 
+
+Slično kao i kod suradnje na razini Korisnik-korisnik, predviđanje ocjene
+korisnika $k$ za predmet $i$ računa se korištenjem težinskog prosjeka:
 \begin{equation}
 \label{eq:tezinskiProsjek}
 	p_{k,i} = 
@@ -802,18 +809,21 @@ računa se korištenjem težinskog prosjeka:
 			{\sum_{j \epsilon N} \|w_{i,j}\|}
 \end{equation}
 gdje je $N$ susjedstvo predmeta ocjenjenih od strane korisnika $k$ najsličnijih
-predmetu $i$. Jedan od najpoznatijih preporučitelja na svijetu, internetska
+predmetu $i$.
+
+algoritam
+
+Jedan od najpoznatijih preporučitelja na svijetu, internetska
 trgovina \emph{Amazon.com} koristi patentirani hibridni algoritam baziran na
 ovoj tehnici (slike \ref{fig:amazon1} i \ref{fig:amazon2}).
-
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=14.21cm]{images/collaborative/amazon.png}
 	\caption{Primjer preporuke sustava \glqq Amazon.com\grqq}
 	\label{fig:amazon1}
 \end{figure}
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=14.21cm]{images/collaborative/amazon2.png}
 	\caption{Primjer preporuke sustava \glqq Amazon.com\grqq}
@@ -821,8 +831,15 @@ ovoj tehnici (slike \ref{fig:amazon1} i \ref{fig:amazon2}).
 \end{figure}
 
 \section{Redukcija dimenzija}
-SVD itd
-\section{Hibridni tehnike}
+
+
+\section{Hibridne tehnike}
+Hibridne tehnike podrazumjevaju kombiniranje više različitih tehnika filtriranja
+
+zbog pokrivanja većeg spektra
+kombiniranje kvalitetnijih obilježja u nekim okolinama
+performanse
+
 \begin{enumerate}
   \item Težinski - ocjena predmeta preporuke računa se iz svih dostupnih
   preporučiteljskih tehnika u sustavu. Najjednostavniji primjer jest linearna
@@ -855,6 +872,9 @@ svode u velikoj mjeri na različite hibride osnovnih tehnika. Velike industrije
 trgovine i zabavnih sadržaja u praksi imaju autorska algoritamska rješenja
 hibridnih preporučitelja.
 \section{Moguća područja primjene}
+utrpaj iz seminara
+
+
 \section{Preporučiteljski sustavi u sveprisutnom računarstvu}
 Primjena preporučiteljskih sustava u sveprisutnom računarstvu logična je
 posljedica ne samo činjenice da je sveprisutno računarstvo računarstvo kao takvo
@@ -901,10 +921,10 @@ komponenti
 Osnovni problem s kojim se konvencionalni preporučiteljski sustavi susreću (a
 time i popularniji radni okviri i biblioteke koji ih implementiraju) jest
 izostanak bilo kakve potpore za prostorne i vremenske komponente koje
-su se pokazale neophodne za rad sa sveprisutnim sustavima.
+su se pokazale neophodne za rad sa sveprisutnim sustavima. 
 %Za sveprisutno prostor i vrijeme su jedne od bitnijih stavki (referenca?)
 
-\section{Naš model}
+\section{The model}
 Znači cijeli model treba opisati, od ocjenjivanja do apsolutno svega
 
 \begin{equation}
@@ -940,10 +960,10 @@ sastoje itd.
 
 Kakve su ocjene, koje su skale
 
-\begin{algorithm}[1]
+\begin{algorithm}[!htbp]
 	\caption{Algoritam kontekstualizirane preporuke u vremenu i prostoru}
 	\label{algo:TheAlgo}
-	\begin{algorithmic}
+	\begin{algorithmic}[1]
 		\STATE{\textbf{Ulaz: Korisnik $u$, Prostor $l$, Vrijeme $t$} }
 		\STATE{\textbf{Izlaz: Vektor kretanja $v$} }
 		
@@ -1020,14 +1040,14 @@ mnogo pouzdanih i efikasnih algoritama za traženje najkraćeg puta između dva
 vrha, odnosno dva polja. Neki od njih su npr. \emph{Dijkstrin algoritam},
 \emph{Bellman-Ford algoriam} ili \emph{A$\ast$ algoritam}.
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=7cm]{images/grid.png}
 	\caption{Tlocrt prostora modeliran kvadratnom mrežom}
 	\label{fig:StoreGrid}
 \end{figure}
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=7cm]{images/Manhattan_distance.png}
 	\caption{Ilustracija Manhattanske udaljenosti}
@@ -1070,7 +1090,7 @@ krivulje:
   \item $c$ - pomak na $x$ osi
 \end{itemize}
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=12cm]{images/zvonolika1matlab.png}
 	\caption{Preferencija korisnika za predmet na dnevnoj skali}
@@ -1082,7 +1102,7 @@ može zadati po dijelovima (puno kompleksnije situacije).
 Znači, funkcija može biti na više različitih skala i može odražavati
 preferenciju za predmet ili preferenciju za traženje preporuke općenito
 %TODO Tu mi fali neka slika funkcije pod više dijelova i na tjednoj skali
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=14.21cm]{images/neprigusenocropped.png}
 	\caption{Preferencija korisnika za predmet na dnevnoj skali}
@@ -1155,7 +1175,7 @@ Ovdje također postoji mogućnost da se funkcija $g(x)$ zada diskretno, tj. po
 uzorcima.
 
 %TODO: slika s gušenjem
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=14.21cm]{images/prigusenocropped.png}
 	\caption{Preferencija korisnika za predmet na dnevnoj skali}
@@ -1216,7 +1236,7 @@ svoj jedinstveni identifikator. Kada se mobilni uređaj nađe u dometu signala, 
 prima taj jedinstveni identifikator te može utvrditi \emph{RSS} \engl{Received
 signal strength}. 
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=9cm]{images/gridbeacons1cell.png}
 	\caption{Grafički prikaz radio oznake i mobilnog telefona}
@@ -1233,7 +1253,7 @@ pravom može smatrati da jači \emph{RSS} nužno povlači veću fizičku blizinu
 korisnika u odnosu na pripadajuću radio oznaku, tj. ono što ta radio oznaka
 obilježava.
 
-\begin{figure}[htb]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=9cm]{images/gridbeacons2cells.png}
 	\caption{Grafički prikaz višestrukog prijama signala s radio oznaka}
