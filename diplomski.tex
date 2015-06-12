@@ -529,7 +529,7 @@ Vektore je poželjno normalizirati, TFIDF
 S obzirom na relacije \ref{eq:kosinus} i \ref{eq:cosUserItem} slijedi algoritam
 za preporučivanje zasnovano na sadržaju:
 
-\begin{algorithm}
+\begin{algorithm}[!h]
 	\caption{Filtriranje zasnovano na sadržaju}
 	\label{algo:content}
 	\begin{algorithmic}
@@ -594,10 +594,6 @@ mijenjaju preferencije. Zbog svega navedenog, ova vrsta filtriranja uglavnom se
 upotrebljava u sustavima za pregledavanje vijesti, personaliziranim servisima za
 multimediju, video na zahtjev i sl.
 
-Nešto tu ne štima vezano uz težine. Komponente vektora zapravo su kvantitativni
-opis, brojka, to nisu težine. Težine, koje predstavljaju koja je karakteristika
-korisniku koliko važna su u drugom vektoru?
-
 \subsection{Filtriranje zasnovano na suradnji}
 Suradnički pristup dijametralno je suprotan sadržajnom pristupu. Princip rada
 ove vrste filtriranja suradnja je između pojedinih korisnika odnosno predmeta.
@@ -621,10 +617,17 @@ preporučitelj se u osnovi dijeli na dvije moguće tehnike:
 \subsubsection{Korisnik -- Korisnik}
 Suradničko filtriranje na relaciji između korisnika koji traži preporuku i
 ostalih korisnika sustava svodi se na predikciju ocjene korisnika koji traži
-preporuku za neki predmet na osnovu ocjena njemu bliskih ljudi gdje je bliskost
-dva korisnika dobro definirana nekom metrikom, npr. Pearsonovim koeficjentom
-korelacije (\ref{eq:pearsonKorisnik})
+preporuku za neki predmet na osnovu ocjena njemu bliskih ljudi. Neka je $K$ skup
+svih korisnika nekog sustava. Također, neka je $k$ korisnik iz skupa $K$ koji
+traži preporuku za neki predmet. Tada je susjedstvo $N$ korisnika $k$
+definirano kao:
+\begin{equation}
+\label{eq:susjedstvo}
+	N = K \backslash \{k\}
+\end{equation}
 
+Bliskost, odnosno udaljenost dvaju korisnika dobro je definirana nekom metrikom,
+npr. Pearsonovim koeficjentom korelacije (\ref{eq:pearsonKorisnik}):
 \begin{equation}
 \label{eq:pearsonKorisnik}
 	R = \frac
@@ -639,16 +642,14 @@ korelacije (\ref{eq:pearsonKorisnik})
 				\sqrt{{\sum_{i \epsilon I} (r_{u,i} - \overline{r_u})^2}}
 			}
 \end{equation}
-
 gdje je $w_{q,u}$ težina između aktivnog korisnika $k$ i korisnika $u$, $i$ skup
 predmeta koje su ocijenila oba korisnika, $r_{u,i}$ ocjena koju je korisnik $u$
 dodijelio predmetu $i$, a $\overline{r_u}$ srednja vrijednost svih ocjena koje
 je dodijelio korisnik $u$.
 
-Alternativno, ocjene korisnika možemo predstaviti kao vektore u
-$m$ - dimenzionalnom prostoru pa se težina može izraziti preko skalarnog
-produkta kao kosinus kuta između ta dva vektora:
-
+Alternativno, ocjene korisnika mogu se predstaviti kao vektore u $m$ -
+dimenzionalnom prostoru pa se udaljenost, tj. bliskost može izraziti preko
+skalarnog produkta kao kosinus kuta između ta dva vektora:
 \begin{equation}
 \label{eq:pearsonKosinus}
 	w_{k,u} = 
@@ -660,42 +661,20 @@ produkta kao kosinus kuta između ta dva vektora:
 			{\sum_{i=1}^m r_{k,i} \ast r_{u,i}}
 			{\sqrt{\sum_{i=1}^m r_{k,i}^2} \ast \sqrt{\sum_{i=1}^m r_{u,i}^2}}
 \end{equation}
-
 Mana pristupa \ref{eq:pearsonKosinus} jest nedostatak negativnih ocjena.
-
-Neka je $K$ skup svih korisnika nekog sustava. Također, neka je $k$ korisnik iz
-skupa $K$ koji traži preporuku za neki predmet. Tada je susjedstvo $N$
-korisnika $k$ definirano kao
-\begin{equation}
-\label{eq:susjedstvo}
-	N = K \backslash \{k\}
-\end{equation}
 
 S obzirom na relaciju \ref{eq:susjedstvo} i metriku za ocjenu bliskosti
 (\ref{eq:pearsonKorisnik}) ili \ref{eq:pearsonKosinus} dan je algoritam za
 filtriranje na relaciji više korisnika:
-\ref{algo:korisnik-korisnik}
 \begin{algorithm}
 	\caption{Korisnik-korisnik filtriranje}
 	\label{algo:korisnik-korisnik}
 	\begin{algorithmic}
 		\STATE{\textbf{Ulaz:} $k$ - korisnik za kojeg se traži predikcija. $N$ -
-		susjedstvo korisnika}
+		matrica ocjena korisnika gdje su retci predmeti, a stupci korisnici}
 		\STATE{\textbf{Izlaz:} Predikcija $p$ ocjene korisnika $K$ za predmet $P$.}
-		\STATE{topN := $20$}
-		\STATE{n := length($N$)}
-		\STATE{w := initVector()}
-		\FOR{($i := 0; i < n; inc(i)$)}
-			\STATE{$w_i := calculatePearson(k, N_i)$}
-		\ENDFOR
-		\STATE{sort(w)}
-		\STATE{$suma := 0; tezine := 0$}
-		\FOR{($i := 0; i < topN; inc(i)$)}
-			\STATE{$suma := suma + w_i * N_i$}
-			\STATE{$tezine := tezine + w_i$}
-		\ENDFOR
-		\STATE{$p := suma / tezine$}
-		\RETURN{p}
+		\STATE{$N^T := transpose(N);$}
+		\STATE{$correlMatrix := calculatePearsonElementwise(N, N^T)$;}
 	\end{algorithmic}
 \end{algorithm}
 
@@ -708,8 +687,21 @@ Algoritam se ugrubo svodi na:
   odabranih korisnika
 \end{enumerate}
 
-Ovaj pristup je relativno efikasan i jednostavan za implementaciju, ali druge
-strane, računalno postaje vrlo zahtjevan ako se primjeni na velike baze podataka
+Primjer korištenja ovog pristupa je \glqq MovieLens\grqq sustav razvijen od
+strane istraživačke skupine \glqq GroupLens\grqq \cite{MovieLens}. Taj
+preporučitelj na temelju korisničkih ocjena i odabira traži slične korisnike
+sustava te krajnjem korisniku daje listu filmova koji su dovoljno dobro
+ocjenjeni od strane tih sličnih korisnika. Primjer je vidljiv na slici
+\ref{fig:movielens}.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=7cm]{images/collaborative/movielens.png}
+	\caption{Primjer preporuke sustava \glqq MovieLens\grqq}
+	\label{fig:movielens}
+\end{figure}
+
+Ovaj pristup je relativno efikasan i jednostavan za implementaciju, ali druge strane, računalno postaje vrlo zahtjevan ako se primjeni na velike baze podataka
 korisnika i predmeta. U algoritmu \ref{algo:korisnik-korisnik} se može vidjeti
 da $for$ petlja ima $N$ prolazaka, a za svaki taj prolazak računa se Pearsonov
 koeficjent korelacije dan formulom \ref{eq:pearsonKorisnik} ($I$ puta).
