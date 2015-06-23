@@ -10,6 +10,8 @@
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{wrapfig}
+\usepackage{rotating}
 
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 
@@ -45,36 +47,52 @@ of Things} uhvatio je gotovo eksponencijalni zamah, a pojedini izvori navode da
 milijardi \cite{gartner2013Iot} odnosno $30$ milijardi \cite{ABI2013Iot}. Tomu
 značajno doprinosi i konstantno opadanje cijene proizvodnog procesa tehnologije
 koja naizgled obične stvari na neki način čini inteligentnima i sposobnima za
-komunikaciju. 
-Sveprisutno računarstvo, kao koncept u računarskoj znanosti
-gdje je računarstvo prisutno svugdje \cite{theComputerWeiser}, opisuje upravo 
-takve vrste stvari i uređaja, ali i takve principe gdje računalo može biti
-ugrađeno u bilo kojem uređaju, na bilo kojoj lokaciji i u bilo kojem obliku.
+komunikaciju. Internet stvari samo je jedna od mogućih manifestacija
+sveprisutnog računarstva.Sveprisutno računarstvo, kao koncept u računarskoj
+znanosti gdje je računarstvo prisutno svugdje \cite{theComputerWeiser}, opisuje
+upravo takve vrste stvari i uređaja, ali i takve principe gdje računalo može
+biti ugrađeno u bilo kojem uređaju, na bilo kojoj lokaciji i u bilo kojem
+obliku. Čovječanstvo je danas nepobitno zagazilo u treće računarsko doba koje
+nakon doba osobnih računala predviđa prožimanje računala u svakodnevnicu. To
+nedvojbeno znači da će se broj računala povećati, a time će se povećati i
+količina podataka koja će biti prikupljena ili generirana od strane takvih
+računala. Također, zbog činjenice sveprisutnosti, kontekst, a pogotovo prostor i
+vrijeme, u kojem se računalo nalazi postaje važna karakteristika za opisivanje i
+korištenje sustava.
 
-Internet stvari samo je jedna od mogućih manifestacija sveprisutnog računarstva.
+S druge strane, preporučiteljski sustavi su se kroz posljednjih tridesetak
+godina nametnuli kao standard u filtriranju sadržaja u onim sustavima i uslugama
+koje imaju značajan udio dodira s krajnjim korisnicima. Moderne usluge i sustavi
+sa sadržajem gotovo su nezamislivi bez preporučitelja zbog količine informacija,
+u smislu predmeta preporuke, koja postoji u takvim sustavima. Primjer se može
+naći u modernijim internetskim dućanima u kojima korisnik obično ne može znati
+koji su sve predmeti dostupni i koji su sve predmeti povezani s onim predmetima
+koji su njemu od interesa. S druge strane, sustavi multimedije na zahtjev
+\engl{multimedia-on-demand} općenito sadrže velike količine multimedije za koju
+korisnik ne zna da postoji. Nerijetko se zbog toga zna dogoditi da korisnik
+eksplicitno traži od sustava preporuku za glazbu ili film koji bi mu se mogao
+svidjeti.
 
-S druge strane, preporučiteljski sustavi
-filtriranje sadržaja
-multimedija, internetske trgovine
-i ono manje primjetno, pametni prostori, arhitektura 
-preporučitelji svjesni konteksta
-vrijeme i prostor važni dionici konteksta
+S obzirom na činjenicu da će sveprisutno računarstvo nastaviti razvoj u
+započetom smijeru, prirodno se nameće potreba za preporučiteljskim sustavima u
+takvoj vrsti računarstva. Usluge koje sveprisutno računarstvo već sada nudi ili
+će tek nuditi neophodno će zahtjevati filtriranje informacija. Preporuke koje će
+takvi sustavi davati morat će biti svjesne konteksta, a pogotovo prostora i
+vremena u kojem se nalaze. Potreba i smisao izučavanja sinteze ova dva područja
+dolazi iz očitog primjera za ulaganjem u bolje i efikasnije algoritme jer je u
+nepreglednoj masi informacija, kakav je Internet stvari i sveprisutno
+računarstvo idealan izvor, procesna moć današnjih računala davno izgubila
+bitku.
 
-Potreba i smisao izučavanja ovog područja dolazi iz očitog primjera za
-ulaganjem u bolje i efikasnije algoritme jer je u nepreglednoj masi
-informacija, kakav je Internet stvari idealan izvor, procesna moć današnjih
-računala davno izgubila bitku.
-
-Dodano u uvod
-
-Motiv ovog diplomskog rada jest manjak dostupnih algoritama za ovakvu
-specifičnu vrstu preporučitelja. U ovom radu dat će se teorijska
-podloga bazičnih algoritama za filtriranje sadržaja te analizirati prednosti i
-nedostatke takvih pristupa. Prikazat će se principi primjene preporučiteljskih
-sustava u sveprisutnim aplikacijama te će se prikazati i analizirati posebni
-zahtjevi na preporučiteljske sustave od strane takvih aplikacija na konkretnom
-scenariju. Na kraju će biti dan prikaz razvijenog preporučiteljskog sustava za
-takvu primjenu.
+Motiv ovog diplomskog rada jest manjak dostupnih algoritama i radnih okvira
+specifičnih za preporučiteljske sustave u sveprisutnom računarstvu. U ovom radu
+dat će se kratak uvod u sveprisutno računarstvo, teorijska podloga bazičnih
+algoritama za filtriranje sadržaja te analizirati prednosti i nedostatke takvih
+pristupa. Analizirat će se posebni zahtjevi na preporučiteljske sustave
+od strane sveprisutnih aplikacija. Prikazat će se principi rada osmišljenog
+preporučiteljskog sustava, te će se analizirati komponente istog sustava. Na
+kraju prikazat će se jednostavno testiranje izgrađenog sustava na konkretnom
+scenariju.
 
 \chapter{Sveprisutno računarstvo}
 \section{Uvod u sveprisutno računarstvo}
@@ -1106,10 +1124,6 @@ vrha, odnosno dva polja. Neki od njih su npr. \emph{Dijkstrin algoritam},
 Vremenska komponenta koja se uzima u obzir u modelu preporučitelja također je
 zapravo komponenta konteksta u kojem se nalazi korisnik. 
 
-uuuu, korisnik može za određeni proizvod imati funkciju koja opisuje kakve on
-ima vremenske preferencije s obzirom na taj proizvod. ili funkcija može
-opisivati samo one trenutke kada se stavlja korisnik u situaciju da traži
-preporuk
 
 Jedna takva funkcija može biti primjerice tzv. \emph{Gaussova krivulja}
 (slika \ref{fig:Gauss1}). Ona je pogodna zbog činjenice da prosječan korisnik
@@ -1249,7 +1263,81 @@ Profil:
 %Novi chapter%
 \chapter{Implementacija i ispitivanje modela}
 \section{Arhitektura implementacije}
-Opisati razrede, lupiti negdje class diagram itd.
+
+Programsko riješenje opisanog modela preporučiteljskog sustava izvedeno je u
+programskom jeziku $Java$ verzije $8$, a sastoji se od više interoperabilnih
+modula koje je prema potrebi moguće nadograđivati. Dijagram razreda sustava
+vidljiv je na slici \ref{fig:classdiagram}.
+
+Glavnina funkcionalnosti sadržana je u paketu \emph{filter}. Taj paket u prvom
+redu sadrži sučelja \emph{SpaceFilter}, \emph{TimeFilter} te \emph{DataFilter}
+implementacijom kojih se ostvaruje mogućnost filtriranja po prostoru, vremenu i
+generički po podacima respektivno.
+Osim sučelja, paket sadržava implementacije prostornog filtera, vremenskog
+filtera, suradničkog filtriranja na korisničkoj razini te filtriranja zasnovanog
+na sadržaju. Prostorno filtriranje implementirano je upotrebom standardnog
+Dijkstrinog algoritma za pronalaženje najkraćeg puta u grafu. Vremensko
+filtriranje izvedeno je evaluacijom funkcije vremena u trenutku traženja
+preporuke. Konačni algoritam implementiran je u razredu \emph{TheAlgorithm}, a
+kao takav je hibrid filtriranja po prostoru, vremenu i podacima.
+
+U paketu \emph{data} nalaze se razredi koji enkapsuliraju podatke koje koriste
+algoritmi za filtriranje. Razred \emph{Correlations} enkapsulira tablicu
+Pearsonovih koeficjenata korelacije između svaka dva korisnika u sustavu, dok
+razred \emph{Ratings} enkapsulira tablicu ocjena svih korisnika za sve predmete.
+Potonji razred posjeduje metode potrebne za sustav pobuda i pojačavanja
+obilježja \engl{Reinforcement}. Anotacija \engl{Annotation} \emph{Link} označava
+razrede \emph{ItemBeaconLink}, \emph{ItemPredictionLink} i
+\emph{UserCorrelationLink}. Navedeni razredi su jednostavni nositelji podataka
+između preporučiteljskih algoritama i klijentskog koda. Spremnici podataka
+također su i razredi \emph{Matrix} i \emph{Vector} u paketu \emph{commons} koji
+modeliraju proizvoljnu matricu, odnosno vektor.
+
+Paket \emph{functions} sadrži sučelja za funkcije koje se koriste u vremenskom
+filtru. Sučelje \emph{Function} predstavlja osnovu za implementaciju funkcije.
+Naslijeđuju ga sučelja \emph{DiscreteFunction} i sučelje \emph{Continuous
+function} koja je potrebno implementirati da bi se ostvarila diskretna, odnosno
+kontinuirana funkcija pogodna za korištenje u vremenskom filtru. Također, paket
+sadrži konkretnu implementaciju Gaussove zvonolike funkcije konfigurabilne
+pomoću parametara $a$, $b$ i $c$ (\ref{eq:BellFunc}).
+
+Model grafa koji opisuje prostor nalazi se u paketu \emph{space}. Graf je
+modeliran kroz vrhove (razred \emph{Node}) koji sadrže mape oblika
+$vrh \rightarrow udaljenost$ i ostale podatke nužne za ostvarivanje grafa.
+Razred \emph{Graph} sadrži listu svih vrhova u grafu te metodu za učitavanje
+grafa iz \emph{CSV} datoteke u kojoj je pohranjena matrica susjedstava. Sučelje
+\emph{SPAlgorithm} modelira algoritam za traženje najkraćeg puta, a konkretna
+implementacija jednog takvog algoritma (Dijkstrinog) nalazi se u razredu
+\emph{Dijkstra}.
+
+Korisnici i predmeti modelirani su kroz razrede \emph{User} odnosno \emph{Item}
+paketa \emph{model}, a sadržavaju podatke i metapodatke korisnicima i predmetima
+koji su nužni za ispravan rad sustava. Za korisnika je to npr. vremenska mapa u
+kojoj su pohranjeni parovi ključeva i vrijednosti u obliku
+$itemId \rightarrow function$, gdje je $itemId$ jedinstveni identifikator
+predmeta, a $function$ funkcija kojom je opisana vremenska preferencija
+korisnika za predmetom s identifikatorom $itemId$. Za predmet su to jedinstveni
+identifikator, identifikator oznake te mapa karakteristika u obliku
+$karakteristika \rightarrow preferencija$, gdje je $karakteristika$ naziv, tj.
+identifikator karakteristike, a $preferencija$ brojčana mjera preferencije.
+Razred također zadržava statični skup imena svih karakteristika u sustavu.
+Paket \emph{model} također sadržava pomoćne razrede \emph{ItemBuilder} i
+\emph{UserBuilder} koji korištenjem oblikovnog obrasca \emph{Graditelj} stvaraju
+nove objekte tipa \emph{Item} odnosno \emph{User}.
+ 
+Analiza dnevničkih zapisa proizašlih s mobilnog uređaja vrši se kroz razred
+\emph{RecordAnalyzer} i metodu \emph{analyze}. Pomoćne strukture za analizu
+nalaze se u paketu \emph{io}, a služe za modeliranje zapisa s mobilnog uređaja,
+konkretno, trodimenzionalne točke, vremenske oznake te samog zapisa. Razred
+\emph{FileInput} s metodom \emph{parseFile} vrši ulaznu obradu dnevničkih
+zapisa (tzv. \emph{parsiranje}).
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{images/diagramland.png}
+	\caption{Dijagram razreda implementiranog preporučitelja}
+	\label{fig:classdiagram}
+\end{figure}
 
 \section{Ispitni scenarij}
 Osmišljavanje ispitnog scenarija pokazalo se natprosječno zahtjevnim radi
