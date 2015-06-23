@@ -114,7 +114,9 @@ poslovima \cite{VukoticTankovic}.
 
 
 \section{Razvoj}
-U općem slučaju mogu se razlikovati tri velika vala u računalnoj eri. To su:
+Razvoj sveprisutnog računarstva započeo je devedesetih godina prošlog stoljeća
+a prethodile su mu dva računalna razdoblja. U općem slučaju mogu se razlikovati
+tri velika vala, a to su:
 \begin{enumerate}
   \item Radne stanice \engl{Mainframe} - jedno računalo, više osoba
   \item Osobna računala \engl{PC, Personal Computer} - jedno računalo, jedna
@@ -123,12 +125,16 @@ U općem slučaju mogu se razlikovati tri velika vala u računalnoj eri. To su:
   jedna osoba
 \end{enumerate}
 
+Slika \ref{fig:majortrends} prikazuje odnose računalnih razdoblja.
+
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=12cm]{images/majortrends2.png}
-	\caption{Tri vala u računarstvu (preuzeto u edukacijske svrhe \cite{trends})}
+	\caption{Tri vala u računarstvu}
 	\label{fig:majortrends}
 \end{figure}
+
+
 
 \section{Zahtjevi}
 Analiziranjem zahtjeva na sveprisutno i prožimajuće računarstvo, može se
@@ -159,6 +165,7 @@ procesna moć, interakcija s okolinom)
 
 \section{Primjena}
 
+Sveprisutno računarstvo već sada nalazi svoju primjenu u raznim segmentima 
 Udri brigu na veselje u ovom poglavlju natuć za sva vremena xD
 
 Pametni gradovi, pametni prostori, internet stvari.
@@ -548,7 +555,7 @@ način moguće izraziti kompatibilnost promatranog korisnika i predmeta:
 Vektore je poželjno normalizirati, TFIDF
 
 S obzirom na relacije \ref{eq:kosinus} i \ref{eq:cosUserItem} slijedi algoritam
-za preporučivanje zasnovano na sadržaju:
+za preporučivanje zasnovano na sadržaju.
 
 \begin{algorithm}[H]
 	\caption{Filtriranje zasnovano na sadržaju}
@@ -828,8 +835,6 @@ korisnika $k$ za predmet $i$ računa se korištenjem težinskog prosjeka:
 gdje je $N$ susjedstvo predmeta ocjenjenih od strane korisnika $k$ najsličnijih
 predmetu $i$.
 
-algoritam
-
 Jedan od najpoznatijih preporučitelja na svijetu, internetska
 trgovina \emph{Amazon.com} koristi patentirani hibridni algoritam baziran na
 ovoj tehnici (slike \ref{fig:amazon1} i \ref{fig:amazon2}).
@@ -848,10 +853,52 @@ ovoj tehnici (slike \ref{fig:amazon1} i \ref{fig:amazon2}).
 \end{figure}
 
 \section{Redukcija dimenzija}
+Skup algoritama redukcije dimenzija bazira se na činjenici da je u općem slučaju
+baza podataka korisnika i predmeta rijetko popunjena \engl(sparse). Za većinu
+korisnika neće biti dostupna većina ocjena, tj. u matrici ocjena korisnika za
+predmete, većina elemenata će vjerojatno biti $0$. S druge strane, filriranje
+zasnovano na suradnji i suradničko filtriranje u naprednijim slučajevima mogu
+biti naivni kada je u pitanju sinonimija između pojmova. 
 
+Neka je dan primjer sustava za prodaju knjiga. Ako je korisnik kupio više
+knjiga istog autora, može se pretpostaviti da njegovom profilu odgovara kupljeni
+autor. S druge strane, u općem slučaju i ukoliko se isključi mogućnost
+slučajnosti, knjiga o tom autoru vjerojatno mu neće biti preporučena jer
+suradničko filtriranje neće moći naći vezu između knjige o tom autoru i
+kupljenih knjiga, a sadržajno neće biti kompatibilne. Iz tog razloga algoritam
+redukcije dimenzija teži u izdvajanje kompleksnih karakteristika u zasebne
+podatkovne strukture koje ne ovise niti o korisniku, niti o predmetu.
+
+Matematički gledano, algoritam se bazira na $SVD$ dekompoziciji matrice
+korisnika i predmeta \engl{Singular value decomposition}. Rezultat te
+dekompozicije je:
+\begin{equation}
+	\label{eq:svd}
+	R = U \ast \sigma \ast V^{\ast}
+\end{equation}
+gdje je $U$ matrica dimenzija $m X r$, $S$ dimenzija $r X r$, a $V^{\ast}$
+dimenzija $r X n$. Matrica $S$ je dijagonalna matrica koja sadrži svojstvene
+vrijednosti, a te svojstvene vrijednosti su težine dimenzija koje doprinose
+konačnom rezultatu. Ukoliko se vrijednosti sortiraju silazno, može se pokazati
+da se većina elemenata nalazi u okolini nule \cite{courseraRC}. To omogućuje da
+se odstrane ti elementi pa se matrica $S$ reducira na dimenzije $k X k$, matrica
+$U$ na dimenzije $m X k$, a matrica $V^{\ast}$ na dimenzije $k X n$. Konačni
+rezultat redukcije jest:
+\begin{equation}
+	\label{eq:svdred}
+	R_k = U_k \ast \sigma_{k} \ast V^{\ast}_{k}
+\end{equation}
+$R_k$ najbliža $rank-k$ matrica originalne matrice $R$, a $k$ predstavlja broj
+dimenzija kompleksnih karakteristika.
+Izračun predikcije tada se svodi na skalarni produkt odgovarajućih vektora iz
+matrica $U_k$ i $V^{\ast}_{k}$ te svojstvenih vrijednosti iz dijagonalne matrice
+$\sigma_{k}$.
+
+Mana ovog algoritma jest skupa i zahtjevna operacija $SVD$ dekompozicije
+relativno velikih ulaznih matrica.
 
 \section{Hibridne tehnike}
-Hibridne tehnike podrazumjevaju kombiniranje više različitih tehnika
+Hibridne tehnike uglavnom podrazumjevaju kombiniranje više različitih tehnika
 filtriranja. Razne okolnosti u kojima rade preporučiteljski sustavi dovode do
 različitih primjenjivosti sustava. Primjerice, suradničko filtriranje niti u
 teoriji ne može raditi dobro ukoliko nisu zadovoljeni neki preduvjeti, npr.
