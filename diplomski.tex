@@ -1004,7 +1004,9 @@ Kakve su ocjene, koje su skale
   \item U ovoj fazi primjenjujemo prilagođeni kolaborativni i content filter.
   Može i SVD dekompozicija(skupo) pa matrična algebra
   
-  \item Imamo listu, sortira se prema lokaciji i vodimo korisnika.
+  \item Imamo listu, sortira se prema lokaciji i vodimo korisnika. Može se
+  izvesti da se kao težine putova označe rezultati predikcije pa se zavrti još
+  jednom Dijkstra i imamo putanju.
   
 \end{enumerate}
 
@@ -1199,8 +1201,13 @@ Profil:
   \item vektor preferencija
 \end{enumerate}
 
+\section{Modeliranje predmeta}
+
 %Novi chapter%
-\chapter{Ispitivanje modela}
+\chapter{Implementacija i ispitivanje modela}
+\section{Arhitektura implementacije}
+Opisati razrede, lupiti negdje class diagram itd.
+
 \section{Ispitni scenarij}
 Osmišljavanje ispitnog scenarija pokazalo se natprosječno zahtjevnim radi
 pokušaja da takav scenarij obuhvati i ispita sve segmente kontekstualno svjesnog
@@ -1211,7 +1218,6 @@ model moći implementirati i koristiti. Na kraju je odabrana prosječna
 svakodnevna aktivnost većine potencijalnih korisnika ovakvog sustava, a to je
 odlazak u kupovinu.
 
-%TODO: gdje se nalaze podaci o policama?
 Ispitni scenarij podrazumjeva generički srednje velik dućan u kojem se
 može naći mješovita roba, dakle, i prehrana i neprehrana. Radi jednostavnosti, a
 bez značajnijeg utjecaja na krajnji ishod, tlocrt dućana modeliran je mrežastom
@@ -1225,7 +1231,7 @@ mogu nalaziti radio oznake \engl{beacon} kojima mogu biti obilježeni:
 Ovdje se nameće pitanje je li potrebno radio oznakama obilježiti sve
 potencijalne predmete preporuke. Sa strane sustava, podrazumjeva se
 posjedovanje točnih lokacija svake radio oznake, a poznavanjem točnih lokacija
-te poznavanjem rasporeda u dućanu, interpolacijom možemo aproksimirati lokaciju
+te poznavanjem rasporeda u dućanu, interpolacijom se može aproksimirati lokacija
 korisnika u trenutcima kada je on između radio oznaka. Svakoj radio oznaci
 pridodani su i neki metapodaci od kojih je najvažniji jedinstveni identifikator
 u sustavu.
@@ -1287,22 +1293,161 @@ sučelje s određenom opremom, a ta oprema je:
 Takav izvor u praksi može biti bilo koji moderniji mobilni telefon ili tablet.
 
 \section{Simulacija primjene}
-%TODO: treba negdje ubaciti kako se stvar može generalizirati
-Opis načina testiranja
-Opisati inpute i outpute, konfiguraciju itd.
+U praktičnom smislu, ispitni scenarij modeliran je radio oznakom i prolaskom
+korisnika s mobilnim telefonom. Korisnik hoda normalnim hodom prosječne brzine,
+a mobilni telefon drži u ruci koja slobodno visi i giba se u skladu s koracima.
+Radio oznaka razašilje jedinstveni identifikator frekvencijom od $1 Hz$, a
+mobilni telefon bilježi podatke frekvencijom od $5 Hz$. Različite razine
+povratne informacije preporučitelju o akcijama korisnika simulirane su
+različitim ponašanjem u ispitnom scenariju, a vidljive su u tablici
+\ref{tbl:podscenariji}
 
-Ulazi i izlazi
-\begin{enumerate}
-  \item logovi (id + rss)
-  \item multiplus id
-  \item lokacija beacona s id-em
-  \item multiplus profil (kontekstualizirani), vremenski
-  \item tendencija kretanja
-\end{enumerate}
-\begin{enumerate}
-  \item lista s obzirom na lokaciju i vrijeme
-  \item s obzirom na očekivani profil kupnje
-\end{enumerate}
+\begin{table}[!htb]
+	\caption{Ispitni podscenariji}
+	\label{tbl:podscenariji}
+	\centering
+	\begin{tabular}{|c|c|c|} \hline		
+		Dataset & Način zaustavljanja & Korištenje mobitela\\ \hline
+		1 & Ne postoji & Ne\\
+		2 & Usporavanje & Ne\\
+		3 & Zastajkivanje & Ne\\
+		4 & Zastajkivanje & Kraće podizanje\\
+		5 & Zastajkivanje & Dulje podizanje\\
+		6 & Zaustavljanje & Ne\\
+		7 & Zaustavljanje & Kraće podizanje\\
+		8 & Zaustavljanje & Dulje podizanje\\ \hline
+	\end{tabular}
+\end{table}
+
+Tablica \ref{tbl:reinforcement} prikazuje konkretne iznose odgovora na različite
+pobude od strane korisnika na sustav.
+
+\begin{table}[!htb]
+	\caption{Reakcije na interakciju korisnika i predmeta}
+	\label{tbl:reinforcement}
+	\centering
+	\begin{tabular}{|c|c|} \hline		
+		Način zaustavljanja & Pojačanje\\ \hline
+		Ne postoji & 0\\
+		Usporavanje & 0.025\\
+		Zastajkivanje & 0.05\\
+		Zaustavljanje & 0.1\\ \hline
+	\end{tabular}
+\end{table}
+
+%Kako se konkretno računa zaustavljanje, usporavanje zastajkivanje itd.
+
+\subsection{Ulazi}
+Ulazi u sustav ugrubo se mogu podijeliti na ulaze potrebne za postavljanje
+sustava i ulaze na koje sustav reagira preporukom. Ulazi potrebni za
+postavljanje su tlocrt, tj. prostorni opis okoline, podaci o ocjenama korisnika
+sustava za predmete, predmeti sustava sa vektorima svojih karakteristika te
+podaci o vezama između radio oznaka i predmeta. Uz navedene podatke, ulaz u
+sustav je i jedinstveni identifikator korisnika za kojeg se traži preporuka. Taj
+identifikator jest jednostavan podatak cjelobrojnog tipa pa neće biti detaljnije
+opisivan. Također, ulaz u sustav je i cijeli broj $N$ kojim se specificira
+koliko se najboljih predmeta traži za korisnika.
+
+\subsubsection{Prostorni opis okoline}
+Za potrebe testiranja koristi se jednostavni generirani tlocrt prikazan slikom
+\ref{fig:layout}. Razlog relativno jednostavnom tlocrtu jest kombinatorna
+eksplozija kojoj su veći prostori podložni. Tlocrt se učitava iz \emph{CSV}
+datoteke \engl{Comma separated values}, a u toj datoteci zapisana je matrica
+susjedstava grafa (\ref{eq:adjacencyMatrix}) koji odgovara tlocrtu. Zbog
+jednostavnosti, praktično je tlocrt prikazati grafom zbog velikog broja
+dostupnih i provjerenih algoritama za izračun udaljenosti između čvorova
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=5cm]{images/3x3grid.png}
+	\caption{Jednostavan ispitni tlocrt}
+	\label{fig:layout}
+\end{figure}
+
+\begin{equation}
+	\label{eq:adjacencyMatrix}
+	M = 
+	\begin{bmatrix}
+		0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0\\
+		0 & 0 & 1 & 0 & 1 & 1 & 0 & 0 & 0\\
+		0 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 0\\
+		1 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0\\
+		0 & 1 & 1 & 0 & 0 & 1 & 0 & 1 & 0\\
+		0 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 0\\
+		0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 0\\
+		0 & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 1\\
+		0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0\\
+	\end{bmatrix}
+\end{equation}
+
+U datoteci u kojoj je tlocrt zapisan, elementi stupaca matrice odvojeni su
+znakom točka - zarez \engl{Semicolon}, a elementi redaka znakom novog retka.
+Datoteka se procesira na početku rada sustava, a po potrebi svaki put kada se
+dogodi promjena rasporeda u prostoru. U tom slučaju, pretpostavlja se da će u
+datoteci biti zapisan novi tlocrt prostora.
+
+\subsubsection{Veza između radio oznaka i predmeta}
+Veza između radio oznaka i predmeta razmjerno je jednostavna. Također se učitava
+iz \emph{CSV} datoteke, a format joj je:
+
+\begin{equation}
+	\centering
+	beaconId;itemId
+\end{equation}
+
+S obzirom da izmjena radio oznake za neki predmet nije česta radnja, datoteka se
+procesira jedanput na početku rada sustava. U slučaju promjena, nove podatke
+moguće je unijeti dinamički u sustav.
+
+\subsubsection{Podaci o predmetima}
+Podaci o predmetima učitavaju se iz \emph{CSV} datoteke. Opći izgled retka
+datoteke je:
+
+\begin{equation}
+	\centering
+	itemId;itemName;locationId\#CharName1;CharName2 \ldots
+\end{equation}
+
+Prvo se čita prvi redak datoteke iz kojeg se nakon razdvajanja učitanog retka po
+znaku $\#$ prebrojavaju i učitavaju imena karakteristika kojima će se opisivati
+predmeti. Karakteristika u sustavu može biti neograničeno mnogo. Nakon toga
+slijedi slijedno čitanje datoteke, redak po redak. Svaki redak započinje
+cijelim brojem koji je jedinstveni identifikator predmeta u sustavu. Nakon
+njega, odvojen točka-zarezom slijedi naziv predmeta te cijeli broj koji je
+jedinstveni identifikator lokacije, tj. ćelije, u sustavu. Nakon
+znaka $\#$ slijedi niz sastavljen od $0$ ili $1$ odvojen znakom točka-zarez.
+Znak $0$ označava da ta karakteristika nije prisutna u predmetu kojem pripada
+redak, a znak $1$ da je karakteristika prisutna, tj. primjenjiva na predmet.
+
+Nakon inicijalnog čitanja datoteke, nove predmete u sustav moguće je unijeti
+dinamički. Primjer ove datoteke nalazi se u dodatku.
+
+\subsubsection{Matrica ocjena korisnika}
+Matrica ocjena korisnika također razlikuje prvi redak od ostalih. 
+Oblik prvog retka datoteke je:
+\begin{equation}
+	\centering
+	;itemId\#itemName;itemId\#itemName
+\end{equation}
+gdje predmeta može biti nedefinirano mnogo. Općeniti izgled ostalih redaka je:
+\begin{equation}
+	\centering
+	userId;ratingForItem1;ratingForItem2 \ldots
+\end{equation}
+gdje je $userId$ jedinstveni identifikator korisnika u sustavu, a
+$ratingForItem$ ocjena korisnika za predmet kojem odgovara stupac u kojem se ta
+ocjena nalazi. Ocjene su predstavljene skupom:
+\begin{equation}
+	\centering
+	R \in \big[ 0.5, 5.0 \big]
+\end{equation}
+Općenito, granulacija dodjeljivanja ocjena jest $0.5$ iako to nije kriterij za
+stabilan rad sustava. Ukoliko ocjena korisnika za neki predmet ne postoji, pri
+obradi retka, na to mjesto umeće se numerička oznaka $-100.0$ koja se naravno
+ne koristi kao ocjena nego kao oznaka neodstatka ocjene. Primjer ove datoteke
+može se naći u dodatku
+
+\subsubsection{Dnevnički zapisi mobilnog uređaja}
 
 %17:37:47.392#74278bda-b644-4520-8f0c-720eaf059935-baba-bebe$-86#9.8;-1.8;1.6#-42.2;4.7;13.9
 Krajnji ulaz u sustav, bez ikakve apstrakcije, su dnevnički zapisi \engl{Log} s
@@ -1332,17 +1477,31 @@ $accelerometer$ i $magnetometer$ složeni.
   fizičke osi uređaja u $\mu T$
 \end{itemize}
 
-timestamp -> popis beacona + rss
-magnetometar i akcelerometar
-shadow preporuke (može u globalni model) -> implicitna preporuka u kojoj korisnika
-preko akcija vodimo do onoga što njemu treba
-beacon id -> proizvod i lokaciju
+\subsection{Izlazi}
 
-out -> za trenutnu lokaciju -> u kojem smijeru dalje i koji proizvodi idući (topN)
+Izlazi iz sustava su serijalizirani $Java$ interni objekti $ItemPredictionLink$
+slijedećeg oblika:
+\begin{equation}
+	\centering
+	ItemPredictionLink\{ 
+		itemId=N,
+		prediction=P
+	\}
+\end{equation}
+gdje je $itemId$ jedinstveni identifikator predmeta u sustavu, a $prediction$
+predikcija ocjene korisnika za kojeg je preporuka zatražena za predmet s
+identifikatorom $itemId$. Objekti su smješteni u jednostruko povezanoj listi, a
+prethodno su sortirani padajućim redoslijedom prema predikciji. Rezultati rada
+sustava kao objekti se ispisuju na standardni izlaz računala \engl{STDOUT}.
 
-\section{Provođenje testiranja}
-Opis testnog scenarija u smislu kako smo polijepili beacone po feru, hodali,
-zaustavljali se itd.
+
+%TODO: treba negdje ubaciti kako se stvar može generalizirati
+
+
+Inicijalizacija se jednom zavrti a onda se preporuke šibaju nonstop. Nakon
+reinforcementa i izmjene podataka, treba ponovno zavrtiti izračune korelacija i
+ostalih content based gluposti.
+
 \section{Rezultati testiranja}
 Prikazati rezultate, jelte
 
@@ -1376,4 +1535,27 @@ Abstract.
 		numbersep=5pt,
 		numberstyle=\color{mygray}
 	]{logs/LogFile_06-06-15_18_27a.txt}
+	
+\chapter{Datoteka s podacima o predmetima}
+\lstinputlisting[
+		language=C, 
+		firstline=1,
+		lastline=15, 
+		numbers=left, 
+		breaklines=true, 
+		numbersep=5pt,
+		numberstyle=\color{mygray}
+	]{csv/items.csv}
+
+\chapter{Datoteka s matricom ocjena korisnika}
+\lstinputlisting[
+		language=C, 
+		firstline=1,
+		lastline=15, 
+		numbers=left, 
+		breaklines=true, 
+		numbersep=5pt,
+		numberstyle=\color{mygray}
+	]{csv/ratings.csv}
+	
 \end{document}
