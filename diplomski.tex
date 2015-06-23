@@ -107,8 +107,8 @@ U općem slučaju mogu se razlikovati tri velika vala u računalnoj eri. To su:
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=10cm]{images/majortrends.png}
-	\caption{Tri vala u računarstvu (preuzeto u edukacijske svrhe, ne valja slika)}
+	\includegraphics[width=12cm]{images/majortrends2.png}
+	\caption{Tri vala u računarstvu (preuzeto u edukacijske svrhe \cite{trends})}
 	\label{fig:majortrends}
 \end{figure}
 
@@ -539,9 +539,8 @@ za preporučivanje zasnovano na sadržaju:
 		\STATE{\textbf{Ulaz:} $k$ - vektor ocjena korisnika. $I$ - matrica u kojoj su
 		retci predmeti, a stupci karakteristike}
 		\STATE{\textbf{Izlaz:} Lista $L$ najboljih $N$ predmeta za korisnika $k$}
-		\STATE{$L := initList(N)$}
-		\STATE{$idfPolje := initPolje(width(I))$}
-		\STATE{$userPolje := initPolje(width(I))$}
+		\STATE{$L := initList(N);$}
+		\STATE{$idfPolje := initPolje(width(I)); userPolje := initPolje(width(I))$}
 		
 		%PRVA FAZA ALGORITMA, NORMALIZIRATI VEKTOR ZA SVE ITEME
 		%Vanjska for petlja koja ide po svim itemima
@@ -834,11 +833,18 @@ ovoj tehnici (slike \ref{fig:amazon1} i \ref{fig:amazon2}).
 
 
 \section{Hibridne tehnike}
-Hibridne tehnike podrazumjevaju kombiniranje više različitih tehnika filtriranja
-
-zbog pokrivanja većeg spektra
-kombiniranje kvalitetnijih obilježja u nekim okolinama
-performanse
+Hibridne tehnike podrazumjevaju kombiniranje više različitih tehnika
+filtriranja. Razne okolnosti u kojima rade preporučiteljski sustavi dovode do
+različitih primjenjivosti sustava. Primjerice, suradničko filtriranje niti u
+teoriji ne može raditi dobro ukoliko nisu zadovoljeni neki preduvjeti, npr.
+određeni broj korisnika u sustavu. Zbog toga se kombinacijom više različitih
+preporučiteljskih tehnika nastoji proširiti spektar okolnosti u kojima
+preporučiteljski sustav može raditi. Nadalje, razlog hibridizacije
+preporučitelja može biti, ne samo nemogućnost preporuke, nego traženje
+kvalitetnije preporuke u nekim okolnostima. Također, razlog mogu biti i
+performanse u različitim okolnostima, pa jedna tehnika može dati bolje rezultate
+u nekoj okolini, a neka druga tehnika bolje rezultate u nekoj drugoj okolini.
+Neki od poznatijih hibridnih preporučiteljskih tehnika su: \cite{RSHandbook}
 
 \begin{enumerate}
   \item Težinski - ocjena predmeta preporuke računa se iz svih dostupnih
@@ -872,8 +878,45 @@ svode u velikoj mjeri na različite hibride osnovnih tehnika. Velike industrije
 trgovine i zabavnih sadržaja u praksi imaju autorska algoritamska rješenja
 hibridnih preporučitelja.
 \section{Moguća područja primjene}
-utrpaj iz seminara
+Prikazane tehnike preporuke danas se aktivno koriste u gotovo svim sferama
+internetskog života. U velikoj mjeri preporučitelji nisu eksplicitni, nego rade
+u pozadini, pa se na prvi pogled ne bi moglo reći da je korišten preporučitelj.
+Na prvom mjestu svakako jest svakodnevan upotreba internetskih tražilica.
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=7cm]{images/google.png}
+	\caption{Preporuka internetske tražilice \emph{Google}}
+	\label{fig:google}
+\end{figure}
+Internetske tražilice danas, čak i za neregistrirane korisnike vrlo precizno
+mogu prikupiti implicitne podatke i ponuditi personalizirane preporuke.
+Pretraživanje internetskih trgovina i \emph{e-commerce} sustava uz današnju
+ponudu predmeta i potražnju korisnika praktički je nezamislivo bez nekog oblika
+filtra koji će ponuditi korisniku interesantne predmete i navesti ga na druge
+bliske predmete. Ovo čini preporučitelje interesnom sferom i za marketing s
+obzirom da često upravo o njima ovisi prodaja, a time i zarada.
 
+Internetski servisi za razmjenu i pregledavanje multimedijalnih sadržaja
+(\emph{Youtube, Last.fm, Netflix, Pandora}) naveliko koriste preporučitelje kako
+bi povećali kvalitetu usluge a time i zadovoljstvo korisnika, pogotovo ako se
+radi o plaćenim korisničkim računima. Također, koriste ih često i za pogađanje
+ukusa korisnika. Usluga \emph{Last.fm} nudi opciju \glqq Scrobblera \grqq koja u
+pozadini prikuplja informacije i stvara liste slušanja bez eksplicitne pomoći
+korisnika.
+
+Preporučitelje koriste i \emph{IpTV} usluge \engl{Internet protocol television}
+za lakše snalaženje u digitalnim videotekama i pojednostavljenje usluga
+multimedije na zahtjev \engl{multimedia - on - demand}.
+
+Društvene mreže i servisi za upoznavanje koriste preporučiteljske sustave za
+davanje preporuka na razini korisnik - korisnik. Takve usluge tretiraju objekte
+drugih korisnika kao predmete i na sličan način traže $top-N$ listu za aktualnog
+korisnika.
+
+Preporučitelje je moguće koristiti i u pametnim prostorima te u \emph{Internet
+of things} okolini \cite{Munoz-Organero2010}. U tom kontekstu prostorne i
+vremenske karakteristike, te kontekst u kojem se korisnici i predmeti nalaze
+potrebno je na poseban način modelirati i uzeti u obzir.
 
 \section{Preporučiteljski sustavi u sveprisutnom računarstvu}
 Primjena preporučiteljskih sustava u sveprisutnom računarstvu logična je
@@ -1494,13 +1537,11 @@ identifikatorom $itemId$. Objekti su smješteni u jednostruko povezanoj listi, a
 prethodno su sortirani padajućim redoslijedom prema predikciji. Rezultati rada
 sustava kao objekti se ispisuju na standardni izlaz računala \engl{STDOUT}.
 
-
 %TODO: treba negdje ubaciti kako se stvar može generalizirati
 
-
-Inicijalizacija se jednom zavrti a onda se preporuke šibaju nonstop. Nakon
-reinforcementa i izmjene podataka, treba ponovno zavrtiti izračune korelacija i
-ostalih content based gluposti.
+Ovo ubaci: Inicijalizacija se jednom zavrti a onda se preporuke šibaju nonstop.
+Nakon reinforcementa i izmjene podataka, treba ponovno zavrtiti izračune
+korelacija i ostalih content based gluposti.
 
 \section{Rezultati testiranja}
 Prikazati rezultate, jelte
