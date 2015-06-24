@@ -1023,26 +1023,234 @@ specifičnosti, koji postoje, mobilni uređaji, foursquare itd.
 \section{Preporučiteljski sustavi s izraženom prostornom i vremenskom
 komponentom}
 
-Priča o postojećim preporučiteljima i kako nemaju prostorno vremenskih
-komponenti 
-
 Osnovni problem s kojim se konvencionalni preporučiteljski sustavi susreću (a
 time i popularniji radni okviri i biblioteke koji ih implementiraju) jest
-izostanak bilo kakve potpore za prostorne i vremenske komponente koje
-su se pokazale neophodne za rad sa sveprisutnim sustavima. 
-%Za sveprisutno prostor i vrijeme su jedne od bitnijih stavki (referenca?)
+u većoj mjeri izostanak podrške za kontekstualizaciju. U kontekstu sveprisutnog
+računarstva preporučitelj kao minimalan skup konteksta u kojem se sustav nalazi
+treba imati podršku za prostornu i vremensku komponentu. Model takvog
+preporučitelja može se prikazati relacijom \ref{eq:DefModel2}
+\begin{equation}
+\label{eq:DefModel2}
+	R \leftarrow U \times I \times C
+\end{equation}
+gdje je $C$ kontekst preporuke, tj. kontekst u kojem se nalazi sustav. Minimalan
+skup sastavnica konteksta tada je:
+\begin{equation}
+\label{eq:Context}
+	C \leftarrow T \times S
+\end{equation}
+gdje je $T$ vremenska komponenta, a $S$ prostorna komponenta
 
-\section{The model}
+\section{Prostorna komponenta}
+
+S obzirom na kompleksnost postupka modeliranja prostora, prostorna komponenta
+konteksta modelirat će se poednostavljeno, i to kvadratnom mrežom
+(slika \ref{fig:StoreGrid}). Iako se na prvi pogled tako čini, to nije
+ograničenje jer modeliranje prostora u kojem će korisnici tražiti preporuku
+najčešće nije slobodno, tj. korisnik se u takvim prostorima kreće putem koji mu
+je dostupan. Primjer je dućan u kojem se korisnik može kretati između polica, a
+očito je i razumno da se ne može kretati \emph{preko} polica.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=7cm]{images/grid.png}
+	\caption{Tlocrt prostora modeliran kvadratnom mrežom}
+	\label{fig:StoreGrid}
+\end{figure}
+
+%TODO: ružno napisano, refactor
+Dostupne puteve za korisnika može se čuvati u npr. riječnicima
+\engl{Dictionary}, tj. parovima $kljuc \rightarrow vrijednost$ gdje je $kljuc$
+neko polje kvadratne mreže a $vrijednost$ lista svih \emph{susjednih} polja do
+kojih je moguće doći iz polja $kljuc$. Minorna mana ovog pristupa jest
+dvostruko spremanje putova jer ako se iz polja $p_1$ može doći u polje $p_2$,
+onda se iz polja $p_2$ može doći u polje $p_1$. Dvostruko spremanje može se
+izbjeći nauštrb vremenu pretraživanja dvostrukih putanja, a za relativno malu
+memorijsku uštedu, čak i kod modeliranja vrlo velikih prostora.
+
+Ako se kvadratnu mrežu i dostupne putove kretanja prikaže kao neusmjereni
+težinski graf, onda se taj prostor može predstaviti \emph{matricom
+susjedstva}, a kako je takva matrica simetrična, spremati se može samo npr.
+gornja trokutasta matrica, čime se postiže svojevrsna rijetka popunjenost
+matrice \engl{Sparse Matrix}.
+Prednost predstavljanja mreže i prostora grafom jest i postojanje nebrojeno
+mnogo pouzdanih i efikasnih algoritama za traženje najkraćeg puta između dva
+vrha, odnosno dva polja. Neki od njih su npr. \emph{Dijkstrin algoritam},
+\emph{Bellman-Ford algoriam} ili \emph{A$\ast$ algoritam}.
+
+Kvadratna mreža ne mora se nužno prevoditi u graf. U tom slučaju fizička
+udaljenost između dva polja može se modelirati \emph{Manhattanskom udaljenosti}
+(slika \ref{fig:ManhattanDistance}). Radi se o vrsti udaljenosti koja od
+standardne Euklidske udaljenosti odudara po činjenici da je udaljenost dviju
+točaka suma apsolutnih razlika njihovih Kartezijevih koordinata.
+
+ \begin{figure}[H]
+	\centering
+	\includegraphics[width=7cm]{images/Manhattan_distance.png}
+	\caption{Ilustracija Manhattanske udaljenosti}
+	\label{fig:ManhattanDistance}
+\end{figure}
+
+\section{Vremenska komponenta}
+Vremenska komponenta koja se uzima u obzir u modelu preporučitelja također je
+komponenta konteksta u kojem se nalazi korisnik. S obzirom na ponavljajuće
+navike korisnika i prirodno uklapanje, ta komponenta modelirat će se funkcijom
+koja preslikava vrijeme na potrebu korisnika za nekim predmetom:
+\begin{equation}
+	\label{eq:time}
+	f: vrijeme \rightarrow predikcija
+\end{equation}
+Domena funkcije jest vrijeme, a period u teoriji može biti proizvoljan. Dakle,
+svaka funkcija prikazivat će želju ili potrebu korisnika za nekim predmetom u
+periodu konzistentnom za sve predmete u sustavu. Rezultat funkcije jest
+predikcija u intervalu $\big[ 0, 1 \big]$
+
+Jedna takva funkcija može biti primjerice tzv. \emph{Gaussova krivulja}
+(slika \ref{fig:Gauss1}). Ona je pogodna zbog činjenice da prosječan korisnik
+prosječnu akciju u kojoj će tražiti preporuku u principu traži u jednom kraćem
+vremenskom intervalu. Drugim riječima, pojedini predmeti preporuke za nekog
+korisnika u vremenski svjesnom preporučiteljskom sustavu bit će zanimljivi samo
+jedan kraći interval.
+\begin{equation}
+	\label{eq:BellFunc}
+	f(x;a,b,c) = \frac
+	{
+		1
+	}
+	{
+		1 + \mid\frac{x - c}{a}\mid^{2b}
+	}
+\end{equation}
+gdje je $x$ varijabla, a $a$, $b$ i $c$ parametri kojima se regulira oblik
+krivulje:
+\begin{itemize}
+  \item $a$ - širina vrha
+  \item $b$ - nagib porasta i pada, oblik vrha
+  \item $c$ - pomak na $x$ osi
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{images/zvonolika1matlab.png}
+	\caption{Preferencija korisnika za predmet na dnevnoj skali}
+	\label{fig:Gauss1}
+\end{figure}
+
+S druge strane, skala ne mora biti dnevna, može biti i tjedna te se funkciju
+može zadati po dijelovima. Primjer jedne takve funkcije nalazi se na slici
+\ref{fig:Gauss2}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14.21cm]{images/neprigusenocropped.png}
+	\caption{Preferencija korisnika za predmet na dnevnoj skali}
+	\label{fig:Gauss2}
+\end{figure}
+
+S obzirom na matematičku analizu koja stoji iza računa za pronalazak funkcijete
+kompleksnost i težinu izračuna, one se mogu zadati i diskretno, npr. kroz vektor
+uzoraka funkcije. Ta diskretna funkcija može se koristiti kao takva ili se može
+procesom interpolacije naći njezin eksplicitni zapis. Pogodne metode
+interpolacije mogu npr. biti interpolacija polinomom višeg stupnja ili
+interpolacija splajnovima \engl{Spline}.
+
+%TODO: refactor
+Vremenska komponenta omogućava i praćenje obrazaca ponašanja korisnika, pa time
+i predviđanje ponavljanja ponašanja \engl{Recurring}. Također, vremenska
+komponenta podrazumjeva i tzv. \emph{efekt blijeđenja} \engl{Fade-out effect}.
+Ako korisnik kod kojeg je uočen neki obrazac akcija prestane provoditi tu
+akciju, preporučitelj će prestati primati pobudu za održavanje te akcije.
+Međutim, neće je odmah zanemariti nego će se vremenska komponenta, tj. funkcija
+koja opisuje tu komponentu, lagano gušiti nekom drugom funkcijom, primjerice
+recipročnom eksponencijalnom funkcijom:
+
+\begin{equation}
+	\label{eq:RecipExp}
+	g(x) = e^{-x}
+\end{equation}
+
+Tada će ukupan rezultat vremenske komponente konteksta biti:
+
+\begin{equation}
+	\label{eq:Gusenje}
+	T \leftarrow f(x) \ast g(x)
+\end{equation}
+
+gdje je $f(x)$ funkcija koja opisuje vremensku komponentu konteksta nekog
+korisnika za neki predmet, a $g(x)$ funkcija koja guši tu komponentu.
+primjer. 
+
+Na slici \ref{fig:GaussPriguseno} vidljiv je primjer \emph{efekta
+blijeđenja} na tipično periodičko ponašanje korisnika. Prema formuli
+\ref{eq:Gusenje} vrijedi:
+
+\begin{equation}
+	\label{eq:BellFunc}
+	f(x) = \frac
+	{
+		1
+	}
+	{
+		1 + \mid\frac{x - 2*k}{0.23}\mid^{5}
+	}
+	+ 2 \ast k + 1
+\end{equation}
+gdje je $k \in \{ 0, 1, 2, 3, 4, 5, 6, 7 \}$
+
+\begin{equation}
+	\label{eq:Prigusnica}
+	g(x)=e^{-0.18 * x}
+\end{equation}
+
+Ovdje također postoji mogućnost da se funkcija $g(x)$ zada diskretno, tj. po
+uzorcima.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14.21cm]{images/prigusenocropped.png}
+	\caption{Preferencija korisnika za predmet na dnevnoj skali}
+	\label{fig:GaussPriguseno}
+\end{figure}
+
+Kod naprednijih modeliranja vremenske komponente, te kod kompleksnijih prilika
+ponašanja korisnika, vremensku komponentu teoretski je moguće simulirati
+neuronskom mrežom. Mana ovog postupka svakako bi bilo potrebno vrijeme za
+treniranje mreže navikama korisnika u vremenskom kontekstu.
+
+\section{Modeliranje korisnika}
+Korisnika se u sustavu modelira korisničkim profilom. Takav profil sadrži
+elementarne podatke o korisniku:
+\begin{itemize}
+  \item Jedinstveni identifikator korisnika u sustavu
+  \item Ime i prezime korisnika
+  \item Vektor preferencija korisnika
+\end{itemize}
+
+Vektor preferencija korisnika predstavlja preferencije korisnika za
+predefinirane karakteristike. Vektor kao takav može se predstaviti fizičkim
+vektorom ili riječnikom gdje je ključ naziv karakteristike a vrijednost mjera
+preferencije. Potonji pristup razmjerno je bolji jer minimizira mogućnost krivog
+korištenja vektora preferencija.
+Kroz rad sustava profil korisnika se dopunjuje na temelju povratnih informacija
+korisnika sustava prema preporučitelju. Primjerice, moguće je detektirati
+interes korisnika za nekim predmetom pa na takvu vrstu pobude reagirati
+pojačavanjem karakteristika u profilu korisnika koje odgovaraju tom predmetu.
+Moguće je i pojačavati karakteristike na više različitih načina u ovisnosti o
+jačini pobude.
+Ovakva vrsta korisničkog profila donekle riješava problem hladnog početka
+\engl{Cold start}, jer se može pretpostaviti da su u inicijalnom trenutku
+vektori preferencija dostupni u datotekama. Zbog toga će sigurno biti moguće
+izvesti sadržajno temeljenu preporuku, dok će do suradničke preporuke moći doći
+tek nakon ponovnog treniranja algoritma.
+
+\section{Modeliranje predmeta}
+
+\section{Izgrađeni model}
 Znači cijeli model treba opisati, od ocjenjivanja do apsolutno svega
 
 \begin{equation}
 \label{eq:DefModel}
 	R \leftarrow U \times I \times C
-\end{equation}
-
-\begin{equation}
-\label{eq:Context}
-	C \leftarrow T \times S
 \end{equation}
 
 Izražen prostorno vremenski kontekst (općenito)
@@ -1117,195 +1325,6 @@ Kakve su ocjene, koje su skale
   jednom Dijkstra i imamo putanju.
   
 \end{enumerate}
-
-\section{Prostorna komponenta}
-
-S obzirom na kompleksnost postupka modeliranja prostora, prostorna komponenta
-konteksta modelirat će se poednostavljeno, i to kvadratnom mrežom
-(slika \ref{fig:StoreGrid}). Iako se na prvi pogled tako čini, to nije
-ograničenje jer modeliranje prostora u kojem će korisnici tražiti preporuku
-najčešće nije slobodno, tj. korisnik se u takvim prostorima kreće putem koji mu
-je dostupan. Primjer je dućan u kojem se korisnik može kretati između polica, a
-očito je i razumno da se ne može kretati \emph{preko} polica.
-%TODO: ružno napisano, refactor
-Dostupne puteve za korisnika može se čuvati u npr. riječnicima
-\engl{Dictionary}, tj. parovima $kljuc \rightarrow vrijednost$ gdje je $kljuc$
-neko polje kvadratne mreže a $vrijednost$ lista svih \emph{susjednih} polja do
-kojih je moguće doći iz polja $kljuc$. Minorna mana ovog pristupa jest
-dvostruko spremanje putova jer ako se iz polja $p_1$ može doći u polje $p_2$,
-onda se iz polja $p_2$ može doći u polje $p_1$. Dvostruko spremanje može se
-izbjeći nauštrb vremenu pretraživanja dvostrukih putanja, a za relativno malu
-memorijsku uštedu, čak i kod modeliranja vrlo velikih prostora.
-%TODO: Manhattan distance
-%TODO: refactor text
-Ako se kvadratnu mrežu i dostupne putove kretanja prikaže kao neusmjereni
-težinski graf, onda se taj prostor može predstaviti \emph{matricom
-susjedstva}, a kako je takva matrica simetrična, spremati se može samo npr.
-gornja trokutasta matrica, čime se postiže svojevrsna rijetka popunjenost
-matrice \engl{Sparse Matrix}.
-%TODO: i ovo refactor
-%treba napisati kako su različite namjene dijkstre i A* itd.
-Prednost predstavljanja mreže i prostora grafom jest i postojanje nebrojeno
-mnogo pouzdanih i efikasnih algoritama za traženje najkraćeg puta između dva
-vrha, odnosno dva polja. Neki od njih su npr. \emph{Dijkstrin algoritam},
-\emph{Bellman-Ford algoriam} ili \emph{A$\ast$ algoritam}.
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=7cm]{images/grid.png}
-	\caption{Tlocrt prostora modeliran kvadratnom mrežom}
-	\label{fig:StoreGrid}
-\end{figure}
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=7cm]{images/Manhattan_distance.png}
-	\caption{Ilustracija Manhattanske udaljenosti}
-	\label{fig:ManhattanDistance}
-\end{figure}
-
-
-
-\section{Vremenska komponenta}
-
-Vremenska komponenta koja se uzima u obzir u modelu preporučitelja također je
-zapravo komponenta konteksta u kojem se nalazi korisnik. 
-
-
-Jedna takva funkcija može biti primjerice tzv. \emph{Gaussova krivulja}
-(slika \ref{fig:Gauss1}). Ona je pogodna zbog činjenice da prosječan korisnik
-prosječnu akciju u kojoj će tražiti preporuku u principu traži u jednom kraćem
-vremenskom intervalu. Drugim riječima, pojedini predmeti preporuke za nekog
-korisnika u vremenski svjesnom preporučiteljskom sustavu bit će zanimljivi samo
-jedan kraći interval.
-\begin{equation}
-	\label{eq:BellFunc}
-	f(x;a,b,c) = \frac
-	{
-		1
-	}
-	{
-		1 + \mid\frac{x - c}{a}\mid^{2b}
-	}
-\end{equation}
-gdje je $x$ varijabla, a $a$, $b$ i $c$ parametri kojima se regulira oblik
-krivulje:
-\begin{itemize}
-  \item $a$ - širina vrha
-  \item $b$ - nagib porasta i pada, oblik vrha
-  \item $c$ - pomak na $x$ osi
-\end{itemize}
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=12cm]{images/zvonolika1matlab.png}
-	\caption{Preferencija korisnika za predmet na dnevnoj skali}
-	\label{fig:Gauss1}
-\end{figure}
-
-S druge strane, skala ne mora biti dnevna, može biti i tjedna te se funkciju
-može zadati po dijelovima (puno kompleksnije situacije). 
-Znači, funkcija može biti na više različitih skala i može odražavati
-preferenciju za predmet ili preferenciju za traženje preporuke općenito
-%TODO Tu mi fali neka slika funkcije pod više dijelova i na tjednoj skali
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=14.21cm]{images/neprigusenocropped.png}
-	\caption{Preferencija korisnika za predmet na dnevnoj skali}
-	\label{fig:Gauss2}
-\end{figure}
-
-S obzirom na matematičku analizu koja stoji iza računa za pronalazak funkcije,
-one se mogu zadati i diskretno, npr. kroz vektor uzoraka funkcije. Ta diskretnu
-funkciju može se koristiti kao takva ili se može procesom interpolacije naći
-njezin eksplicitni zapis. Pogodne metode interpolacije mogu npr. biti
-interpolacija polinomom višeg stupnja ili interpolacija splajnovima
-\engl{Spline}.
-
-u funkcija može biti kontinuirana, a može biti i uzorkovana i
-pohranjena u nekom polju. y os funkcije tada je vrijednost koju korisnik
-pridaje nekom proizvodu u neko doba dana. ne mora biti ni doba dana, može biti
-doba tjedna. diskretizirane funkcije mogu se interpolirati polinomima višeg
-stupnja ili splajnovima
-
-%TODO: refactor
-Vremenska komponenta omogućava i praćenje obrazaca ponašanja korisnika, pa time
-i predviđanje ponavljanja ponašanja \engl{Recurring}.
-
-Vremenska komponenta podrazumjeva i tzv. \emph{efekt blijeđenja} \engl{Fade-out
-effect}. Ako korisnik kod kojeg je uočen neki obrazac akcija prestane provoditi
-tu akciju, preporučitelj će prestati primati pobudu za održavanje te akcije.
-Međutim, neće je odmah zanemariti nego će se vremenska komponenta, tj. funkcija
-koja opisuje tu komponentu, lagano gušiti nekom drugom funkcijom, primjerice
-recipročnom eksponencijalnom funkcijom:
-
-\begin{equation}
-	\label{eq:RecipExp}
-	g(x) = e^{-x}
-\end{equation}
-
-Tada će ukupan rezultat vremenske komponente konteksta biti:
-
-\begin{equation}
-	\label{eq:Gusenje}
-	T \leftarrow f(x) \ast g(x)
-\end{equation}
-
-gdje je $f(x)$ funkcija koja opisuje vremensku komponentu konteksta nekog
-korisnika za neki predmet, a $g(x)$ funkcija koja guši tu komponentu.
-primjer. 
-
-Na slici \ref{fig:GaussPriguseno} vidljiv je primjer \emph{efekta
-blijeđenja} na tipično periodičko ponašanje korisnika. Prema formuli
-\ref{eq:Gusenje} vrijedi:
-
-\begin{equation}
-	\label{eq:BellFunc}
-	f(x) = \frac
-	{
-		1
-	}
-	{
-		1 + \mid\frac{x - 2*k}{0.23}\mid^{5}
-	}
-	+ 2 \ast k + 1
-\end{equation}
-gdje je $k \in \{ 0, 1, 2, 3, 4, 5, 6, 7 \}$
-
-\begin{equation}
-	\label{eq:Prigusnica}
-	g(x)=e^{-0.18 * x}
-\end{equation}
-
-Ovdje također postoji mogućnost da se funkcija $g(x)$ zada diskretno, tj. po
-uzorcima.
-
-%TODO: slika s gušenjem
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=14.21cm]{images/prigusenocropped.png}
-	\caption{Preferencija korisnika za predmet na dnevnoj skali}
-	\label{fig:GaussPriguseno}
-\end{figure}
-
-akcije
-
-\section{Modeliranje korisnika}
-multiplus profil
-
-\begin{enumerate}
-  \item multiplus profil, znamo tko što voli, tj. imamo profil korisnika
-  \item dopuna profila? kroz šetnju, kroz zadržavanje, kada kupi?
-  \item cold start profil?
-\end{enumerate}
-
-Profil:
-\begin{enumerate}
-  \item Proizvodi, skupine proizvoda, redovi? -> stablo?
-  \item vektor preferencija
-\end{enumerate}
-
-\section{Modeliranje predmeta}
 
 %Novi chapter%
 \chapter{Implementacija i ispitivanje modela}
