@@ -1875,10 +1875,46 @@ Kod ispitivanja podsustava za pojačavanje obilježja, korištena je radio oznak
 kojom je u simulaciji bio označen predmet s jedinstvenim identifikatorom $11$.
 Ispitana je detekcija povratne informacije korisnika na temelju jačine signala i
 vrijednosti mjerača ubrzanja. Ispitni scenariji opisani su u tablici
-\ref{tbl:podscenariji}. Radi jednostavnosti, sustav ispisuje samo detektiranu
-vrstu pobude i odziv na tu pobudu.
+\ref{tbl:podscenariji}. Za svaki skup podataka, podaci su nanovo učitani iz
+\emph{CSV} datoteka. Radi jednostavnosti, sustav ispisuje samo detektiranu vrstu
+pobude i odziv na tu pobudu. Rezultati testiranja vidljivi su u tablici
+\ref{tbl:rezultati}.
 
+\begin{table}[H]
+	\caption{Rezultati ispitivanja podsustava za pojačavanje obilježja}
+	\label{tbl:rezultati}
+	\centering
+	\begin{tabular}{|c|c|c|c|c|} \hline		
+		Skup podataka & Datoteka & Pobuda & Odziv & Stanje nakon odziva\\ \hline
+		1 & 1 & Prolazak & 0 & 4.5\\
+		 & 2 & Prolazak & 0 & 4.5\\
+		 & 3 & Prolazak & 0 & 4.5\\ \hline
+		2 & 1 & Usporavanje & 0.025 & 4.525\\
+		 & 2 & Zastajkivanje & 0.05 & 4.575\\
+		 & 3 & Usporavanje & 0.025 & 4.6\\ \hline
+		3 & 1 & Zastajkivanje & 0.05 & 4.55\\
+		 & 2 & Zastajkivanje & 0.05 & 4.6\\
+		 & 3 & Zastajkivanje & 0.05 & 4.65\\ \hline
+		 
+		 4 & 1 & Zastajkivanje & 0.05 & 4.55\\
+		 & 2 & Zastajkivanje & 0.05 & 4.6\\
+		 & 3 & Zastajkivanje & 0.05 & 4.65\\ \hline
+		5 & 1 & Zastajkivanje & 0.05 & 4.55\\
+		 & 2 & Zastajkivanje & 0.05 & 4.6\\
+		 & 3 & Zastajkivanje & 0.05 & 4.65\\ \hline
+		6 & 1 & Zaustavljanje & 0.1 & 4.6\\
+		 & 2 & Zastajkivanje & 0.05 & 4.65\\
+		 & 3 & Zaustavljanje & 0.1 & 4.75\\ \hline
+		 
+		 7 & 1 & Zaustavljanje & 0.1 & 4.6\\
+		 & 2 & Zaustavljanje & 0.1 & 4.7\\
+		 & 3 & Zaustavljanje & 0.1 & 4.8\\ \hline
+		8 & 1 & Zaustavljanje & 0.1 & 4.6\\
+		 & 2 & Zaustavljanje & 0.1 & 4.7\\
+		 & 3 & Zaustavljanje & 0.1 & 4.8\\ \hline
 
+	\end{tabular}
+\end{table}
 
 \chapter{Zaključak}
 Zaključak.
