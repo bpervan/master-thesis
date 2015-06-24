@@ -25,25 +25,12 @@
 \author{Branimir Pervan}
 \maketitle
 
-% Ispis stranice s napomenom o umetanju izvornika rada. Uklonite naredbu
-% \izvornik ako želite izbaciti tu stranicu.
 \izvornik
 
-% Dodavanje zahvale ili prazne stranice. Ako ne želite dodati zahvalu, naredbu
-% ostavite radi prazne stranice.
 \zahvala{Ovdje dolazi zahvala}
 
 \tableofcontents
 
-%Spomenuti IoT, recommendere i njihovu primjenu, sveprisutno računarstvo je
-%prisutnije no ikad, 
-%kako povezati preporučitelje i sveprisutno računarstvo, 
-%što se tu ima preporučivati, koji je konkretan scenarij itd
-
-%jednostavno, preporučiteljski sustavi filtriraju informacije iz velikih i
-% nepreglednih baza podataka a gdje ćeš više informacija nego u sveprisutnom
-% računarstvu koji je motiv za ovaj diplomski -> do sada se nije razvio takav
-% specifičan preporučitelj
 \chapter{Uvod}
 U posljednjih dvadesetak godina razvoj Interneta stvari \engl{Internet
 of Things} uhvatio je gotovo eksponencijalni zamah, a pojedini izvori navode da
@@ -1788,17 +1775,73 @@ sustava kao objekti se ispisuju na standardni izlaz računala \engl{STDOUT}.
 \section{Rezultati ispitivanja}
 Ispitivanje rada sustava izvedeno je korištenjem $JUnit 4$ knjižnice za
 programski jezik $Java$. Ispitana je svaka komponenta preporučiteljskog
-algoritma, a rezultati su prikazani u nastavku.
+algoritma, a rezultati su prikazani u nastavku. 
+Za testiranje se koristio korisnik s jedinstvenim identifikatorom $89$. Ispitni
+skup obuhvaća bazu od $25$ korisnika i $100$ predmeta. Tablica ocjena je rijetko
+popunjena kako bi se simulirala realna situacija u kojoj korisnici ne mogu
+ocijeniti svaki predmet u sustavu. 
+Funkcija za filtriranje po vremenu jest neprigušena Gaussova funkcija
+(\ref{eq:BellFunc}) s parametrima $a = 0.23$, $b = 2.5$ i $c = 2$, a testni
+tlocrt je prikazan na slici \ref{fig:layout}. Korištena je i jedna radio oznaka
+kojom je u simulaciji bio označen predmet s jedinstvenim identifikatorom $11$.
+
+Zbog jednostavnosti i velike količine potrebnih ispitnih podataka, samo je dio
+tablica ocjena i liste predmeta s karakteristikama prikazan u dodatku.
 
 \subsection{Ispitivanje prostornog filtera}
+\lstinputlisting[
+		language=Java, 
+		firstline=1,
+		lastline=25, 
+		numbers=left, 
+		breaklines=true, 
+		numbersep=5pt,
+		numberstyle=\color{mygray}
+	]{tests/space.txt}
 
 \subsection{Ipsitivanje vremenskog filtera}
+\lstinputlisting[
+		language=Java,
+		firstline=1,
+		lastline=15, 
+		numbers=left, 
+		breaklines=true, 
+		numbersep=5pt,
+		numberstyle=\color{mygray}
+	]{tests/time.txt}
 
 \subsection{Ispitivanje sadržajnog filtera}
+\lstinputlisting[
+		language=Java, 
+		firstline=1,
+		lastline=15, 
+		numbers=left, 
+		breaklines=true, 
+		numbersep=5pt,
+		numberstyle=\color{mygray}
+	]{tests/content.txt}
 
 \subsection{Ispitivanje suradničkog filtera}
+\lstinputlisting[
+		language=Java, 
+		firstline=1,
+		lastline=15, 
+		numbers=left, 
+		breaklines=true, 
+		numbersep=5pt,
+		numberstyle=\color{mygray}
+	]{tests/useruser.txt}
 
 \subsection{Ispitivanje sustava za pojačavanje obilježja}
+\lstinputlisting[
+		language=Java, 
+		firstline=1,
+		lastline=15, 
+		numbers=left, 
+		breaklines=true, 
+		numbersep=5pt,
+		numberstyle=\color{mygray}
+	]{tests/thealgo.txt}
 
 \chapter{Zaključak}
 Zaključak.
