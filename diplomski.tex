@@ -15,6 +15,8 @@
 
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 
+
+
 \begin{document}
 \thesisnumber{1136}
 \title{Preporučiteljski sustavi u sveprisutnom računarstvu}
@@ -1307,6 +1309,35 @@ sastoje itd.
 
 Kakve su ocjene, koje su skale
 
+\begin{description}
+  \item[Prostorni filtar:] sve što je trenutno u okolini korisnika manje od
+  nekog graničnog „radiusa“, uzmi u obzir, ostalo odbaci. Potrebno između
+  ostalog da smanjimo broj računanja. Što je veća blizina, to veća težina u
+  rezultatu. Tu ide definicija udaljenosti, ili graf pa
+  Dijkstra/Bellman-Ford/A*, ili kvadradna mreža pa Manhattan distance
+  
+  \item[Vremenski filtar:] Uzeti u obzir dio dana i dio
+  tjedna, što smo vremenski bliže vremenu u kojem korisnik kupuje te predmete, to je veća
+  težina/utjecaj. Svaki korisnik ima funkcije (kontinuirane ili diskretne)
+  kojima se opisuje vremenska preferencija za neke predmete
+  
+  \item U ovoj fazi postoji lista s poredanim prostorno vremenskim
+  „udaljenostima“. Ako sadrži manje od nekog broja predmeta, ponovi od 1. ali
+  olabavi kriterije
+  
+  \item U ovoj fazi primjenjujemo prilagođeni kolaborativni i content filter.
+  Može i SVD dekompozicija(skupo) pa matrična algebra
+  
+  \item Imamo listu, sortira se prema lokaciji i vodimo korisnika. Može se
+  izvesti da se kao težine putova označe rezultati predikcije pa se zavrti još
+  jednom Dijkstra i imamo putanju.
+  
+\end{description}
+
+\begin{enumerate}
+  \item Prostorni f
+\end{enumerate}
+
 \begin{algorithm}[H]
 	\caption{Algoritam kontekstualizirane preporuke u vremenu i prostoru}
 	\label{algo:TheAlgo}
@@ -1341,35 +1372,35 @@ Kakve su ocjene, koje su skale
 		\ENDFOR
 		
 		\COMMENT{Podatkovni filtri}
+		\STATE{$SuradnickaLista := InitLista();$}
+		\STATE{$SadrzajnaLista := InitLista();$}
 		
-		\RETURN{p}
+		\IF{$k.FilterType == COLLABORATIVE$}
+			\STATE{$SuradnickaLista := SuradnickiFiltar(u,r,c);$}
+		\ELSIF{$k.FilterType == CONTENT$}
+			\STATE{$SadrzajnaLista := SadrzajnaLista(u,i,r);$}
+		\ELSIF{$k.FilterType == BOTH$}
+			\STATE{$SuradnickaLista := SuradnickiFiltar(u,r,c);$}
+			\STATE{$SadrzajnaLista := SadrzajnaLista(u,i,r);$}
+		\ENDIF
+		
+		\STATE{
+		\begin{multline*}
+			Rezultat := LinearnaKombinacija(
+			ListaLokacija, 
+			VremenskaLista, \\
+			SuradnickaLista, 
+			SadrzajnaLista).kombiniraj(k);
+		\end{multline*}
+			
+		}
+		\STATE{$sort(Rezultat);$}
+		\STATE{$SlijedeciCvor := NadjiDostupan(Rezultat);$}
+		
+		
+		\RETURN{$(Rezultat, SlijedeciCvor)$}
 	\end{algorithmic}
 \end{algorithm}
-
-\begin{enumerate}
-  \item Prostorni filter: sve što je trenutno u okolini korisnika manje od
-  nekog graničnog „radiusa“, uzmi u obzir, ostalo odbaci. Potrebno između
-  ostalog da smanjimo broj računanja. Što je veća blizina, to veća težina u
-  rezultatu. Tu ide definicija udaljenosti, ili graf pa
-  Dijkstra/Bellman-Ford/A*, ili kvadradna mreža pa Manhattan distance
-  
-  \item Vremenski filter: Uzeti u obzir dio dana i dio tjedna, što smo
-  vremenski bliže vremenu u kojem korisnik kupuje te predmete, to je veća
-  težina/utjecaj. Svaki korisnik ima funkcije (kontinuirane ili diskretne)
-  kojima se opisuje vremenska preferencija za neke predmete
-  
-  \item U ovoj fazi postoji lista s poredanim prostorno vremenskim
-  „udaljenostima“. Ako sadrži manje od nekog broja predmeta, ponovi od 1. ali
-  olabavi kriterije
-  
-  \item U ovoj fazi primjenjujemo prilagođeni kolaborativni i content filter.
-  Može i SVD dekompozicija(skupo) pa matrična algebra
-  
-  \item Imamo listu, sortira se prema lokaciji i vodimo korisnika. Može se
-  izvesti da se kao težine putova označe rezultati predikcije pa se zavrti još
-  jednom Dijkstra i imamo putanju.
-  
-\end{enumerate}
 
 %Novi chapter%
 \chapter{Implementacija i ispitivanje modela}
