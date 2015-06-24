@@ -15,7 +15,9 @@
 
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
 
-
+\newcommand{\setalglineno}[1]{%
+  \setcounter{ALC@line}{\numexpr#1-1}}
+\makeatother
 
 \begin{document}
 \thesisnumber{1136}
@@ -1278,69 +1280,73 @@ vrijednosti vektora:
 \end{equation}
 gdje je $N$ duljina vektora karakteristika.
 \section{Izgrađeni model}
-Znači cijeli model treba opisati, od ocjenjivanja do apsolutno svega i koji se
-filtri koriste(content i collaborative)
 
+Izgrađeni model preporučiteljskog sustava kombinira mogućnosti svih navedenih
+algoritama za filtriranje. Zbog mogućnosti filtriranja po vremenu i prostoru,
+može se reći da je algoritam svjestan konteksta te je kao takav primjenjiv u
+sveprisutnoj okolini. 
+
+Algoritam započinje filtriranjem po prostoru. Sve što je trenutno u okolini
+korisnika manje od nekog graničnog radiusa uzima se u obzir, a ostalo se
+implicitno odbacuje jer jer rezultat preporuke $0$. Ovaj filtar se prvi izvodi
+jer u prostornom kontekstu nema smisla filtrirati prema drugim kriterijima, ako
+se predmetu fizički ne može pristupiti. Također, filtar je koristan jer u
+početku eliminira velik broj nedostupnih predmeta te tako smanjuje opseg
+izračuna. Algoritam prema kojem se filtrira jest neki od poznatijih algoritama
+za pronalazak najkraćeg puta ukoliko je prostor na vrhu apstrakcije modeliran
+grafom, npr. \emph{Dijsktrin algoritam}, \emph{Bellman - Ford algoritam} ili
+\emph{A* algoritam}, odnosno algoritam za izračun \emph{Manhattanske
+udaljenosti} ukoliko je na vrhu apstrakcije kvadratna mreža.
+
+Vremensko filtriranje izvodi se skaliranjem vremenskog trenutka u trenutku
+izvođenja algoritma na interval tjedna. Granulacija do koje se uzima trenutno
+vrijeme je sekunda, a relacija za konverziju je:
 \begin{equation}
-\label{eq:DefModel}
-	R \leftarrow U \times I \times C
+\label{eq:timeconv}
+	t = d + \frac{s}{24} + \frac{m}{1440}
 \end{equation}
+gdje je $t$ vrijeme primjenjivo u sustavu, $d$ redni broj dana u tjednu počevši
+od ponedjeljka kao $1$. dana, $s$ trenutni sati od ukupno $24$ sata, a $m$
+trenutne minute. Nakon skaliranja, evaluira se funkcija kojom je opisana
+preferencija korisnika za neki predmet. Funkcija je takva da joj je rezultat
+skaliran na interval $\big[0, 1\big]$. Efekt blijeđenja \engl{Fade out} izvodi
+se množenjem opisne funkcije funkcijom gušenja koja je u općem slučaju
+recipročna eksponencijalna funckija. Moguće je primjeniti proizvoljnu funkciju
+koja najvjernije opisuje individualnu potrebu svakog korisnika.
 
-Izražen prostorno vremenski kontekst (općenito)
-dvije razine reinforcementa. preporučitelj neće raditi online, tj. akcije iz
-trenutnog sessiona ne utječu na preporuke u tom istom sessionu. tek kad se
-session commita (po izlasku iz sustava) profili se zbrajaju i preporuke postaju
-aktualne koje je pravo vrijeme za reinforcement dva profila -> privremeni i
-trajni profil pa zbroj nakon kupnje netko svaka dva tjedna kupuje jabuke pa mu
-se svaka dva tjedna kupuju jabuke (recurring)
+Nakon sveprisutno kontekstualiziranog filtriranja, slijedi filtriranje zasnovano
+na sadržaju ili filtriranje zasnovano na suradnji i relaciji između više
+korisnika. Krajnji korisnik kroz konfiguraciju može birati koji filtar će
+koristiti, ili može koristiti oba. U trenutku početka rada sustava, teško je
+ostvariti veze između korisnika pa je preporučljivije koristiti sadržajni
+filtar. Nakon određenog vremena, moguće je prebacivanje na suradnički filtar
+koji se u općem slučaju pokazuje kao stabilnije rješenje \cite{RSHandbook}.
+Ove vrste filtriranja koriste podatke o preferencijama korisnika,
+karakteristikama predmeta i međusobnim sličnostima između korisnika. Skup ocjena
+kojima korisnik može ocjeniti predmet je:
+\begin{equation}
+	\label{eq:ratings}
+	R \in \big[0,5\big]
+\end{equation}
+Opća granulacija ocjene jest $0.5$ iako sustavski nije ograničeno, tj. sustav
+će ispravno raditi sa svim granulacijama.
 
+Razvijeni model sustava odgovara na povratne informacije korisnika. Analizom
+korisničkih radnji i kretanja dolazi do pobude na koju je odziv sustava
+pojačavanje neke od karakteristika u podatkovnim strukturama. Odzivi mogu biti
+različiti i ovise o jačini pobude, primjerice, detekcija zastajkivanja korisnika
+kraj određenog predmeta nosi manju pobudu na karakteristike tog predmeta od
+detekcije kupnje tog istog proizvoda. Zbroj svih odziva stvara privremeni profil
+korisnika koji će postati aktivan tek nakon zbrajanja sa stvarnim profilom, tako
+da trenutne akcije ne mogu utjecati na predikcije u trenutnoj sesiji korištenja
+sustava.
 
-Tu bi u principu trebalo ubaciti the algoritam
-* fade out efekt
-akcije(u konzumu)
-I kolaboracija i sadržaj
-- kod sadržaja, gdje je udaljenost manja od nekog broja (i fizička udaljenost)
-- račun udaljenosti je apstrahiran
-
-Možda sekcija kontekst pa onda napisati nešto generički o kontekstu pa onda
-podsekcije prostor i vrijeme
-Sekcija za svaku komponentu, korisnika i predmete, fino opisati od čega se
-sastoje itd.
-
-Kakve su ocjene, koje su skale
-
-\begin{description}
-  \item[Prostorni filtar:] sve što je trenutno u okolini korisnika manje od
-  nekog graničnog „radiusa“, uzmi u obzir, ostalo odbaci. Potrebno između
-  ostalog da smanjimo broj računanja. Što je veća blizina, to veća težina u
-  rezultatu. Tu ide definicija udaljenosti, ili graf pa
-  Dijkstra/Bellman-Ford/A*, ili kvadradna mreža pa Manhattan distance
-  
-  \item[Vremenski filtar:] Uzeti u obzir dio dana i dio
-  tjedna, što smo vremenski bliže vremenu u kojem korisnik kupuje te predmete, to je veća
-  težina/utjecaj. Svaki korisnik ima funkcije (kontinuirane ili diskretne)
-  kojima se opisuje vremenska preferencija za neke predmete
-  
-  \item U ovoj fazi postoji lista s poredanim prostorno vremenskim
-  „udaljenostima“. Ako sadrži manje od nekog broja predmeta, ponovi od 1. ali
-  olabavi kriterije
-  
-  \item U ovoj fazi primjenjujemo prilagođeni kolaborativni i content filter.
-  Može i SVD dekompozicija(skupo) pa matrična algebra
-  
-  \item Imamo listu, sortira se prema lokaciji i vodimo korisnika. Može se
-  izvesti da se kao težine putova označe rezultati predikcije pa se zavrti još
-  jednom Dijkstra i imamo putanju.
-  
-\end{description}
-
-\begin{enumerate}
-  \item Prostorni f
-\end{enumerate}
+S obzirom na sve komponente sustava, slijedi algoritam za kontekstualiziranu
+preporuku u vremenu i prostoru (\ref{algo:TheAlgo}):
 
 \begin{algorithm}[H]
 	\caption{Algoritam kontekstualizirane preporuke u vremenu i prostoru}
-	\label{algo:TheAlgo}
+	\label{algo:TheAlgo1}
 	\begin{algorithmic}[1]
 		\STATE{\textbf{Ulaz: 
 			Korisnik $u$, 
@@ -1383,7 +1389,13 @@ Kakve su ocjene, koje su skale
 			\STATE{$SuradnickaLista := SuradnickiFiltar(u,r,c);$}
 			\STATE{$SadrzajnaLista := SadrzajnaLista(u,i,r);$}
 		\ENDIF
-		
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+	\label{algo:TheAlgo2}
+	\begin{algorithmic}[1]
+		\setalglineno{27}
 		\STATE{
 		\begin{multline*}
 			Rezultat := LinearnaKombinacija(
@@ -1394,10 +1406,11 @@ Kakve su ocjene, koje su skale
 		\end{multline*}
 			
 		}
+		\setalglineno{28}
 		\STATE{$sort(Rezultat);$}
+		\setalglineno{29}
 		\STATE{$SlijedeciCvor := NadjiDostupan(Rezultat);$}
-		
-		
+		\setalglineno{30}
 		\RETURN{$(Rezultat, SlijedeciCvor)$}
 	\end{algorithmic}
 \end{algorithm}
@@ -1783,16 +1796,22 @@ Zaključak.
 \bibliographystyle{fer}
 
 \begin{sazetak}
-Sažetak na hrvatskom jeziku.
+U ovom radu dan je uvod u sveprisutno računarstvo i preporučiteljske algoritme.
+Analizirane su mogućnosti korištenja preporučiteljskih sustava u sveprisutnom
+računarstvu, te je smišljen i razvijen model kontekstno svjesnog preporučitelja.
+Analizirane su različite mogućnosti filtriranja po vremenu i prostoru.
+U sklopu rada konkretan sustav je implementiran te je prikazana arhitektura
+implementacije, testni scenariji i rezultati korištenja sustava.
 
-\kljucnerijeci{Ključne riječi, odvojene zarezima.}
+\kljucnerijeci{sveprisutno računarstvo, preporučiteljski sustavi}
 \end{sazetak}
 
 \engtitle{Recommender systems in ubiquituous computing}
 \begin{abstract}
-Abstract.
+This thesis gives fundamentals of ubiquitous computing and recommendation
+algorithms.
 
-\keywords{Keywords.}
+\keywords{Ubiquitous computing, recommender systems}
 \end{abstract}
 
 \appendix
