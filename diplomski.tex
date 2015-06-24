@@ -1284,7 +1284,15 @@ gdje je $N$ duljina vektora karakteristika.
 Izgrađeni model preporučiteljskog sustava kombinira mogućnosti svih navedenih
 algoritama za filtriranje. Zbog mogućnosti filtriranja po vremenu i prostoru,
 može se reći da je algoritam svjestan konteksta te je kao takav primjenjiv u
-sveprisutnoj okolini. 
+sveprisutnoj okolini. Algoritam se sastoji od nekoliko koraka:
+\begin{enumerate}
+  \item Faza prostornog filtra
+  \item Faza vremenskog filtra
+  \item Opcionalna faza odluke u kojoj, ukoliko nema dovoljno predmeta na listi
+  preporuke, algoritam može početi od prvog koraka ali sa spuštenim kriterijima
+  \item Faza filtriranja na suradničkoj ili sadržajnoj razini
+  \item Faza prezentacije rezultata
+\end{enumerate}
 
 Algoritam započinje filtriranjem po prostoru. Sve što je trenutno u okolini
 korisnika manje od nekog graničnog radiusa uzima se u obzir, a ostalo se
@@ -1342,7 +1350,7 @@ da trenutne akcije ne mogu utjecati na predikcije u trenutnoj sesiji korištenja
 sustava.
 
 S obzirom na sve komponente sustava, slijedi algoritam za kontekstualiziranu
-preporuku u vremenu i prostoru (\ref{algo:TheAlgo}):
+preporuku u vremenu i prostoru (\ref{algo:TheAlgo1}):
 
 \begin{algorithm}[H]
 	\caption{Algoritam kontekstualizirane preporuke u vremenu i prostoru}
@@ -1561,7 +1569,6 @@ bude u dometu signala radio oznake, a fizički nije usmjeren prema predmetu koji
 ona označava. Korištenjem magnetometra na pametnom uređaju i poznavanjem
 razmještaja radio oznaka u prostoru, može se jednostavno utvrditi je li korisnik
 iskazao interes za obilježeni predmet ili je okrenut od njega.
-%zadržavanje -> reinforcement prvog stupnja
 
 Izvor podataka je dobro enkapsuliran pa se može reći da mora implementirati
 sučelje s određenom opremom, a ta oprema je:
@@ -1734,8 +1741,6 @@ ne koristi kao ocjena nego kao oznaka neodstatka ocjene. Primjer ove datoteke
 može se naći u dodatku
 
 \subsubsection{Dnevnički zapisi mobilnog uređaja}
-
-%17:37:47.392#74278bda-b644-4520-8f0c-720eaf059935-baba-bebe$-86#9.8;-1.8;1.6#-42.2;4.7;13.9
 Krajnji ulaz u sustav, bez ikakve apstrakcije, su dnevnički zapisi \engl{Log} s
 pametnog uređaja. U njih uređaj zapisuje:
 \begin{itemize}
@@ -1780,14 +1785,20 @@ identifikatorom $itemId$. Objekti su smješteni u jednostruko povezanoj listi, a
 prethodno su sortirani padajućim redoslijedom prema predikciji. Rezultati rada
 sustava kao objekti se ispisuju na standardni izlaz računala \engl{STDOUT}.
 
-%TODO: treba negdje ubaciti kako se stvar može generalizirati
+\section{Rezultati ispitivanja}
+Ispitivanje rada sustava izvedeno je korištenjem $JUnit 4$ knjižnice za
+programski jezik $Java$. Ispitana je svaka komponenta preporučiteljskog
+algoritma, a rezultati su prikazani u nastavku.
 
-Ovo ubaci: Inicijalizacija se jednom zavrti a onda se preporuke šibaju nonstop.
-Nakon reinforcementa i izmjene podataka, treba ponovno zavrtiti izračune
-korelacija i ostalih content based gluposti.
+\subsection{Ispitivanje prostornog filtera}
 
-\section{Rezultati testiranja}
-Prikazati rezultate, jelte
+\subsection{Ipsitivanje vremenskog filtera}
+
+\subsection{Ispitivanje sadržajnog filtera}
+
+\subsection{Ispitivanje suradničkog filtera}
+
+\subsection{Ispitivanje sustava za pojačavanje obilježja}
 
 \chapter{Zaključak}
 Zaključak.
