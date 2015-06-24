@@ -1775,20 +1775,19 @@ sustava kao objekti se ispisuju na standardni izlaz računala \engl{STDOUT}.
 \section{Rezultati ispitivanja}
 Ispitivanje rada sustava izvedeno je korištenjem $JUnit 4$ knjižnice za
 programski jezik $Java$. Ispitana je svaka komponenta preporučiteljskog
-algoritma, a rezultati su prikazani u nastavku. 
-Za testiranje se koristio korisnik s jedinstvenim identifikatorom $89$. Ispitni
-skup obuhvaća bazu od $25$ korisnika i $100$ predmeta. Tablica ocjena je rijetko
-popunjena kako bi se simulirala realna situacija u kojoj korisnici ne mogu
-ocijeniti svaki predmet u sustavu. 
-Funkcija za filtriranje po vremenu jest neprigušena Gaussova funkcija
-(\ref{eq:BellFunc}) s parametrima $a = 0.23$, $b = 2.5$ i $c = 2$, a testni
-tlocrt je prikazan na slici \ref{fig:layout}. Korištena je i jedna radio oznaka
-kojom je u simulaciji bio označen predmet s jedinstvenim identifikatorom $11$.
-
+algoritma, a rezultati su prikazani u nastavku.  Za testiranje se koristio
+korisnik s jedinstvenim identifikatorom $89$.
 Zbog jednostavnosti i velike količine potrebnih ispitnih podataka, samo je dio
-tablica ocjena i liste predmeta s karakteristikama prikazan u dodatku.
+tablica ocjena i liste predmeta s karakteristikama prikazan u dodatku. Također,
+isključivo iz praktičnih razloga nisu prikazani cijeli ispisi sustava na
+standardni izlaz nego samo prvih $15$, odnosno $10$
 
 \subsection{Ispitivanje prostornog filtera}
+S obzirom na razmjerno jednostavan ispitni tlocrt, rezultati su uglavnom
+jednolični jer svakoj ispitnoj lokaciji pripada približno $11$ predmeta. Testni
+tlocrt je prikazan na slici \ref{fig:layout}. U nastavku je primjer ispisa
+prostornog filtra.
+
 \lstinputlisting[
 		language=Java, 
 		firstline=1,
@@ -1799,11 +1798,22 @@ tablica ocjena i liste predmeta s karakteristikama prikazan u dodatku.
 		numberstyle=\color{mygray}
 	]{tests/space.txt}
 
-\subsection{Ipsitivanje vremenskog filtera}
+\subsection{Ispitivanje vremenskog filtera}
+Zbog nemogućnosti za naprednijim modeliranjem ponašanja korisnika funkcijom, pri
+ispitivanju vremenskog filtra, korištena je neprigušena Gaussova funkcija
+(\ref{eq:BellFunc}) s parametrima nasumično odabranim parametrima iz intervala:
+$a \in \big[0.2, 0.25 \big]$, 
+$b \in \big[2.2, 2.7 \big]$ i 
+$c \in \big[1.8, 2.2 \big]$.
+Parametri Gaussove krivulje namjerno su nasumično odabrani kako bi se pokazalo
+variranje u preporuci, jer bi suprotnom predikcija za svaki predmet bila bi
+identična. Kod ove vrste ispitivanja nemoguće je koristiti ispitne knjižnice
+jer ispitni rezultat ovisi o trenutku u kojem je pokrenuto ispitivanje.
+
 \lstinputlisting[
 		language=Java,
 		firstline=1,
-		lastline=15, 
+		lastline=10, 
 		numbers=left, 
 		breaklines=true, 
 		numbersep=5pt,
@@ -1811,10 +1821,15 @@ tablica ocjena i liste predmeta s karakteristikama prikazan u dodatku.
 	]{tests/time.txt}
 
 \subsection{Ispitivanje sadržajnog filtera}
+Uz tablicu ocjena, korišteni su podaci o preferencijama korisnika. Svaki predmet
+je opisan s $10$ karakteristika koje mogu imati vrijednost $0$ ili $1$, tj.
+karakteristika nije primjenjiva na predmet, odnosno karakteristika je
+primjenjiva na predmet.
+
 \lstinputlisting[
 		language=Java, 
 		firstline=1,
-		lastline=15, 
+		lastline=10, 
 		numbers=left, 
 		breaklines=true, 
 		numbersep=5pt,
@@ -1822,26 +1837,48 @@ tablica ocjena i liste predmeta s karakteristikama prikazan u dodatku.
 	]{tests/content.txt}
 
 \subsection{Ispitivanje suradničkog filtera}
+Za ispitivanje suradničkog filtera korištena je baza od $25$ korisnika i $100$
+predmeta. Tablica ocjena je rijetko popunjena kako bi se simulirala realna
+situacija u kojoj korisnici ne mogu ocijeniti svaki predmet u sustavu.
+Susjedstvo ispitnog korisnika je $N = 5$, dakle, pri izračunu predikcije koristi
+se $5$ najbližih korisnika pronađenih najvećim Perasonovim koeficjentom
+korelacije.
+
 \lstinputlisting[
 		language=Java, 
 		firstline=1,
-		lastline=15, 
+		lastline=10, 
 		numbers=left, 
 		breaklines=true, 
 		numbersep=5pt,
 		numberstyle=\color{mygray}
 	]{tests/useruser.txt}
 
-\subsection{Ispitivanje sustava za pojačavanje obilježja}
-\lstinputlisting[
+\subsection{Ispitivanje ukupnog algoritma}
+Kod ispitivanja konačnog algoritma korištena je kombinacija svih filtara, s time
+da je udio svakog od sadržajnog i suradničkog filtera u konačnom rezultatu
+$50\%$. U nastavku se nalazi ispis najboljih $10$ predmeta za ispitnog
+korisnika.
+
+ \lstinputlisting[
 		language=Java, 
 		firstline=1,
-		lastline=15, 
+		lastline=10, 
 		numbers=left, 
 		breaklines=true, 
 		numbersep=5pt,
 		numberstyle=\color{mygray}
 	]{tests/thealgo.txt}
+	
+\subsection{Ispitivanje podsustava za pojačavanje obilježja}
+Kod ispitivanja podsustava za pojačavanje obilježja, korištena je radio oznaka
+kojom je u simulaciji bio označen predmet s jedinstvenim identifikatorom $11$.
+Ispitana je detekcija povratne informacije korisnika na temelju jačine signala i
+vrijednosti mjerača ubrzanja. Ispitni scenariji opisani su u tablici
+\ref{tbl:podscenariji}. Radi jednostavnosti, sustav ispisuje samo detektiranu
+vrstu pobude i odziv na tu pobudu.
+
+
 
 \chapter{Zaključak}
 Zaključak.
