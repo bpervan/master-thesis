@@ -1245,8 +1245,39 @@ tek nakon ponovnog treniranja algoritma.
 
 \section{Modeliranje predmeta}
 
+Model predmeta analogno je sličan modelu korisnika. Svaki objekt tipa predmet
+sadrži elementarne podatke o predmetu:
+\begin{itemize}
+  \item Jedinstveni identifikator predmeta u sustavu
+  \item Naziv predmeta
+  \item Identifikator (oznaka) lokacije predmeta u prostoru
+  \item Vektor karakteristika predmeta
+\end{itemize}
+
+Vektor karakteristika predmeta posjeduje sadržajni opis predmeta. U vektoru se
+na unaprijed dogovorenim indeksima nalaze brojčane mjere primjenjivosti
+karakteristike na predmet. U modelu se može koristiti i binarna primjenjivost
+koja prikazuje da je neka karakteristika primjenjiva, odnosno nije primjenjiva
+na predmet. Alternativno, vektor karakteristika može se prikazati riječnikom,
+gdje je ključ u riječniku naziv karakteristike, a vrijednost mjera
+primjenjivosti karakteristike na predmet. 
+Prilikom unosa predmeta u sustav, vektor karakteristika potrebno je
+normalizirati dijeljenjem svakog elementa vektora drugim korijenom zbroja svih
+vrijednosti vektora:
+\begin{equation}
+	\label{eq:norm}
+	w_i = \frac
+	{
+		w_i
+	}
+	{
+		\sqrt{\sum_{j=0}^N w_j}
+	}
+\end{equation}
+gdje je $N$ duljina vektora karakteristika.
 \section{Izgrađeni model}
-Znači cijeli model treba opisati, od ocjenjivanja do apsolutno svega
+Znači cijeli model treba opisati, od ocjenjivanja do apsolutno svega i koji se
+filtri koriste(content i collaborative)
 
 \begin{equation}
 \label{eq:DefModel}
@@ -1280,22 +1311,36 @@ Kakve su ocjene, koje su skale
 	\caption{Algoritam kontekstualizirane preporuke u vremenu i prostoru}
 	\label{algo:TheAlgo}
 	\begin{algorithmic}[1]
-		\STATE{\textbf{Ulaz: Korisnik $u$, Prostor $l$, Vrijeme $t$} }
-		\STATE{\textbf{Izlaz: Vektor kretanja $v$} }
+		\STATE{\textbf{Ulaz: 
+			Korisnik $u$, 
+			Lista Predmeta $i$,
+			Prostor $s$,
+			Lokacija korisnika $l$,
+			Ocjene $r$,
+			Korelacije $c$,
+			Veličina liste $n$,
+			Konfiguracija $k$} }
+		\STATE{\textbf{Izlaz: Predikcija $p$, Slijedeća lokacija $l_i$} }
 		
-		\FOR{($i := 0; i < n; inc(i)$)}
-			\STATE{$w_i := calculatePearson(k, N_i)$}
+		\COMMENT{Prostorni filtar}
+		\STATE{$ListaLokacija := ProstorniFilter(s, l);$} 
+		\STATE{$sort(ListaLokacija);$}
+		\STATE{$NajvecaUdaljenost := ListaLokacija[ListaLokacija.length - 1]$}
+		\FOR{($Lokacija l_j \in ListaLokacija$)}
+			\FOR{($Predmet p_i \in Lokacija$)}
+				\STATE{$PostaviTezinu(p_i, 1 - (p_i.udaljenost) / NajvecaUdaljenost)$}
+			\ENDFOR
 		\ENDFOR
 		
-		\STATE{sort(w)}
-		\STATE{$suma := 0; tezine := 0$}
-		
-		\FOR{($i := 0; i < topN; inc(i)$)}
-			\STATE{$suma := suma + w_i * N_i$}
-			\STATE{$tezine := tezine + w_i$}
+		\COMMENT{Vremenski filtar}
+		\STATE{$VremenskaLista := InitLista();$}
+		\STATE{$Vrijeme := SkalirajNaTjedan(TrenutnoVrijeme);$}
+		\FOR{($Item i_j \in i$)}
+			\STATE{$f := EvaluirajFunkciju(u.funkcija(Vrijeme));$}
+			\STATE{$VremenskaLista.add((i_j, f));$}
 		\ENDFOR
 		
-		\STATE{$p := suma / tezine$}
+		\COMMENT{Podatkovni filtri}
 		
 		\RETURN{p}
 	\end{algorithmic}
