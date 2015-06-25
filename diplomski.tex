@@ -91,7 +91,11 @@ scenariju.
 Termin \glqq Sveprisutno računarstvo\grqq prvi je upotrijebio Mark Weiser u
 svom vizionarskom članku u kojem je rekao kako su najkorisnije
 one one tehnologije koje nestaju, u smislu da korisnici izgube pojam o
-korištenju te tehnologije \cite{computer21}. 
+korištenju te tehnologije \cite{computer21}. U tom smislu sveprisutno
+računarstvo podrazumjeva skup onih tehnologija i načela koja omogućuju
+ugrađivanje računala u svakodnevne korištene predmete. Takvi predmeti koristili
+bi se za potporu u svakodnevnim aktivnostima dok bi bili jednako primjenjivi u
+poslovnom okruženju, upravljanju prostorima, igrama i sl \cite{Krumm2009}.
 
 Cilj filozofije sveprisutnog računarstva nije staviti čovjeka u svijet računala
 nego integracija računala u svijet čovjeka. Praktična posljedica toga jest
@@ -103,17 +107,16 @@ poslovima \cite{VukoticTankovic}.
 
 
 \section{Razvoj}
-Razvoj sveprisutnog računarstva započeo je devedesetih godina prošlog stoljeća
-a prethodile su mu dva računalna razdoblja. Odnos vremena i prodaje računala
-prikazan je na slici \ref{fig:majortrends}.
-U općem slučaju mogu se razlikovati tri velika vala, a to su:
-\begin{enumerate}
-  \item Radne stanice \engl{Mainframe} - jedno računalo, više osoba
-  \item Osobna računala \engl{PC, Personal Computer} - jedno računalo, jedna
-  osoba
-  \item Sveprisutno računarstvo \engl{Ubiquitous Computing} - više računala,
-  jedna osoba
-\end{enumerate}
+Sveprisutno računarstvo treći je veliki val u računalnom razdoblju. Prvi val
+jest val radnih stanica \engl{Mainframe} koji je karakterizirao upotreba jednog
+račuala na više osoba. Drugi val je i danas naveliko prisutan, a to je val
+osobnih računala \engl{PC, Personal Computer} koji karakterizira upotreba jednog
+računala po osobi. Treći val, val sveprisutnog računarstva karakterizira veliki
+i brzi razvoj malih, umreženih i prijenosnih računala koji rezultira korištenjem
+više računala od strane jedne osobe \cite{Krumm2009}. Razvoj sveprisutnog
+računarstva započeo je devedesetih godina prošlog stoljeća u \emph{Xerox PARC}
+laboratorijima, a nastavlja se do danas potaknut strelovitim napretkom
+tehnologije potrebne za ostvarivanje sveprisutnih koncepata.
 
 \begin{figure}[H]
 	\centering
@@ -121,8 +124,6 @@ U općem slučaju mogu se razlikovati tri velika vala, a to su:
 	\caption{Tri vala u računarstvu}
 	\label{fig:majortrends}
 \end{figure}
-
-
 
 \section{Zahtjevi}
 Elementarni zahtjevi potječu od dvaju osnovnih atributa sveprisutnog računarstva
@@ -1011,7 +1012,7 @@ Primjena preporučiteljskih sustava u sveprisutnom računarstvu logična je
 posljedica ne samo činjenice da je sveprisutno računarstvo računarstvo kao takvo
 pa u njemu postoji interes za preporukom, nego i činjenice da se u njemu
 generiraju velike količine podataka pa se preporučiteljski algoritmi mogu
-primjeniti kao filtri podataka. O podacima sveprisutnom računarstvu praktički
+primjeniti kao filtri podataka. O podacima u sveprisutnom računarstvu praktički
 je nemoguće govoriti bez konteksta u kojem se nalaze. Taj kontekst može se
 definirati kao bilo koja informacija o okolnostima, predmetima ili uvjetima
 koje okružuju korisnika, a smatra se relevantnom za interakciju između
@@ -1024,19 +1025,35 @@ Tri najvažnija aspekta kontekseta su \cite{schilit1994context}:
   \item Koji resursi se nalaze u blizini
 \end{enumerate}
 
-Koje su specifičnosti? Nisam ni sam ziher, algoritam vjerojatno mora biti
-prilagođen filtiranju ogromne količine nestrukturiranih podataka, kontekst
-vremena i prostora je najbitniji, predmeti preporuke su iz puno više različitih
-domena nego npr na amazonu, pa ih je teže opisati.
+Dakle, preporučiteljski sustav, tj. algoritam koji on koristi mora biti
+prilagođen barem nekim aspektima konteksta u kojem se sustav nalazi. Najčešće su
+to navedeni aspekti uz, ovisno o primjeni, vremenski trenutak u kojem se
+zahtjeva preporuka. Također, algoritam mora biti prilagođen filtriranju velike
+količine nestrukturiranih i nefiltriranih podataka. Zbog toga te zbog
+ograničenih računalnih kapaciteta je na većoj skali nužna optimizacija na
+procesnoj i memorijskoj razini. Izazov predstavlja i opisivanje predmeta u
+sustavu s obzirom da u sveprisutnom kontekstu predmeti dolaze iz mnogo više
+različitih domena, za razliku od prosječnog internetskog dućana. Predmeti
+preporuke u sveprisutnom računarstvu najčešće se predmetima nazivaju samo
+apstraktno, a može se raditi o preporučenim smjerovima kretanja i sličnim
+apstraktnim preporukama. 
+
+Sustav koji implementira preporučitelj za sveprisutnu primjenu mora biti
+skalabilan jer će se komponente takvog sustava izvoditi na raznoraznim
+računalima, od mogućih mikrokontrolera koji će zahtjevati preporuku do
+poslužitelja koji će preporuku, tj. predikciju i izračunati. Osim toga, jedna od
+osnovnih odrednica sveprisutnog računarstva je i karakteristika razmjernog
+rasta.
 
 Primjer preporučiteljskog sustava koji se djelomično nalazi u sveprisutnom
 računarstvu jest algoritam koji koristi \emph{Foursquare}. \emph{Foursquare} je
 servis koji preporučuje lokale na temelju preferencija korisnika, njegovih
 ocjena sličnih lokacija te ocjena njegovih najbližih prijatelja i stručnjaka
-koje prati \cite{FoursquareAbout}. Kod ovog preporučitelja vidljiv je prostorni
-kontekst u smislu preporučivanja
+koje prati \cite{FoursquareAbout}. Kod ovog preporučitelja vidljivi su svi
+navedeni aspekti konteksta jer je preporučiteljskom algoritmu bitno gdje se
+korisnik nalazi, u čijem je društvu te koji su resursi fizički u blizini.
+Vremenska komponenta nije prisutna kod ovog preporučitelja.
 
-specifičnosti, koji postoje, mobilni uređaji, foursquare itd.
 %-------------------------------------------------------------------------------
 %  CHAPTER: Izgrađeni model preporučiteljskog sustava
 %-------------------------------------------------------------------------------
@@ -1958,7 +1975,71 @@ pobude i odziv na tu pobudu. Rezultati testiranja vidljivi su u tablici
 \end{table}
 
 \chapter{Zaključak}
-Zaključak.
+
+Sveprisutno računarstvo, kao treći veliki val u računalnoj eri nepobitno ulazi u
+sfere intenzivnog i svakodnevnog korištenja, kako u poslovnom, tako i privatnom
+svijeti. Ono kao takvo generira i koristi velike podatkovne skupove zbog same
+prirode podataka, a to su najčešće lokacija, vrijeme, atmosferski podaci i sl.
+Iz tog razloga, kao i zbog činjenice da će nepobitno nastaviti svoj razvoj,
+potrebni su kvalitetni i efikasni algoritmi filtriranja podataka.
+
+S druge strane, preporučiteljski sustavi čiji razvoj traje otprilike koliko i
+razvoj sveprisutnog računarstva, danas su se nametnuli kao neizostavni filtri u
+svim primjenama gdje postoje sustavi s velikim skupovima podataka, a korisnik od
+tog istog sustava zahtjeva ili konkretni podatak ili uslugu. Danas, vjerojatno
+niti jedna internetska trgovina nije zamisliva bez kvalitetnog preporučiteljskog
+algoritma. U radu je dan pregled bazičnih filtarskih algoritama, a to su
+neosobno filtriranje, filtriranje zasnovano na sadržaju, filtriranje zasnovano
+na suradnji te metoda redukcije dimenzija. Prikazani su i hibridi tehnika, širok
+spektar mogućnosti za upotrebu preporučiteljskih sustava te su analizirani
+zahtjevi na preporučitelje u sveprisutnom računarstvu.
+
+Kao metoda preporučivanja u sveprisutnoj okolini osmišljen je kontekstno svjesni
+algoritam koji uz kontekstne filtre koristi neke postojeće preporučiteljske
+tehnike. Algoritam se sastoji od slijedećih filtara:
+\begin{enumerate}
+  \item Prostorni filtar za preporučivanje prema udaljenosti u prostoru za
+  fizički dostupne predmete
+  \item Vremenski filtar za preporučivanje prema vremenskim navikama korisnika
+  na periodu od jednog tjedna
+  \item Sadržajni filtar za preporučivanje prema karakteristikama kojima je
+  opisan svaki predmet u sustavu
+  \item Suradnički filtar za preporučivanje prema sličnosti korisnika u sustavu
+\end{enumerate}
+
+Uz algoritam, prikazan je u potpunosti i model sustava koji sadrži opisani
+hibridni preporučiteljski algoritam. Prikazano je modeliranje korisnika i
+predmeta sustava te zahtjevi na modeliranje. Prikazan je i način kombiniranja
+rezultata filtara u jedinstvenu predikciju.
+
+Naposlijetku, razvijeni model sustava implementiran je u programskom jeziku
+$Java$ te je prikazana arhitektura implementacije. Razvijeni model isproban je
+na fiktivnom scenariju dućana uz ispitivanje i ulazne podatke s pametnog
+telefona. Osmišljeni su razni scenariji povratne informacije preporučitelju od
+strane korisnika u vidu detekcije ponašanja korisnika u odnosu na radio oznakom
+označeni predmet te odzivi sustava na takve informacije. U svrhu ispitivanja,
+detaljno su prikazani ispitni podaci. Na kraju su prikazani ispitni rezultati.
+
+Rad u svakom slučaju ima prostora za napredak. Na prvom mjestu bi svakako bila
+podrobnija ispitivanja u kompleksnijim i realnijim scenarijima. Temeljem tih
+ispitnih podataka bolje bi se mogli ugoditi parametri algoritama do čijih se
+optimalnih vrijednosti može doći samo empirijski, primjerice omjer korištenja
+suradničke i sadržajne predikcije. Interdisciplinarnom suradnjom s područjima
+psihologije i ekonomije također bi se mogli poboljšati parametri filtara, u
+prvom redu, vremenskog filtra čiji uspješan rad uglavnom ovisi o kvalitetnom
+matematičkom opisu navika korisnika. Još jedna mogućnost daljnjeg razvijanja
+postoji i u marketingu i komercijalizaciji preporučitelja. U suradnji sa
+stvarnim dućanima, preporučitelj bi se mogao prilagoditi realnim i individualnim
+potrebama svakog potrošača. Optimizacija algoritama druga je osnovna baza za
+napredak projekta. U tom pogledu moguće je osmisliti bolje načine modeliranja
+vremena i prostora pa time i filtriranja vremena i prostora. Modeli korisnika i
+predmeta također su podložni optimizaciji. Moguće je i ispitivati druge načine
+povezivanja filtarskih rezultata u jedinstvenu preporuku.
+
+Budućnost projekta moguća je i van sfere trgovine i marketinga. Prikazani
+koncept u potpunosti je moguće primjeniti i u druge sveprisutne aplikacije
+kojima je potreban preporučiteljski sustav, primjerice, veliki sajmišni
+prostori.
 
 \bibliography{literatura}
 \bibliographystyle{fer}
