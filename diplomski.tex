@@ -87,8 +87,6 @@ scenariju.
 
 \chapter{Sveprisutno računarstvo}
 \section{Uvod u sveprisutno računarstvo}
-A šta koji drek ovdje da pričam. Što je sveprisutno računarstvo, tko ga je
-definirao, što u njemu dolazi do izražaja, koje su koristi?
 
 Termin \glqq Sveprisutno računarstvo\grqq prvi je upotrijebio Mark Weiser u
 svom vizionarskom članku u kojem je rekao kako su najkorisnije
@@ -106,8 +104,9 @@ poslovima \cite{VukoticTankovic}.
 
 \section{Razvoj}
 Razvoj sveprisutnog računarstva započeo je devedesetih godina prošlog stoljeća
-a prethodile su mu dva računalna razdoblja. U općem slučaju mogu se razlikovati
-tri velika vala, a to su:
+a prethodile su mu dva računalna razdoblja. Odnos vremena i prodaje računala
+prikazan je na slici \ref{fig:majortrends}.
+U općem slučaju mogu se razlikovati tri velika vala, a to su:
 \begin{enumerate}
   \item Radne stanice \engl{Mainframe} - jedno računalo, više osoba
   \item Osobna računala \engl{PC, Personal Computer} - jedno računalo, jedna
@@ -116,9 +115,7 @@ tri velika vala, a to su:
   jedna osoba
 \end{enumerate}
 
-Slika \ref{fig:majortrends} prikazuje odnose računalnih razdoblja.
-
-\begin{figure}[!htb]
+\begin{figure}[H]
 	\centering
 	\includegraphics[width=12cm]{images/majortrends2.png}
 	\caption{Tri vala u računarstvu}
@@ -128,35 +125,74 @@ Slika \ref{fig:majortrends} prikazuje odnose računalnih razdoblja.
 
 
 \section{Zahtjevi}
-Analiziranjem zahtjeva na sveprisutno i prožimajuće računarstvo, može se
-zaključiti nešto:
+Elementarni zahtjevi potječu od dvaju osnovnih atributa sveprisutnog računarstva
+prema klasifikaciji Marka Weisera \cite{Weiser93}:
 \begin{itemize}
-  \item Mali uređaji
-  \item Umrežavanje
-  \item Sakupljanje podataka i razmjena u okruženju bez prisustva korisnika
-  \item Otvoreno računarstvo radi podložnosti promjene softwarea i uređaja
-  (Java ili CLR ili nekaj takvo -> bytecode)
+  \item Sveprisutnost - sustav je takav da je uvijek dostupan na zahtjev
+  korisnika
+  \item Transparentnost - sustav je integriran u svakodnevnu okolinu i prikriven
+  za krajnjeg korisnika
 \end{itemize}
 
-Još jedna lista zahtjeva na sveprisutno
+S druge strane, dodatni zahtjevi potječu od dvodimenzionalnih granica koje
+odvajaju sveprisutno računarstvo od drugih istraživačkih područja (slika
+\ref{fig:ubiqreq}) \cite{Maffioletti2001}:
 \begin{itemize}
-  \item Uređaj za prikaz, terminal, korisnički interface
-  \item Ekonomična cijena
-  \item Širok mrežni opseg
-  \item Sistem nevidljivih datoteka (bez znanja o direktorijima, nazivu
-  datoteka, lokaciji td.)
-  \item Automatska instalacija - migracija s jednog računala na drugi
-  \item Personaliziranost informacija
-  \item Privatnost (ima puno personaliziranih informacija, što ako se netko
-  dokopa?)
+  \item Mobilnost korisnika - u interakciji sa sustavom, korisnik mora moći
+  imati slobodu kretanja.
+  \item Transparentnost sučelja - odnosi se na količinu pažnje koju korisnik
+  mora posvetiti za upravljanje sustavom i percepciju izlaza.
 \end{itemize}
 
-koje su glavne potrebe za rad sa sveprisutnim sustavima (mala energija,
-procesna moć, interakcija s okolinom)
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=12cm]{images/ubiqreq.png}
+	\caption{Grafički prikaz smještaja sveprisutnog računarstva}
+	\label{fig:ubiqreq}
+\end{figure}
+
+Iz navedenih elementarnih zahtjeva, prirodno se nameću konkretni zahtjevi na
+implementaciju sveprisutnih i prožimajući računalnih sustava. S obzirom na
+fizički dio, zahtjevi mogu biti:
+\begin{itemize}
+  \item Fizički mali uređaji ili senzori koji se koriste u prostoru
+  \item Sposobnost interakcije s okolinom što nužno vodi do zahtjeva
+  na umrežavanje bilo kojim protokolom, žično ili bežično, na manjoj ili većoj
+  udaljenosti
+  \item Sučelje za prikaz podataka ili interakciju s korisnikom, dovoljno
+  transparentno da se postigne iluzija da se računalo ne koristi ili da to
+  računalo ne bude u žarištu pažnje
+  \item Mala energetska potrošnja
+  \item Razmjerno mala i ekonomična cijena
+\end{itemize}
+
+Analogno fizičkim zahtjevima, funkcionalni zahtjevi na sveprisutni računalni
+sustav slijede iz elementarnih zahtjeva:
+\begin{itemize}
+  \item Korištenje otvorenih računalnih standardna radi podložnosti promjeni
+  računalnih programa i uređaja. Preferira se korištenje virtualnih strojeva na
+  kojima se izvode programi bez svijesti o konkretnoj arhitekturi
+  (enkapsulacija računalne arhitekture). Primjeri takvih strojeva su \emph{Java
+  virutal machine} ili \emph{Common language runtime}
+  \item Sustav nevidljivih datoteka, tj. enkapsulacija konkretnog datotečnog
+  sustava u vidu hijerarhije direktorija, naziva datoteka, smještaja datoteka i
+  sl.
+  \item Automatska instalacija programa radi neprimjetne migracije s jednog
+  računala na drugo računalo
+  \item Sakupljanje podataka i razmjena istih u okruženju bez prisustva
+  korisnika bez kršenja pravila i licenci privatnosti
+  \item Personaliziranost informacija u smislu prilagođavanja računalnog sustava
+  korisniku na svim razinama
+  \item Privatnost personaliziranih informacija i svih onih informacija koje se
+  mogu dovesti u vezu s konkretnim korisnikom i tako na bilo koji način ugroziti
+  njegovu sigurnost
+\end{itemize}
 
 \section{Primjena}
 
-Sveprisutno računarstvo već sada nalazi svoju primjenu u raznim segmentima 
+Koncepti sveprisutnog računarstva, iako je ono još u zamahu, već su primjenljivi
+na razne segmente svakodnevnice.  ima jako puno primjena, nabrojat će se samo
+dio Sveprisutno računarstvo već sada nalazi svoju primjenu u raznim segmentima 
 Udri brigu na veselje u ovom poglavlju natuć za sva vremena xD
 
 Pametni gradovi, pametni prostori, internet stvari.
