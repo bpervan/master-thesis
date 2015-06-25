@@ -1750,10 +1750,19 @@ $accelerometer$ i $magnetometer$ složeni.
 \begin{itemize}
   \item Vremenska oznaka -- $sat:minuta:sekunda.stotinka$
   \item Mjerač ubrzanja -- $x;y;z$ - mjeri ubrzanje sile na tri fizičke osi
-  uređaja u $m/s^2$, uključujući ubrzanje sile teže.
+  uređaja u $m/s^2$, uključujući ubrzanje sile teže \cite{AndroidSensors}. Točan
+  položaj osi, tj. mobilnog uređaja u koordinatnom sustavu prikazan je na slici
+  \ref{fig:coordinates}
   \item Magnetometar -- $x;y;z$ - mjeri ambijentalno geomagnetsko polje na tri
-  fizičke osi uređaja u $\mu T$
+  fizičke osi uređaja u $\mu T$ \cite{AndroidSensors}.
 \end{itemize}
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=5cm]{images/coordinates.png}
+	\caption{Mobilni uređaj u trodimenzionalnom koordinatnom sustavu}
+	\label{fig:coordinates}
+\end{figure}
 
 \subsection{Izlazi}
 
