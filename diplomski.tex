@@ -1478,7 +1478,47 @@ na sadržaju. Prostorno filtriranje implementirano je upotrebom standardnog
 Dijkstrinog algoritma za pronalaženje najkraćeg puta u grafu. Vremensko
 filtriranje izvedeno je evaluacijom funkcije vremena u trenutku traženja
 preporuke. Konačni algoritam implementiran je u razredu \emph{TheAlgorithm}, a
-kao takav je hibrid filtriranja po prostoru, vremenu i podacima.
+kao takav je hibrid filtriranja po prostoru, vremenu i podacima. Dijagram
+razreda ovog dijela sustava nalazi se na slici \ref{fig:diagramalgo}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14cm]{images/diagrams/filterdiag.png}
+	\caption{Dijagram razreda algoritamskog modula}
+	\label{fig:diagramalgo}
+\end{figure}
+
+Paket \emph{functions} sadrži sučelja za funkcije koje se koriste u vremenskom
+filtru. Sučelje \emph{Function} predstavlja osnovu za implementaciju funkcije.
+Nasljeđuju ga sučelja \emph{DiscreteFunction} i sučelje \emph{Continuous
+function} koja je potrebno implementirati da bi se ostvarila diskretna, odnosno
+kontinuirana funkcija pogodna za korištenje u vremenskom filtru. Također, paket
+sadrži konkretnu implementaciju Gaussove zvonolike funkcije konfigurabilne
+pomoću parametara $a$, $b$ i $c$ (\ref{eq:BellFunc}). Diagram razreda nalazi se
+na slici \ref{fig:diagramfunc}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=8cm]{images/diagrams/diagramfunc.png}
+	\caption{Dijagram razreda vremenskih funkcija}
+	\label{fig:diagramfunc}
+\end{figure}
+
+Model grafa koji opisuje prostor nalazi se u paketu \emph{space}. Graf je
+modeliran kroz vrhove (razred \emph{Node}) koji sadrže mape oblika
+$vrh \rightarrow udaljenost$ i ostale podatke nužne za ostvarivanje grafa.
+Razred \emph{Graph} sadrži listu svih vrhova u grafu te metodu za učitavanje
+grafa iz \emph{CSV} datoteke u kojoj je pohranjena matrica susjedstva. Sučelje
+\emph{SPAlgorithm} modelira algoritam za traženje najkraćeg puta, a konkretna
+implementacija jednog takvog algoritma (Dijkstrinog) nalazi se u razredu
+\emph{Dijkstra} \ref{fig:diagramspace}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14cm]{images/diagrams/diagramspace.png}
+	\caption{Dijagram razreda prostornog modela}
+	\label{fig:diagramspace}
+\end{figure}
 
 U paketu \emph{data} nalaze se razredi koji enkapsuliraju podatke koje koriste
 algoritmi za filtriranje. Razred \emph{Correlations} enkapsulira tablicu
@@ -1491,23 +1531,6 @@ razrede \emph{ItemBeaconLink}, \emph{ItemPredictionLink} i
 između preporučiteljskih algoritama i klijentskog koda. Spremnici podataka
 također su i razredi \emph{Matrix} i \emph{Vector} u paketu \emph{commons} koji
 modeliraju proizvoljnu matricu, odnosno vektor.
-
-Paket \emph{functions} sadrži sučelja za funkcije koje se koriste u vremenskom
-filtru. Sučelje \emph{Function} predstavlja osnovu za implementaciju funkcije.
-Nasljeđuju ga sučelja \emph{DiscreteFunction} i sučelje \emph{Continuous
-function} koja je potrebno implementirati da bi se ostvarila diskretna, odnosno
-kontinuirana funkcija pogodna za korištenje u vremenskom filtru. Također, paket
-sadrži konkretnu implementaciju Gaussove zvonolike funkcije konfigurabilne
-pomoću parametara $a$, $b$ i $c$ (\ref{eq:BellFunc}).
-
-Model grafa koji opisuje prostor nalazi se u paketu \emph{space}. Graf je
-modeliran kroz vrhove (razred \emph{Node}) koji sadrže mape oblika
-$vrh \rightarrow udaljenost$ i ostale podatke nužne za ostvarivanje grafa.
-Razred \emph{Graph} sadrži listu svih vrhova u grafu te metodu za učitavanje
-grafa iz \emph{CSV} datoteke u kojoj je pohranjena matrica susjedstva. Sučelje
-\emph{SPAlgorithm} modelira algoritam za traženje najkraćeg puta, a konkretna
-implementacija jednog takvog algoritma (Dijkstrinog) nalazi se u razredu
-\emph{Dijkstra}.
 
 Korisnici i predmeti modelirani su kroz razrede \emph{User} odnosno \emph{Item}
 paketa \emph{model}, a sadržavaju podatke i metapodatke korisnicima i predmetima
@@ -1522,7 +1545,16 @@ identifikator karakteristike, a $preferencija$ brojčana mjera preferencije.
 Razred također zadržava statični skup imena svih karakteristika u sustavu.
 Paket \emph{model} također sadržava pomoćne razrede \emph{ItemBuilder} i
 \emph{UserBuilder} koji korištenjem oblikovnog obrasca \emph{Graditelj} stvaraju
-nove objekte tipa \emph{Item} odnosno \emph{User}.
+nove objekte tipa \emph{Item} odnosno \emph{User}. Zajednički dijagram
+podatkovnog podsustava za modeliranje podataka, korisnika i predmeta nalazi se
+na slici \ref{fig:diagramdata}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=14cm]{images/diagrams/diagramdata.png}
+	\caption{Dijagram razreda podatkovnog modela sustava}
+	\label{fig:diagramdata}
+\end{figure}
  
 Analiza dnevničkih zapisa proizašlih s mobilnog uređaja vrši se kroz razred
 \emph{RecordAnalyzer} i metodu \emph{analyze}. Pomoćne strukture za analizu
@@ -1533,7 +1565,7 @@ zapisa (tzv. \emph{parsiranje}).
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=12cm]{images/diagramland.png}
+	\includegraphics[width=14cm]{images/diagramland.png}
 	\caption{Dijagram razreda implementiranog preporučitelja}
 	\label{fig:classdiagram}
 \end{figure}
