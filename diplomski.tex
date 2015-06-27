@@ -130,9 +130,9 @@ Elementarni zahtjevi potječu od dvaju osnovnih atributa sveprisutnog računarst
 prema klasifikaciji Marka Weisera \cite{Weiser93}:
 \begin{itemize}
   \item Sveprisutnost - sustav je takav da je uvijek dostupan na zahtjev
-  korisnika
+  korisnika.
   \item Transparentnost - sustav je integriran u svakodnevnu okolinu i prikriven
-  za krajnjeg korisnika
+  za krajnjeg korisnika.
 \end{itemize}
 
 S druge strane, dodatni zahtjevi potječu od dvodimenzionalnih granica koje
@@ -248,14 +248,14 @@ pretpostavki da bi korisnik te predmete ocijenio najbolje \engl{top -- $N$ list}
 Gornji model ima dva osnovna i lako uočljiva ograničenja:
 \begin{enumerate}
   \item Traženje preporuka za korisnika svodi se na iscrpno pretraživanje
-  prostora predmeta dostupnih algoritmu za filtriranje
+  prostora predmeta dostupnih algoritmu za filtriranje.
   \item Rezultat je preporuka kojoj nedostaje bilo kakav kontekst.
 \end{enumerate}
 
 U svrhu rješavanja gore navedenih problema, razmotrit će se razni modeli
 preporuke od kojih su neki već dobro poznati i korišteni algoritmi. Neka je $C$
-kontekst u kojem korisnik $U$ traži preporuku. Formula \ref{eq:elementarniModel}
-tada prelazi u:
+kontekst u kojem korisnik $U$ traži preporuku. Relacija
+\ref{eq:elementarniModel} tada prelazi u:
 \begin{equation}
 \label{eq:elementarniModelSKontekstom}
 	R \leftarrow U \times I \times C
@@ -656,9 +656,9 @@ predmeta ako su ih i ostali korisnici slično ocijenili.
 Zbog usporedbi i rada na dvije različite razine, korisničkoj i predmetnoj, ovaj
 preporučitelj se u osnovi dijeli na dvije moguće tehnike:
 \begin{itemize}
-  \item Korisnik-korisnik \engl{User-user, Neighbourhood-based,
+  \item korisnik-korisnik \engl{User-user, Neighbourhood-based,
   Memory-based}
-  \item Predmet-predmet \engl{Item-item, Item-based, Model-based}
+  \item predmet-predmet \engl{Item-item, Item-based, Model-based}
 \end{itemize}
 
 \subsubsection{Korisnik -- Korisnik}
@@ -767,12 +767,13 @@ nultog elementa matrice.
 Algoritam se ugrubo svodi na:
 \begin{enumerate}
   \item Račun korelacije između svih korisnika u sustavu korištenjem
-  \ref{eq:pearsonKorisnik}
+  \ref{eq:pearsonKorisnik}.
   \item Odabir $n$ susjeda koji imaju najveće težine s obzirom na korisnika $k$
   gdje je broj tih susjeda ($topN$) određen empirijski.
-  \item Izračun prosječne ocjene kojom svaki susjed $n \in N$ ocjenjuje predmete
-  \item Izračun prosječne ocjene kojom ocjenjuje korisnik $k$
-  \item Izračun predviđanja korištenjem normalizacijske formule
+  \item Izračun prosječne ocjene kojom svaki susjed $n \in N$ ocjenjuje
+  predmete.
+  \item Izračun prosječne ocjene kojom ocjenjuje korisnik $k$.
+  \item Izračun predviđanja korištenjem normalizacijske formule.
   \ref{eq:preduseruser}
 \end{enumerate}
 
@@ -1016,9 +1017,9 @@ korisnika i sveprisutnog računalnog okruženja \cite{RanganathanCampbell}.
 
 Tri najvažnija aspekta konteksta su \cite{schilit1994context}:
 \begin{enumerate}
-  \item Gdje se korisnik sustava nalazi
-  \item U društvu kojih je drugih korisnika sustava
-  \item Koji resursi se nalaze u blizini
+  \item gdje se korisnik sustava nalazi
+  \item u društvu kojih je drugih korisnika sustava
+  \item koji resursi se nalaze u blizini
 \end{enumerate}
 
 Dakle, preporučiteljski sustav, tj. algoritam koji on koristi mora biti
@@ -1261,9 +1262,9 @@ treniranje mreže navikama korisnika u vremenskom kontekstu.
 Korisnika se u sustavu modelira korisničkim profilom. Takav profil sadrži
 elementarne podatke o korisniku:
 \begin{itemize}
-  \item Jedinstveni identifikator korisnika u sustavu
-  \item Ime i prezime korisnika
-  \item Vektor preferencija korisnika
+  \item jedinstveni identifikator korisnika u sustavu
+  \item ime i prezime korisnika
+  \item vektor preferencija korisnika
 \end{itemize}
 
 Vektor preferencija korisnika predstavlja preferencije korisnika za
@@ -1288,10 +1289,10 @@ tek nakon ponovnog treniranja algoritma.
 Model predmeta analogno je sličan modelu korisnika. Svaki objekt tipa predmet
 sadrži elementarne podatke o predmetu:
 \begin{itemize}
-  \item Jedinstveni identifikator predmeta u sustavu
-  \item Naziv predmeta
-  \item Identifikator (oznaka) lokacije predmeta u prostoru
-  \item Vektor karakteristika predmeta
+  \item jedinstveni identifikator predmeta u sustavu
+  \item naziv predmeta
+  \item identifikator (oznaka) lokacije predmeta u prostoru
+  \item vektor karakteristika predmeta
 \end{itemize}
 
 Vektor karakteristika predmeta posjeduje sadržajni opis predmeta. U vektoru se
@@ -1471,7 +1472,7 @@ preporučiteljskog sustava opisanog u prethodnom poglavlju, a one su:
 \begin{itemize}
   \item Model korisnika. Korisnik je modeliran jedinstvenim identifikatorom te
   imenom i prezimenom. Osim toga, model korisnika sadržava općenite 
-  i vremenske preferencije za svaki predmet u sustavu
+  i vremenske preferencije za svaki predmet u sustavu.
   \item Model predmeta.Predmet je također modeliran jedinstvenim identifikatorom
   i nazivom. Dodatno, model predmeta sadržava i identifikator lokacije predmeta
   te vektor njegovih karakteristika.
@@ -1619,9 +1620,9 @@ bez značajnijeg utjecaja na krajnji ishod, tlocrt dućana modeliran je mrežast
 strukturom prikazanom na slici \ref{fig:StoreGrid}. U dućanu se na svakom mjestu
 mogu nalaziti radio oznake \engl{beacon} kojima mogu biti obilježeni:
 \begin{itemize}
-  \item Neka lokacija u dućanu, npr. red polica
-  \item Skupina proizvoda
-  \item Konkretan proizvod
+  \item neka lokacija u dućanu, npr. red polica
+  \item skupina proizvoda
+  \item konkretan proizvod
 \end{itemize}
 Ovdje se nameće pitanje je li potrebno radio oznakama obilježiti sve
 potencijalne predmete preporuke. Sa strane sustava, podrazumijeva se
@@ -1681,7 +1682,7 @@ sučelje s određenom opremom, a ta oprema je:
   radio oznaci ili od nje. % 
   \item Akcelerometar -- koristi se za utvrđivanje gibanja korisnika. Ako je
   korisnik u pokretu, zanemaruju se podaci s ulaza za očitavanje radio oznaka
-  \item Bluetooth -- koristi se za komunikaciju s radio oznakama
+  \item Bluetooth -- koristi se za komunikaciju s radio oznakama.
 \end{itemize}
 
 Takav izvor u praksi može biti bilo koji moderniji mobilni telefon ili tablet.
@@ -1845,11 +1846,11 @@ može se naći u dodatku
 Krajnji ulaz u sustav, bez ikakve apstrakcije, su dnevnički zapisi \engl{Log} s
 pametnog uređaja. U njih uređaj zapisuje:
 \begin{itemize}
-  \item Vremensku oznaku
-  \item Jedinstveni identifikator radio oznake
+  \item vremensku oznaku
+  \item jedinstveni identifikator radio oznake
   \item \emph{RSS} \engl{Received signal strength}
-  \item Podatke s mjerača ubrzanja \engl{Accelerometer}
-  \item Podatke s magnetometra \engl{Magnetometer}
+  \item podatke s mjerača ubrzanja \engl{Accelerometer}
+  \item podatke s magnetometra \engl{Magnetometer}
 \end{itemize}
 Dnevnički zapisi se pišu i čitaju u, odnosno iz obične tekstualne datoteke u
 predefiniranom formatu:
@@ -1866,7 +1867,7 @@ $accelerometer$ i $magnetometer$ složeni.
   \item Mjerač ubrzanja -- $x;y;z$ - mjeri ubrzanje sile na tri fizičke osi
   uređaja u $m/s^2$, uključujući ubrzanje sile teže \cite{AndroidSensors}. Točan
   položaj osi, tj. mobilnog uređaja u koordinatnom sustavu prikazan je na slici
-  \ref{fig:coordinates}
+  \ref{fig:coordinates}.
   \item Magnetometar -- $x;y;z$ - mjeri ambijentalno geomagnetsko polje na tri
   fizičke osi uređaja u $\mu T$ \cite{AndroidSensors}.
 \end{itemize}
@@ -2066,12 +2067,12 @@ algoritam koji uz kontekstne filtre koristi neke postojeće preporučiteljske
 tehnike. Algoritam se sastoji od sljedećih filtara:
 \begin{enumerate}
   \item Prostorni filtar za preporučivanje prema udaljenosti u prostoru za
-  fizički dostupne predmete
+  fizički dostupne predmete.
   \item Vremenski filtar za preporučivanje prema vremenskim navikama korisnika
-  na periodu od jednog tjedna
+  na periodu od jednog tjedna.
   \item Sadržajni filtar za preporučivanje prema karakteristikama kojima je
-  opisan svaki predmet u sustavu
-  \item Suradnički filtar za preporučivanje prema sličnosti korisnika u sustavu
+  opisan svaki predmet u sustavu.
+  \item Suradnički filtar za preporučivanje prema sličnosti korisnika u sustavu.
 \end{enumerate}
 
 Uz algoritam, prikazan je u potpunosti i model sustava koji sadrži opisani
