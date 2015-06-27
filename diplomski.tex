@@ -1144,12 +1144,12 @@ svaka funkcija prikazivat će želju ili potrebu korisnika za nekim predmetom u
 periodu konzistentnom za sve predmete u sustavu. Rezultat funkcije jest
 predikcija u intervalu $\big[ 0, 1 \big]$
 
-Jedna takva funkcija može biti primjerice tzv. \emph{Gaussova krivulja}
-(slika \ref{fig:Gauss1}). Ona je pogodna zbog činjenice da prosječan korisnik
-prosječnu akciju u kojoj će tražiti preporuku u principu traži u jednom kraćem
-vremenskom intervalu. Drugim riječima, pojedini predmeti preporuke za nekog
-korisnika u vremenski svjesnom preporučiteljskom sustavu bit će zanimljivi samo
-jedan kraći interval.
+Jedna takva funkcija može biti primjerice tzv. \emph{generalizirana zvonolika
+krivulja} (slika \ref{fig:Gauss1}). Ona je pogodna zbog činjenice da prosječan
+korisnik prosječnu akciju u kojoj će tražiti preporuku u principu traži u jednom
+kraćem vremenskom intervalu. Drugim riječima, pojedini predmeti preporuke za
+nekog korisnika u vremenski svjesnom preporučiteljskom sustavu bit će zanimljivi
+samo jedan kraći interval.
 \begin{equation}
 	\label{eq:BellFunc}
 	f(x;a,b,c) = \frac
@@ -1333,7 +1333,7 @@ sveprisutnoj okolini. Algoritam se sastoji od nekoliko koraka:
 Algoritam započinje filtriranjem po prostoru. Svi predmeti koji se trenutno
 nalaze u okolini korisnika, a čija je udaljenost od korisnika manja od nekog
 graničnog radijusa, uzimaju se u obzir dok se ostalo odbacuje jer je rezultat
-preporuke $0$. Ovaj filtar se prvi izvodi jer u prostornom kontekstu nema
+preporuke $0$. Ovaj filtar se izvodi prvi jer u prostornom kontekstu nema
 smisla filtrirati prema drugim kriterijima, ako se predmetu fizički ne može
 pristupiti. Također, filtar je koristan jer u početku eliminira velik broj
 nedostupnih predmeta te tako smanjuje opseg izračuna. Algoritam prema kojem se
@@ -1344,8 +1344,8 @@ izračun \emph{Manhattanske udaljenosti} ako je na vrhu apstrakcije kvadratna
 mreža.
 
 Vremensko filtriranje izvodi se skaliranjem vremenskog trenutka u trenutku
-izvođenja algoritma na interval tjedna. Granulacija do koje se uzima trenutno
-vrijeme je sekunda, a relacija za konverziju je:
+izvođenja algoritma na period od jednog tjedna. Granulacija do koje se uzima
+trenutno vrijeme je sekunda, a relacija za konverziju je:
 \begin{equation}
 \label{eq:timeconv}
 	t = d + \frac{s}{24} + \frac{m}{1440}
@@ -1378,13 +1378,16 @@ Opća granulacija ocjene jest $0.5$ iako sustavski nije ograničeno, tj. sustav
 
 Razvijeni model sustava odgovara na povratne informacije korisnika. Analizom
 korisničkih radnji i kretanja dolazi do pobude na koju je odziv sustava
-pojačavanje neke od karakteristika u podatkovnim strukturama. Odzivi mogu biti
-različiti i ovise o jačini pobude, primjerice, detekcija zastajkivanja korisnika
-kraj određenog predmeta nosi manju pobudu na karakteristike tog predmeta od
-detekcije kupnje tog istog proizvoda. Zbroj svih odziva stvara privremeni profil
-korisnika koji će postati aktivan tek nakon zbrajanja sa stvarnim profilom, tako
-da trenutne akcije ne mogu utjecati na predikcije u trenutnoj sesiji korištenja
-sustava.
+pojačavanje interesa korisnika za predmet za koji je izazvana pobuda. U
+konačnici se to manifestira podizanjem korisničke ocjene za predmet ili
+podizanjem preferencija u profilu korisnika za one karakteristike koje
+posjeduje predmet za koji je izazvana pobuda. Odzivi mogu biti različiti i
+ovise o jačini pobude, primjerice, detekcija zastajkivanja korisnika kraj
+određenog predmeta nosi manju pobudu na karakteristike tog predmeta od
+detekcije kupnje tog istog proizvoda. Zbroj svih odziva stvara privremeni
+profil korisnika koji će postati aktivan tek nakon zbrajanja sa stvarnim
+profilom, tako da trenutne akcije ne mogu utjecati na predikcije u trenutnoj
+sesiji korištenja sustava.
 
 S obzirom na sve komponente sustava, slijedi algoritam za kontekstualiziranu
 preporuku u vremenu i prostoru (\ref{algo:TheAlgo1}):
@@ -1494,9 +1497,9 @@ filtru. Sučelje \emph{Function} predstavlja osnovu za implementaciju funkcije.
 Nasljeđuju ga sučelja \emph{DiscreteFunction} i sučelje \emph{Continuous
 function} koja je potrebno implementirati da bi se ostvarila diskretna, odnosno
 kontinuirana funkcija pogodna za korištenje u vremenskom filtru. Također, paket
-sadrži konkretnu implementaciju Gaussove zvonolike funkcije konfigurabilne
-pomoću parametara $a$, $b$ i $c$ (\ref{eq:BellFunc}). Diagram razreda nalazi se
-na slici \ref{fig:diagramfunc}
+sadrži konkretnu implementaciju generalizirane zvonolike funkcije
+konfigurabilne pomoću parametara $a$, $b$ i $c$ (\ref{eq:BellFunc}). Diagram
+razreda nalazi se na slici \ref{fig:diagramfunc}
 
 \begin{figure}[H]
 	\centering
@@ -1860,7 +1863,7 @@ nedostatka oblika:
 gdje je $itemId$ jedinstveni identifikator predmeta u sustavu, a $prediction$
 predikcija ocjene korisnika za kojeg je preporuka zatražena za predmet s
 identifikatorom $itemId$. Objekti su smješteni u jednostruko povezanoj listi, a
-prethodno su sortirani padajućim redoslijedom prema predikciji. Rezultati rada
+prethodno su poredani padajućim redoslijedom prema predikciji. Rezultati rada
 sustava kao objekti se ispisuju na standardni izlaz računala \engl{STDOUT}.
 
 \section{Rezultati ispitivanja}
@@ -1891,15 +1894,17 @@ prostornog filtra.
 
 \subsection{Ispitivanje vremenskog filtera}
 Zbog nemogućnosti za naprednijim modeliranjem ponašanja korisnika funkcijom, pri
-ispitivanju vremenskog filtra, korištena je neprigušena Gaussova funkcija
-(\ref{eq:BellFunc}) s parametrima nasumično odabranim parametrima iz intervala:
+ispitivanju vremenskog filtra, korištena je neprigušena generalizirana zvonolika
+funkcija (\ref{eq:BellFunc}) s parametrima nasumično odabranim parametrima iz
+intervala:
 $a \in \big[0.2, 0.25 \big]$, 
 $b \in \big[2.2, 2.7 \big]$ i 
 $c \in \big[1.8, 2.2 \big]$.
-Parametri Gaussove krivulje namjerno su nasumično odabrani kako bi se pokazalo
-variranje u preporuci, jer bi suprotnom predikcija za svaki predmet bila bi
-identična. Kod ove vrste ispitivanja nemoguće je koristiti ispitne knjižnice
-jer ispitni rezultat ovisi o trenutku u kojem je pokrenuto ispitivanje.
+Parametri generalizirane zvonolike krivulje namjerno su nasumično odabrani kako
+bi se pokazalo variranje u preporuci, jer bi suprotnom predikcija za svaki
+predmet bila bi identična. Kod ove vrste ispitivanja nemoguće je koristiti
+ispitne knjižnice jer ispitni rezultat ovisi o trenutku u kojem je pokrenuto
+ispitivanje.
 
 \lstinputlisting[
 		language=Java,
@@ -1965,7 +1970,7 @@ korisnika.
 Kod ispitivanja podsustava za pojačavanje obilježja, korištena je radio oznaka
 kojom je u simulaciji bio označen predmet s jedinstvenim identifikatorom $11$.
 Ispitana je detekcija povratne informacije korisnika na temelju jačine signala i
-vrijednosti mjerača ubrzanja. Ispitni scenariji opisani su u tablici
+vrijednosti osjetila ubrzanja. Ispitni scenariji opisani su u tablici
 \ref{tbl:podscenariji}. Za svaki skup podataka, podaci su nanovo učitani iz
 \emph{CSV} datoteka. Radi jednostavnosti, sustav ispisuje samo detektiranu vrstu
 pobude i odziv na tu pobudu. Rezultati testiranja vidljivi su u tablici
@@ -2085,7 +2090,7 @@ model kontekstno svjesnog preporučiteljskog sustava s posebnim naglaskom na
 prostor i vrijeme. Prikazani su mogući načini modeliranja prostora, vremena,
 korisnika i predmeta u sustavu, te je prikazan način sinteze filtarskih
 algoritama u jedinstvenu predikciju. Na kraju, osmišljeni model je
-implementiran i ispitan na osmišljenom ispitnom scenariju u realnim uvjetima.
+implementiran i ispitan na osmišljenom ispitnom scenariju.
 
 \kljucnerijeci{sveprisutno računarstvo, preporučiteljski sustavi, kontekst,
 svjesnost konteksta, prostor-vrijeme, filtriranje podataka}
@@ -2093,14 +2098,14 @@ svjesnost konteksta, prostor-vrijeme, filtriranje podataka}
 
 \engtitle{Recommender systems in ubiquituous computing}
 \begin{abstract}
-This thesis shows fundamentals of Ubiquitous computing. Basic algorithms used by
-Recommender systems have been analysed, as well as requirements for Recommender
-systems used in ubiquitous environments. Context aware recommender system with
-special intrest in space and time has been designed. Possible ways of modelling
-space, time, user and item have been analyzed and shown. Also, a way of
-sinthesys of the filtering algorithms into one unique prediction has been shown.
-Finally, designed model has been implemented and tested on made up scenario in
-real conditions.
+This thesis presents fundamentals of Ubiquitous computing. Basic algorithms used
+by recommender systems have been analysed, as well as requirements for
+recommender systems used in ubiquitous environments. Context aware recommender
+system with special interest in space and time has been designed. Possible ways
+of modelling space, time, user and item have been analyzed and presented. Also,
+a way of sinthesys of the filtering algorithms into one unique prediction has
+been shown. Finally, designed model has been implemented and tested on made up
+scenario.
 
 \keywords{ubiquitous computing, recommender systems, context, context
 awareness, spacetime, data filtering}
