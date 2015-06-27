@@ -1465,6 +1465,35 @@ preporuku u vremenu i prostoru (\ref{algo:TheAlgo1}):
 
 %Novi chapter%
 \chapter{Implementacija i ispitivanje modela}
+\section{Elementi implementacije}
+Elementi implementacije predstavljaju logičke jedinice za izgradnju
+preporučiteljskog sustava opisanog u prethodnom poglavlju, a one su:
+\begin{itemize}
+  \item Model korisnika. Korisnik je modeliran jedinstvenim identifikatorom te
+  imenom i prezimenom. Osim toga, model korisnika sadržava općenite 
+  i vremenske preferencije za svaki predmet u sustavu
+  \item Model predmeta.Predmet je također modeliran jedinstvenim identifikatorom
+  i nazivom. Dodatno, model predmeta sadržava i identifikator lokacije predmeta
+  te vektor njegovih karakteristika.
+  \item Model prostora. Ovaj model podrazumijeva takav način opisa prostora da
+  se:
+	  \begin{itemize}
+	    \item svaka čestica prostora može jedinstveno označiti.
+	    \item može izračunati udaljenost između bilo koje dvije čestice tog
+	    prostora.
+	  \end{itemize}
+  \item Model vremena. Ovaj model manifestira se kroz implementaciju funkcija
+  koje prikazuju odnos preferencije korisnika za predmet u bilo kojem vremenskom
+  intervalu.
+  \item Implementacije filtarskih algoritama. Te implementacije podrazumijevaju
+  enkapsulaciju algoritama te unificirano sučelje za dohvaćanje preporuke.
+  \item Ulazno - izlazne komponente. One predstavljaju komponente kroz koje se
+  iz datoteka učitavaju podaci o korisnicima, predmetima i prostoru.
+\end{itemize}
+Radi jednostavnije implementacije, navedeni elementi se ne moraju nužno nalaziti
+u logičkim jedinicama modeliranja na razini programskog jezika u smislu razreda
+ili paketa.
+
 \section{Arhitektura implementacije}
 
 Programsko rješenje opisanog modela preporučiteljskog sustava izvedeno je u
@@ -1867,10 +1896,10 @@ prethodno su poredani padajućim redoslijedom prema predikciji. Rezultati rada
 sustava kao objekti se ispisuju na standardni izlaz računala \engl{STDOUT}.
 
 \section{Rezultati ispitivanja}
-Ispitivanje rada sustava izvedeno je korištenjem $JUnit 4$ knjižnice za
-programski jezik $Java$. Ispitana je svaka komponenta preporučiteljskog
-algoritma, a rezultati su prikazani u nastavku.  Za testiranje se koristio
-korisnik s jedinstvenim identifikatorom $89$.
+Ispitivanje rada sustava izvedeno je ispisom izlaza komponenata preporučitelja
+na standardni izlaz te usporedbom s očekivanim rezultatima. Ispitana je svaka
+komponenta preporučiteljskog algoritma, a rezultati su prikazani u nastavku. 
+Za testiranje se koristio korisnik s jedinstvenim identifikatorom $89$.
 Zbog jednostavnosti i velike količine potrebnih ispitnih podataka, samo je dio
 tablica ocjena i liste predmeta s karakteristikama prikazan u dodatku. Također,
 isključivo iz praktičnih razloga nisu prikazani cijeli ispisi sustava na
