@@ -633,7 +633,7 @@ za preporučivanje zasnovano na sadržaju (algoritam \ref{algo:content}).
 Jedna od većih prednosti ovog načina filtriranja jest što može stvarati
 preporuke neovisno o tome je li za predmet davana povratna informacija ili ne.
 Drugim riječima, ovaj način filtriranja iznimno je prikladan na početku rada
-sustava jer nema problema s takozvanim hladnim početkom \engl{Cold start}.
+sustava jer nema problema s takozvanim hladnim početkom \engl{cold start}.
 Isto tako, prikladan je za primjene gdje je moguće relativno dobro strukturiranim
 karakteristikama opisati predmete. S druge strane, nepogodan je ako ga
 se implementira u sustave gdje korisnici dolaze rijetko ili relativno često
@@ -811,7 +811,7 @@ složenost:
 Ocjena \ref{eq:slozenostKorisnik} ima kvadratnu ovisnost i s povećanjem broja
 korisnika dolazi do nemalog povećanja broja operacija za izračun preporuke. 
 Valja dodati i da je algoritam \ref{algo:korisnik-korisnik} pojednostavljena
-verzija algoitma, pa ni ocjena \ref{eq:slozenostKorisnik} ne može biti uzeta
+verzija algoritma, pa ni ocjena \ref{eq:slozenostKorisnik} ne može biti uzeta
 kao konačna.
 
 \subsubsection{Predmet -- Predmet}
@@ -874,7 +874,7 @@ ovoj tehnici (slike \ref{fig:amazon1} i \ref{fig:amazon2}).
 
 \section{Redukcija dimenzija}
 Skup algoritama redukcije dimenzija bazira se na činjenici da je u općem slučaju
-baza podataka korisnika i predmeta rijetko popunjena \engl(sparse). Za većinu
+baza podataka korisnika i predmeta rijetko popunjena \engl{sparse}. Za većinu
 korisnika neće biti dostupna većina ocjena, tj. u matrici ocjena korisnika za
 predmete, većina elemenata će vjerojatno biti $0$. S druge strane, filtriranje
 zasnovano na suradnji i suradničko filtriranje u naprednijim slučajevima mogu
@@ -1061,10 +1061,13 @@ komponentom}
 
 Osnovni problem s kojim se konvencionalni preporučiteljski sustavi susreću (a
 time i popularniji radni okviri i biblioteke koji ih implementiraju) jest
-u većoj mjeri izostanak podrške za kontekstualizaciju. U kontekstu sveprisutnog
-računarstva preporučitelj kao minimalan skup konteksta u kojem se sustav nalazi
-treba imati podršku za prostornu i vremensku komponentu. Model takvog
-preporučitelja može se prikazati relacijom \ref{eq:DefModel2}
+u većoj mjeri izostanak podrške za kontekstualizaciju. Takvi sustavi, kao npr.
+\emph{Duine framework}\cite{DuineFW} ili \emph{Lenskit}\cite{LensKit} djeluju
+kao standardni filtri podataka bez posebnog uzimanja u obzir konteksta i
+specifičnosti koje taj kontekst nosi. U kontekstu sveprisutnog računarstva
+preporučitelj kao minimalan skup konteksta u kojem se sustav nalazi treba imati
+podršku za prostornu i vremensku komponentu.
+Model takvog preporučitelja može se prikazati relacijom \ref{eq:DefModel2}
 \begin{equation}
 \label{eq:DefModel2}
 	R \leftarrow U \times I \times C
@@ -1192,8 +1195,9 @@ interpolacija splajnovima \engl{Spline}.
 
 %TODO: refactor
 Vremenska komponenta omogućava i praćenje obrazaca ponašanja korisnika, pa time
-i predviđanje ponavljanja ponašanja \engl{Recurring}. Također, vremenska
-komponenta podrazumijeva i tzv. \emph{efekt blijeđenja} \engl{Fade-out effect}.
+i predviđanje ponavljajućeg ponašanja \engl{recurring behavior}. Također,
+vremenska komponenta podrazumijeva i tzv. \emph{efekt blijeđenja}
+\engl{Fade-out effect}.
 Ako korisnik kod kojeg je uočen neki obrazac akcija prestane provoditi tu
 akciju, preporučitelj će prestati primati pobudu za održavanje te akcije.
 Međutim, neće je odmah zanemariti nego će se vremenska komponenta, tj. funkcija
@@ -1212,9 +1216,8 @@ Tada će ukupan rezultat vremenske komponente konteksta biti:
 	T \leftarrow f(x) \ast g(x)
 \end{equation}
 
-gdje je $f(x)$ funkcija koja opisuje vremensku komponentu konteksta nekog
-korisnika za neki predmet, a $g(x)$ funkcija koja guši tu komponentu.
-primjer. 
+gdje je $f(x)$ funkcija koja opisuje vremensku komponentu konteksta korisnika za
+neki predmet, a $g(x)$ funkcija koja guši tu komponentu.
 
 Na slici \ref{fig:GaussPriguseno} vidljiv je primjer \emph{efekta
 blijeđenja} na tipično periodičko ponašanje korisnika. Prema formuli
@@ -1239,7 +1242,8 @@ gdje je $k \in \{ 0, 1, 2, 3, 4, 5, 6, 7 \}$
 \end{equation}
 
 Ovdje također postoji mogućnost da se funkcija $g(x)$ zada diskretno, tj. po
-uzorcima.
+uzorcima. Funkcija $g(x)$ tada se uzorkuje i pohrani u polje koje predstavlja
+prozivajuću tablicu \engl{lookup table}.
 
 \begin{figure}[H]
 	\centering
@@ -1318,25 +1322,26 @@ algoritama za filtriranje. Zbog mogućnosti filtriranja po vremenu i prostoru,
 može se reći da je algoritam svjestan konteksta te je kao takav primjenjiv u
 sveprisutnoj okolini. Algoritam se sastoji od nekoliko koraka:
 \begin{enumerate}
-  \item Faza prostornog filtra
-  \item Faza vremenskog filtra
-  \item Opcionalna faza odluke u kojoj, ako nema dovoljno predmeta na listi
-  preporuke, algoritam može početi od prvog koraka ali sa spuštenim kriterijima
-  \item Faza filtriranja na suradničkoj ili sadržajnoj razini
-  \item Faza prezentacije rezultata
+  \item faza prostornog filtra
+  \item faza vremenskog filtra
+  \item opcionalna faza odluke u kojoj, ako nema dovoljno predmeta na listi
+  preporuke, algoritam može početi od prvog koraka ali sa nižim kriterijima
+  \item faza filtriranja na suradničkoj ili sadržajnoj razini
+  \item faza prezentacije rezultata
 \end{enumerate}
 
-Algoritam započinje filtriranjem po prostoru. Sve što je trenutno u okolini
-korisnika manje od nekog graničnog radiusa uzima se u obzir, a ostalo se
-implicitno odbacuje jer je rezultat preporuke $0$. Ovaj filtar se prvi izvodi
-jer u prostornom kontekstu nema smisla filtrirati prema drugim kriterijima, ako
-se predmetu fizički ne može pristupiti. Također, filtar je koristan jer u
-početku eliminira velik broj nedostupnih predmeta te tako smanjuje opseg
-izračuna. Algoritam prema kojem se filtrira jest neki od poznatijih algoritama
-za pronalazak najkraćeg puta ako je prostor na vrhu apstrakcije modeliran
-grafom, npr. \emph{Dijsktrin algoritam}, \emph{Bellman - Ford algoritam} ili
-\emph{A* algoritam}, odnosno algoritam za izračun \emph{Manhattanske
-udaljenosti} ako je na vrhu apstrakcije kvadratna mreža.
+Algoritam započinje filtriranjem po prostoru. Svi predmeti koji se trenutno
+nalaze u okolini korisnika, a čija je udaljenost od korisnika manja od nekog
+graničnog radijusa, uzimaju se u obzir dok se ostalo odbacuje jer je rezultat
+preporuke $0$. Ovaj filtar se prvi izvodi jer u prostornom kontekstu nema
+smisla filtrirati prema drugim kriterijima, ako se predmetu fizički ne može
+pristupiti. Također, filtar je koristan jer u početku eliminira velik broj
+nedostupnih predmeta te tako smanjuje opseg izračuna. Algoritam prema kojem se
+filtrira jest neki od poznatijih algoritama za pronalazak najkraćeg puta ako je
+prostor na vrhu apstrakcije modeliran grafom, npr. \emph{Dijsktrin algoritam},
+\emph{Bellman - Ford algoritam} ili \emph{A* algoritam}, odnosno algoritam za
+izračun \emph{Manhattanske udaljenosti} ako je na vrhu apstrakcije kvadratna
+mreža.
 
 Vremensko filtriranje izvodi se skaliranjem vremenskog trenutka u trenutku
 izvođenja algoritma na interval tjedna. Granulacija do koje se uzima trenutno
